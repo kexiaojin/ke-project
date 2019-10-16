@@ -1,0 +1,50 @@
+<!--components/choosemodal/require.wxml-->
+<view class="dialog" hidden="{{!showDialog}}">
+    <view class="dialog-content">
+        <scroll-view scroll-y class="dialog-body">
+            <view class="pt-2 pb-2">
+                <view class="line-title">
+                    <text class="line-title-text">最低学历</text>
+                </view>
+                <view class="cell-pd">
+                    <block class="label-box" wx:for="{{degreeTypeList}}" wx:key="id">
+                        <view class="label-item {{item.id==degreeActiveId?'active':''}}" bindtap="getDegreeActive" data-id="{{item.id}}" data-name="{{item.name}}">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </block>
+                </view>
+                <view class="line-title">
+                    <text class="line-title-text">工作经验</text>
+                </view>
+                <view class="cell-pd">
+                    <block class="label-box" wx:for="{{workYearList}}" wx:key="id">
+                        <view class="label-item {{item.id==workYearActiveId?'active':''}}" bindtap="getWorkYearActive" data-id="{{item.id}}" data-name="{{item.name}}">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </block>
+                </view>
+                <view class="line-title">
+                    <text class="line-title-text">薪资要求</text>
+                </view>
+                <view class="cell-pd">
+                    <block class="label-box" wx:for="{{salaryTypeList}}" wx:key="id">
+                        <view class="label-item {{item.id==salaryActiveId?'active':''}}" bindtap="getSalaryActive" data-id="{{item.id}}" data-name="{{item.name}}">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </block>
+                </view>
+            </view>
+            <view class="seize-box"></view>
+        </scroll-view>
+        <view class="dialog-footer">
+            <view class="p-3">
+                <button hover-class="btn-hover" type='primary' bindtap="save">
+                    保存
+                </button>
+            </view>
+        </view>
+        <view class="dialog-close" bindtap="close">
+            <text class="fa fa-times"></text>
+        </view>
+    </view>
+</view>

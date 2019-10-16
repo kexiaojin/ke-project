@@ -1,0 +1,74 @@
+<!--pages/message/message.wxml-->
+<view class="midline-title" hidden="{{!allLoaded}}">
+    <text class="midline-title-text">全部加载完毕</text>
+</view>
+<block wx:if="{{messageList.length>0}}">
+    <block wx:for="{{messageList}}" wx:key="messageId">
+        <view class="pt-2 pb-2">
+            <view class="text-center text-muted pb-2">
+                <text>{{item.time}}</text>
+            </view>
+            <navigator url="{{item.link}}" open-type="navigate">
+                <view class="cell-weui">
+                    <view class="pb-2" hidden="{{item.type!=0}}">
+                        <view>
+                            <text class="fz-lg">职位推荐</text>
+                        </view>
+                        <view>
+                            <text class="text-muted">根据您的简历描述，系统分析后高度匹配此职位</text>
+                        </view>
+                    </view>
+                    <view class="pb-2" hidden="{{item.type!=1}}">
+                        <text class="fz-lg">好友投递简历通知</text>
+                    </view>
+                    <view class="pb-2" hidden="{{item.type!=2}}">
+                        <text class="fz-lg">推荐奖励到账</text>
+                    </view>
+                    <view class="pb-2" hidden="{{item.type!=3}}">
+                        <text class="fz-lg">入职奖励到账</text>
+                    </view>
+                    <view class="pb-2" hidden="{{item.type!=4}}">
+                        <text class="fz-lg">互动抽奖</text>
+                    </view>
+                    <view class="pb-2" hidden="{{item.type!=5}}">
+                        <text class="fz-lg">面试通知</text>
+                    </view>
+                    <view class="pt-2 pb-2">
+                        <view class="weui-form-preview__item gap-y">
+                            <view class="weui-form-preview__label">职位</view>
+                            <view class="weui-form-preview__value">{{item.position}}</view>
+                        </view>
+                        <view class="weui-form-preview__item gap-y">
+                            <view class="weui-form-preview__label">公司</view>
+                            <view class="weui-form-preview__value">{{item.company}}</view>
+                        </view>
+                        <view class="weui-form-preview__item gap-y">
+                            <view class="weui-form-preview__label">内容</view>
+                            <view class="weui-form-preview__value">{{item.content}}</view>
+                        </view>
+                    </view>
+                    <view class="d-flex align-items-center mt-2 pt-2 bd-t">
+                        <view class="flex-fill">
+                            <text class="text-truncate lh-lg">职位详情</text>
+                        </view>
+                        <view>
+                            <text class="fa fa-fw fa-angle-right text-muted"></text>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
+    </block>
+</block>
+<view class="no-msg" wx:else>
+    <text>暂无数据</text>
+</view>
+<view class="official-account-box" wx:if="{{!concerned}}">
+    <view class="text-center pt-2 pb-2">
+        <text class="fa fa-fw fa-exclamation-circle text-red mr-1"></text>
+        <text>您需要点击</text>
+        <text class="text-red ml-1 mr-1">关注急聘君</text>
+        <text>才能正常使用消息功能</text>
+    </view>
+    <official-account></official-account>
+</view>

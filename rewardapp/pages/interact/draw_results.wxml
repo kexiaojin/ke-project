@@ -1,0 +1,50 @@
+<!--pages/interact/draw_results.wxml-->
+<view class="content">
+    <view class="result-top">
+        <view class="d-flex align-items-center justify-content-center">
+            <view class="flex-fill">
+                <view class="text-truncate">
+                    <image class="user-pic-sm d-inline-block mr-1" src="{{resultInfo.companyLogo}}" mode="widthFix" style="border:solid 4rpx #fff"></image>
+                    <text class="fz-lg">{{resultInfo.companyName}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="pt-4">
+            <text class="{{resultInfo.awardType==0?'fz-xxlg':'fz-xxxlg'}} align-bottom">{{resultInfo.awardNumber}}</text>
+            <text wx:if="{{resultInfo.awardType==2}}"> 元</text>
+            <text wx:if="{{resultInfo.awardType==1}}"> 金豆</text>
+        </view>
+        <view>
+            <text>已存入您的账号，请注意查收</text>
+        </view>
+    </view>
+    <view class="weui-cells">
+        <view class="weui-cell">
+            <text>参与抽奖人数：</text>
+            <text class="fz-lg text-red">{{resultInfo.luckDrawNumber}}</text>
+        </view>
+        <block wx:for="{{resultInfo.list}}" wx:key="userId">
+            <view class="weui-cell">
+                <view class="weui-cell__hd pr-2">
+                    <image class="user-pic" src="{{item.headFileName}}" mode="widthFix"></image>
+                </view>
+                <view class="weui-cell__bd">
+                    <view>
+                        <text class="fz-lg">{{item.realName}}</text>
+                    </view>
+                    <view>
+                        <text class="text-muted">{{item.getTime}}</text>
+                    </view>
+                </view>
+                <view class="weui-cell__ft text-black fz-lg">
+                    <text>{{item.awardNumber}}</text>
+                    <text wx:if="{{item.awardType==2}}"> 元</text>
+                    <text wx:if="{{item.awardType==1}}"> 金豆</text>
+                </view>
+            </view>
+        </block>
+    </view>
+</view>
+<view class="midline-title" hidden="{{!resultInfo.allLoaded}}">
+    <text class="midline-title-text">全部加载完毕</text>
+</view>

@@ -1,0 +1,121 @@
+<!--pages/user/user_center.wxml-->
+<view class="content">
+    <view class="cell-box" wx:if="{{!isLogin}}">
+        <view class="d-flex align-items-center" bindtap="getAuthorize">
+            <view class="flex-fill">
+                <view class="fz-xlg">请登录账号</view>
+                <text class="text-muted">登录后查看更多信息</text>
+            </view>
+            <view class="flex-shrink-0">
+                <image class="user-pic" src="/images/headpic.png" mode="widthFix"></image>
+            </view>
+        </view>
+    </view>
+    <navigator url="/pages/user/user_info" open-type="navigate" class="cell-box" hidden="{{!isLogin}}">
+        <view class="d-flex align-items-center">
+            <view class="flex-fill">
+                <view>
+                    <text class="fz-xlg mr-2">{{base.realName}}</text>
+                    <text class="fa fa-fw fa-edit text-primary"></text>
+                </view>
+                <view class="d-flex">
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-graduation-cap text-muted"></text>
+                        <text> {{base.lastDegree}}</text>
+                    </view>
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-briefcase text-muted"></text>
+                        <text> {{base.workyears}}</text>
+                    </view>
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-birthday-cake text-muted"></text>
+                        <text> {{base.birthDate}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="flex-shrink-0 position-relative">
+                <image class="user-pic" src="{{base.headFileName}}" mode="widthFix"></image>
+                <view class="sexbox">
+                    <text class="fa fa-fw fa-mars text-blue" wx:if="{{base.sex=='男'}}"></text>
+                    <text class="fa fa-fw fa-venus text-red" wx:else></text>
+                </view>
+            </view>
+        </view>
+        <view class="mt-2 memo-box">
+            <text>{{base.memo}}</text>
+        </view>
+    </navigator>
+    <view class="weui-cells mt-2">
+        <navigator url="/pages/user/resume_edit" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-file-alt weui-list-icon"></text>
+                <text class="weui-list-text">微简历</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="text-muted">完善度：</text>
+                <text class="text-primary fz-lg">{{spiritPercent}}%</text>
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/user/my_delivery" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-leaf weui-list-icon"></text>
+                <text class="weui-list-text">我的投递</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/user/my_share" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-share-alt weui-list-icon"></text>
+                <text class="weui-list-text">我的分享</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/user/wallet" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-wallet weui-list-icon"></text>
+                <text class="weui-list-text">钱包</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/user/gift_vouchers" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-puzzle-piece weui-list-icon"></text>
+                <text class="weui-list-text">礼券</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/user/user_address" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-map-marker-alt weui-list-icon"></text>
+                <text class="weui-list-text">收货地址</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+        <navigator url="/pages/help/help" open-type="navigate" class="weui-cell">
+            <view class="weui-cell__bd">
+                <text class="fa fa-fw fa-question-circle weui-list-icon"></text>
+                <text class="weui-list-text">帮助</text>
+            </view>
+            <view class="weui-cell__ft">
+                <text class="fa fa-fw fa-angle-right"></text>
+            </view>
+        </navigator>
+    </view>
+    <view class="cell-pd">
+        <button class="text-muted" hover-class="btn-hover" type='default' plain="true" bindtap="getSignOut">
+            退出账号
+        </button>
+    </view>
+</view>
+<authorize is-login="{{isLogin}}" binduserlogin="userLogin" bindweixinlogin="weixinLogin"  id="authorize"></authorize>

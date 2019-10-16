@@ -1,0 +1,13 @@
+<!--pages/public/msg_success.wxml-->
+<view class='header'>
+    <icon type="success" size="90" color="#1AAD19"></icon>
+</view>
+<view class='content'>
+    <view class="fz-lg">{{info.title}}</view>
+    <text>{{info.content}}</text>
+</view>
+<view class="bottom">
+    <button hover-class="btn-hover" type='primary' bindtap="finish">
+        完成
+    </button>
+</view>

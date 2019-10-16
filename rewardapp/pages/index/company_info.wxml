@@ -1,0 +1,158 @@
+<!--pages/index/company_info.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <view class="d-flex align-items-center">
+            <view class="flex-shrink-0 pr-2">
+                <image class="user-pic" src="{{companyInfo.iconFile}}" mode="widthFix"></image>
+            </view>
+            <view class="flex-fill">
+                <view class="text-truncate">
+                    <text class="fz-lg">{{companyInfo.companyName}}</text>
+                </view>
+                <view class="text-truncate text-muted">
+                    <text>{{companyInfo.tradeType}}</text>
+                    <text>-</text>
+                    <text>{{companyInfo.companyTypeName}}</text>
+                    <text>-</text>
+                    <text>{{companyInfo.companySizeName}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="mt-2 memo-box">
+            <view class="d-flex justify-content-between">
+                <view>
+                    <text class="pr-1 fa fa-fw fa-clock"></text>
+                    <text>{{companyInfo.workTimes}}</text>
+                </view>
+                <view>
+                    <text class="pr-1 fa fa-fw fa-calendar-check"></text>
+                    <text>{{companyInfo.restDate}}</text>
+                </view>
+                <view>
+                    <text class="pr-1 fa fa-fw fa-coffee"></text>
+                    <text>{{companyInfo.overtime}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="cell-box">
+        <view class="mb-2">
+            <text class="fz-lg">公司福利</text>
+        </view>
+        <view>
+            <block class="label-box" wx:for="{{companyInfo.companyImpression}}" wx:key="*this">
+                <view class="label-item">
+                    <text>{{item}}</text>
+                </view>
+            </block>
+        </view>
+        <view class="mt-4 mb-2">
+            <text class="fz-lg">公司介绍</text>
+        </view>
+        <view class="lh-lg">
+            <text>{{companyInfo.memo}}</text>
+            <view wx:if="{{companyInfo.memoUrl}}">
+                <text class="text-primary">{{companyInfo.memoUrl}}</text>
+            </view>
+        </view>
+        <view class="mt-4 mb-2">
+            <text class="fz-lg">公司地址</text>
+        </view>
+        <view class="lh-lg d-flex align-items-center" bindtap="getMap">
+            <view class="pr-1">
+                <text class="fa fa-fw fa-map-marker-alt text-muted"></text>
+            </view>
+            <view class="flex-fill">
+                <text class="text-truncate">{{companyInfo.mapLocation}}</text>
+            </view>
+            <view>
+                <text class="fa fa-fw fa-angle-right text-muted"></text>
+            </view>
+        </view>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">公司产品</text>
+    </view>
+    <block wx:if="{{companyInfo.productList.length>0}}">
+        <view class="weui-cells">
+            <block wx:for="{{companyInfo.productList}}" wx:key="productId">
+                <view class="weui-cell align-items-start">
+                    <view class="weui-cell__hd pr-2">
+                        <image class="user-pic" src="{{item.productImg}}" mode="widthFix"></image>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <view class="text-truncate">
+                            <text class="fz-lg">{{item.productName}}</text>
+                        </view>
+                        <view class="text-muted">
+                            <text>{{item.productIntro}}</text>
+                        </view>
+                        <view class="text-primary">
+                            <text>{{item.productWebsite}}</text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">在招职位</text>
+    </view>
+    <block wx:if="{{jobList.length>0}}">
+        <view class="weui-cells">
+            <block wx:for="{{jobList}}" wx:key="jobOrderId">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd pt-1 pb-2">
+                        <navigator url="/pages/index/job_info?jobId={{item.jobOrderId}}" open-type="navigate">
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                </view>
+                                <view class="flex-shrink-0">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                </view>
+                            </view>
+                            <view class="pt-1 pb-2 text-muted">
+                                <text>{{item.addressPost}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.recruitNumber}}人</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.needDegreeCNName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.workYears}}</text>
+                            </view>
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <view class="d-flex align-items-center">
+                                        <view class="pr-1">
+                                            <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                        </view>
+                                        <view class="flex-fill text-muted">
+                                            <text class="text-truncate">{{item.companyName}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                                <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                    <view class="square-box bg-gray text-red">
+                                        <text class="fz-lg">{{item.rewardMoney}}</text>
+                                        <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+    <view class="midline-title">
+        <text class="midline-title-text">www.doerjob.com</text>
+    </view>
+</view>
+<navbar></navbar>

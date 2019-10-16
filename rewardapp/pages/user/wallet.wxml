@@ -1,0 +1,81 @@
+<!--pages/user/wallet.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <view class="p-4 text-center">
+            <view class="pb-2">
+                <image class="user-pic" src="{{info.headFileName}}" mode="widthFix"></image>
+            </view>
+            <view>
+                <text class="fz-xxlg text-red">{{info.money}}</text>
+            </view>
+            <view>
+                <text class="text-muted">总金额（元）</text>
+            </view>
+        </view>
+    </view>
+    <view class="cell-box">
+        <view class="d-flex justify-content-between lh-lg align-items-center">
+            <view>
+                <text class="fz-lg">提现金额</text>
+            </view>
+            <view>
+                <text class="text-muted">预计72小时内到账</text>
+            </view>
+        </view>
+        <view class="d-flex align-items-center">
+            <view class="fz-xxlg pr-2">
+                <text>￥</text>
+            </view>
+            <view class="flex-fill">
+                <input type="digit" class="weui-input fz-xxlg" value="{{info.withdraw}}" bindinput="getWithdraw"/>
+            </view>
+            <view class="text-primary pl-2 flex-shrink-0 fz-lg" bindtap="getAll">
+                <text>全部</text>
+            </view>
+        </view>
+        <view class="bd-t text-muted pt-4 pb-2">
+            <text>本次可提现￥{{info.withdrawAble}}（服务费￥{{info.charges}}）</text>
+        </view>
+    </view>
+    <view class="cell-pd">
+        <button class="gap-y" hover-class="btn-hover" type='primary' bindtap="saveWithdraw">
+            提现
+        </button>
+        <button class="gap-y" hover-class="btn-hover" type='default' bindtap="getDetail">
+            查看明细
+        </button>
+    </view>
+</view>
+<view class="dialog" hidden="{{!showPswInput}}">
+    <view class='dialog-body'>
+        <input class='input-control' password type='number' focus='{{inputFocus}}' adjust-position='{{false}}' bindinput='getPsw' maxlength='6'/>
+        <view class='p-3'>
+            <view class="text-center fz-lg">
+                请输入提现密码
+            </view>
+            <view class='text-center fz-xxlg pt-3 pb-3 bd-b'>
+                <text>￥</text>
+                <text>{{info.withdraw}}</text>
+            </view>
+            <view class="weui-form-preview__bd">
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">服务费</view>
+                    <view class="weui-form-preview__value">￥{{info.charges}}</view>
+                </view>
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">费率</view>
+                    <view class="weui-form-preview__value">1%</view>
+                </view>
+            </view>
+            <view class='input-row' bindtap='getFocus'>
+                <view class='input-item' wx:for='{{6}}' wx:key='*this'>
+                    <text wx:if='{{pswVal.length>index}}'></text>
+                </view>
+            </view>
+            <view class='text-right text-primary pt-3' bindtap='forgetPsw'>忘记密码</view>
+        </view>
+        <view class="dialog-close" bindtap="close">
+            <text class="fa fa-times"></text>
+        </view>
+    </view>
+</view>

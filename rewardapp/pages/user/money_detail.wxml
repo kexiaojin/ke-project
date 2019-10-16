@@ -1,0 +1,59 @@
+<!--pages/user/money_detail.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <view class="d-flex align-items-center text-center">
+            <view class="flex-fill">
+                <picker mode="date" fields="month" bindchange="getStartDate" value="{{startDate}}">
+                    <view class="picker">
+                        <input type="text" class="weui-input" placeholder="开始时间" value="{{startDate}}" disabled/>
+                    </view>
+                </picker>
+            </view>
+            <text>-</text>
+            <view class="flex-fill">
+                <picker mode="date" fields="month" bindchange="getEndDate" value="{{endDate}}">
+                    <view class="picker">
+                        <input type="text" class="weui-input" placeholder="结束时间" value="{{endDate}}" disabled/>
+                    </view>
+                </picker>
+            </view>
+            <view class="flex-shrink-0 pl-3 pr-3" bindtap="search">
+                <text class="fa fa-fw fa-search"></text>
+            </view>
+        </view>
+    </view>
+    <block wx:if="{{item.length>0}}">
+        <block wx:for="{{item}}" wx:key="month">
+            <view class="line-title">
+                <text class="line-title-text">{{item.month}}</text>
+            </view>
+            <view class="weui-cells">
+                <block wx:for="{{item.order}}" wx:key="orderId">
+                    <navigator url="/pages/public/preview?orderId={{item.orderId}}" open-type="navigate" class="weui-cell">
+                        <view class="flex-fill">
+                            <view class="fz-lg text-truncate">
+                                <text>{{item.orderType}}</text>
+                            </view>
+                            <view class="text-muted">
+                                <text>{{item.orderDate}}</text>
+                            </view>
+                        </view>
+                        <view class="flex-shrink-0 text-right {{item.orderState==1?'text-green':item.orderState==2?'text-red':''}}">
+                            <view>
+                                <text class="fa fa-fw fa-plus" wx:if="{{item.orderState==1}}"></text>
+                                <text class="fa fa-fw fa-minus" wx:if="{{item.orderState==2}}"></text>
+                                <text class="fz-lg">{{item.orderMoney}}</text>
+                            </view>
+                            <view class="text-muted" wx:if="{{item.state==0}}">
+                                <text>交易关闭</text>
+                            </view>
+                        </view>
+                    </navigator>
+                </block>
+            </view>
+        </block>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+</view>

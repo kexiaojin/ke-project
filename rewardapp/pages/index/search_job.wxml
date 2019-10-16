@@ -1,0 +1,116 @@
+<!--pages/index/search_job.wxml-->
+<view class="fixed-top">
+    <view class="weui-search-bar">
+        <view class="weui-search-bar__form">
+            <view class="weui-search-bar__box">
+                <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+                <input type="text" class="weui-search-bar__input" placeholder="请输入内容" value="{{inputVal}}" bindinput="getInputVal" focus="true"/>
+                <view class="weui-icon-clear" wx:if="{{inputVal.length>0}}" bindtap="clearInput">
+                    <icon type="clear" size="14"></icon>
+                </view>
+            </view>
+        </view>
+        <view class="weui-search-bar__cancel-btn" bindtap="goSearch">搜索</view>
+    </view>
+    <view class="topbar">
+        <view class="topbar-item" data-id="0" bindtap="getCity">
+            <text class="text-black">地区</text>
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+        <view class="topbar-item" data-id="1" bindtap="getPosition">
+            <text class="text-black">职位类型</text>
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+        <view class="topbar-item" data-id="2" bindtap="getRequire">
+            <text class="text-black">要求</text>
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+</view>
+<view class="content" hidden="{{searchRecommend}}">
+    <block wx:if="{{jobList.length>0}}">
+        <view class="weui-cells">
+            <block wx:for="{{jobList}}" wx:key="jobOrderId">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd pt-1 pb-2">
+                        <navigator url="/pages/index/job_info?jobId={{item.jobOrderId}}" open-type="navigate">
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                </view>
+                                <view class="flex-shrink-0">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                </view>
+                            </view>
+                            <view class="pt-1 pb-2 text-muted">
+                                <text>{{item.addressPost}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.recruitNumber}}人</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.needDegreeCNName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.workYears}}</text>
+                            </view>
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <view class="d-flex align-items-center">
+                                        <view class="pr-1">
+                                            <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                        </view>
+                                        <view class="flex-fill text-muted">
+                                            <text class="text-truncate">{{item.companyName}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                                <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                    <view class="square-box bg-gray text-red">
+                                        <text class="fz-lg">{{item.rewardMoney}}</text>
+                                        <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+    <view class="midline-title" hidden="{{!allLoaded}}">
+        <text class="midline-title-text">全部加载完毕</text>
+    </view>
+</view>
+<view class="content" hidden="{{!searchRecommend}}">
+    <view class="line-title">
+        <text class="line-title-text">历史搜索</text>
+        <view class="pl-4 lh-lg" bindtap="historyDel">
+            <text class="fa fa-fw fa-trash text-muted"></text>
+        </view>
+    </view>
+    <view class="cell-pd">
+        <view class="label-box">
+            <block wx:for="{{historySearch}}" wx:key="*this">
+                <view class="label-item" data-item="{{item}}" bindtap="fastSearch">
+                    <text>{{item}}</text>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">热门搜索</text>
+    </view>
+    <view class="cell-pd">
+        <view class="label-box">
+            <block wx:for="{{hotSearch}}" wx:key="*this">
+                <view class="label-item" data-item="{{item}}" bindtap="fastSearch">
+                    <text>{{item}}</text>
+                </view>
+            </block>
+        </view>
+    </view>
+</view>
+<position id="position" picker-data="{{positionData}}" bindsave="positionSave" multi="{{false}}" unlimited="{{true}}"></position>
+<city id="city" picker-data="{{cityData}}" bindsave="citySave" multi="{{false}}" unlimited="{{true}}"></city>
+<require id="require" picker-data="{{requireData}}" bindsave="requireSave"></require>

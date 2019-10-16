@@ -1,0 +1,55 @@
+<!--pages/user/add_intention.wxml-->
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">期望职位</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请选择内容" value="{{info.positionType}}" bindtap="getPositionType" disabled/>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">期望行业</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请选择内容" value="{{info.tradeType}}" bindtap="getTradeType" disabled/>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">期望地点</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请选择内容" value="{{info.addressPost}}" bindtap="getRegion" disabled/>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">期望薪资</view>
+        </view>
+        <view class="weui-cell__bd">
+            <salarytype picker-data="{{info.salaryType}}" bindsave="salaryTypeSave"></salarytype>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="saveIntention">
+        保存
+    </button>
+</view>
+<position id="position" picker-data="{{positionData}}" bindsave="positionSave" multi="{{false}}"></position>
+<trade id="trade" picker-data="{{tradeData}}" bindsave="tradeSave" multi="{{false}}" unlimited="{{true}}"></trade>
+<city id="city" picker-data="{{cityData}}" bindsave="citySave" multi="{{false}}" unlimited="{{true}}"></city>

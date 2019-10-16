@@ -1,0 +1,13 @@
+<!--pages/public/cropper.wxml-->
+<import src="/wxCropper/we-cropper.wxml"/>
+<view class="cropper-wrapper">
+    <template is="we-cropper" data="{{...cropperOpt}}"/>
+    <cover-view class="cropper-buttons">
+        <cover-view class="cropper-button text-gray" bindtap="getCancel">
+            取消
+        </cover-view>
+        <cover-view class="cropper-button text-primary" bindtap="getCropperImage">
+            上传
+        </cover-view>
+    </cover-view>
+</view>

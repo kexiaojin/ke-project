@@ -1,0 +1,77 @@
+<!--components/choosemodal/city.wxml-->
+<view class="dialog" hidden="{{!showDialog}}">
+    <view class="dialog-content">
+        <view class="dialog-body d-flex">
+            <scroll-view scroll-y class="citychoose-item-box flex-fill">
+                <view class="cell-pd">
+                    <text class="text-muted">选择省份</text>
+                </view>
+                <block wx:for="{{provinceList}}" wx:key="id">
+                    <view class="citychoose-item {{raw.provinceId==item.id?'active':''}}" bindtap="getProvince" data-name="{{item.name}}" data-id="{{item.id}}">
+                        <text>{{item.name}}</text>
+                    </view>
+                </block>
+                <view class="seize-box"></view>
+            </scroll-view>
+            <scroll-view scroll-y class="citychoose-item-box flex-fill">
+                <view class="cell-pd">
+                    <text class="text-muted">选择城市</text>
+                </view>
+                <block wx:for="{{cityList}}" wx:key="id">
+                    <view class="citychoose-item {{raw.cityId==item.id?'active':''}}" hidden="{{raw.provinceId!=item.parentId}}" bindtap="getCity" data-name="{{item.name}}" data-id="{{item.id}}">
+                        <text>{{item.name}}</text>
+                    </view>
+                </block>
+                <view class="seize-box"></view>
+            </scroll-view>
+            <scroll-view scroll-y class="citychoose-item-box flex-fill">
+                <view class="cell-pd">
+                    <text class="text-muted">选择地区</text>
+                </view>
+                <view class="citychoose-item {{raw.countyId=='-1'?'active':''}}" bindtap="getCounty" data-name="全部区域" data-id="-1">
+                    <text>全部区域</text>
+                </view>
+                <block wx:for="{{countyList}}" wx:key="id+parentId">
+                    <view class="citychoose-item {{raw.countyId==item.id?'active':''}}" hidden="{{raw.cityId!=item.parentId||item.id=='-1'}}" bindtap="getCounty" data-name="{{item.name}}" data-id="{{item.id}}">
+                        <text>{{item.name}}</text>
+                    </view>
+                </block>
+                <view class="seize-box"></view>
+            </scroll-view>
+        </view>
+        <view class="dialog-footer">
+            <view class="text-muted pl-3 pt-2">
+                <text>已选择（{{multi?'最多五项':'单选'}}）：</text>
+            </view>
+            <view class="pl-3">
+                <scroll-view scroll-x>
+                    <view class="d-flex align-items-center">
+                        <view class="label-item" wx:for="{{newPicker}}" wx:key="countyId">
+                            <view bindtap="del" data-index="{{index}}">
+                                <text>{{item.province}}-{{item.city}}-{{item.county}}</text>
+                                <text class="fa fa-fw fa-times text-red"></text>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </view>
+            <view class="p-3">
+                <view class="d-flex">
+                    <view class="flex-fill" wx:if="{{unlimited}}">
+                        <button hover-class="btn-hover" type='secondary' bindtap="unlimited">
+                            不限
+                        </button>
+                    </view>
+                    <view class="flex-fill">
+                        <button hover-class="btn-hover" type='primary' bindtap="save">
+                            保存
+                        </button>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="dialog-close" bindtap="close">
+            <text class="fa fa-times"></text>
+        </view>
+    </view>
+</view>

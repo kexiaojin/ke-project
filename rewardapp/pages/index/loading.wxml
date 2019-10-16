@@ -1,0 +1,22 @@
+<!--pages/index/loading.wxml-->
+<view class='header'>
+    <image src='/images/logo-sm.png' mode='widthFix' animation="{{animation}}"></image>
+</view>
+<view class='content p-3'>
+    <view class="text-center fz-xlg pb-4">
+        欢迎使用急聘君
+    </view>
+    <view class="text-muted">
+        <text>请您在使用服务前，仔细阅读并充分理解以下相关条款内容。急聘君平台将以条款内全部内容来尽全力保护您的个人信息安全以及消费权益，且保证您与平台交易时平等且安全的进行消费行为。感谢您的信任与支持！</text>
+    </view>
+    <view class="mb-2 mt-2">
+        以下为协议阅读链接，可点击阅读全文
+    </view>
+    <view class="fz-lg text-primary mb-4">
+        <navigator class="d-inline-block mr-4" url="/pages/help/privacy" open-type="navigate">用户隐私条款</navigator>
+        <navigator class="d-inline-block" url="/pages/help/serviceagreement" open-type="navigate">平台服务协议</navigator>
+    </view>
+    <button hover-class="btn-hover" type='primary' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">
+        微信授权
+    </button>
+</view>

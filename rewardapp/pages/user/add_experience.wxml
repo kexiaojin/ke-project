@@ -1,0 +1,66 @@
+<!--pages/user/add_experience.wxml-->
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">职位名称</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{info.positionName}}" bindinput="getPositionName"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">公司名称</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{info.companyName}}" bindinput="getCompanyName"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">在职时间</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker mode="date" fields="month" bindchange="getStartDate" value="{{info.startDate}}">
+                <view class="picker">
+                    <input type="text" class="weui-input" placeholder="开始时间" value="{{info.startDate}}" disabled/>
+                </view>
+            </picker>
+            <text>-</text>
+            <view hidden="{{info.now}}">
+                <picker mode="date" fields="month" bindchange="getEndDate" value="{{info.endDate}}">
+                    <view class="picker">
+                        <input type="text" class="weui-input" placeholder="结束时间" value="{{info.endDate}}" disabled/>
+                    </view>
+                </picker>
+            </view>
+            <view hidden="{{!info.now}}">
+                <input type="text" class="weui-input" value="至今" disabled/>
+            </view>
+        </view>
+        <view class="weui-cell__ft">
+            <checkbox-group bindchange="getNow">
+                <view class="weui-input text-black">
+                    <checkbox value="至今" color="#e69422" checked="{{info.now}}"/>
+                    至今
+                </view>
+            </checkbox-group>
+        </view>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">工作内容</text>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__bd">
+            <textarea maxlength="200" placeholder="详细描述一下工作内容，字数控制在200字以内" value="{{info.memo}}" bindinput="textNumber" bindblur="getMemo"/>
+            <view class="text-right text-muted">
+                {{textNumber}}/200
+            </view>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="saveExperience">
+        保存
+    </button>
+</view>

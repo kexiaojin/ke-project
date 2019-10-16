@@ -1,0 +1,18 @@
+/* pages/public/cropper.wxss */
+.cropper-wrapper{
+    position: relative;
+}
+.cropper-buttons{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    background: #444;
+}
+.cropper-button{
+    padding: 30rpx 40rpx;
+    color: #fff;
+    font-size: 36rpx;
+}

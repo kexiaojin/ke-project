@@ -1,0 +1,60 @@
+/* components/position/position.wxss */
+@import '/font-awesome.wxss';
+@import '/utilities-base.wxss';
+.dialog{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: rgba(0,0,0,.6)
+}
+.dialog-content {
+    position: fixed;
+    top: 40rpx;
+    left: 30rpx;
+    right: 30rpx;
+    bottom: 40rpx;
+    z-index: 10;
+    background: #fff;
+    border-radius: 10rpx;
+    animation: showdialog 0.5s;
+}
+@keyframes showdialog{
+    from{
+        transform: translateY(1000rpx)
+    }
+    to{
+        transform: translateY(0);
+    }
+}
+.dialog-close{
+    position: absolute;
+    right: -20rpx;
+    top: -20rpx;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 52rpx;
+    color: #fff;
+    background-color: #E64340;
+    border: solid 4rpx #fff;
+}
+.dialog-footer{
+    background: #fff;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0rpx 0rpx 10rpx rgba(0,0,0,.2);
+    overflow: hidden;
+    border-radius: 10rpx;
+}
+.dialog-body{
+    height: 100%;
+}
+.seize-box{
+    height: 320rpx;
+}

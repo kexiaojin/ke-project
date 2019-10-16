@@ -1,0 +1,4 @@
+/* pages/user/my_share.wxss */
+.content{
+    padding-top: 90rpx;
+}

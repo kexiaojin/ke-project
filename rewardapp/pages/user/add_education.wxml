@@ -1,0 +1,70 @@
+<!--pages/user/add_education.wxml-->
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">学校名称</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{info.schoolName}}" bindinput="getSchoolName"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">学历</view>
+        </view>
+        <view class="weui-cell__bd">
+            <degreetype picker-data="{{info.lastDegreeName}}" bindsave="degreeTypeSave"></degreetype>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">专业</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请选择内容" value="{{info.majorType}}" bindtap="getMajorType" disabled/>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">就读时间</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker mode="date" fields="month" bindchange="getStartDate" value="{{info.startDate}}">
+                <view class="picker">
+                    <input type="text" class="weui-input" placeholder="开始时间" value="{{info.startDate}}" disabled/>
+                </view>
+            </picker>
+            <text>-</text>
+            <view hidden="{{info.now}}">
+                <picker mode="date" fields="month" bindchange="getEndDate" value="{{info.endDate}}">
+                    <view class="picker">
+                        <input type="text" class="weui-input" placeholder="结束时间" value="{{info.endDate}}" disabled/>
+                    </view>
+                </picker>
+            </view>
+            <view hidden="{{!info.now}}">
+                <input type="text" class="weui-input" value="至今" disabled/>
+            </view>
+        </view>
+        <view class="weui-cell__ft">
+            <checkbox-group bindchange="getNow">
+                <view class="weui-input text-black">
+                    <checkbox value="至今" color="#e69422" checked="{{info.now}}"/>
+                    至今
+                </view>
+            </checkbox-group>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="saveEducation">
+        保存
+    </button>
+</view>
+<major id="major" picker-data="{{majorData}}" bindsave="majorSave" multi="{{false}}"></major>

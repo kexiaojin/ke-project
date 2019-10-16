@@ -1,0 +1,160 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.4.0",
+	"appid": "wxb2b29bb2bcd6e053",
+	"projectname": "rewardapp",
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 1,
+			"list": [
+				{
+					"id": -1,
+					"name": "首页",
+					"pathName": "pages/index/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "职位详情",
+					"pathName": "pages/index/job_info",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "职位搜索",
+					"pathName": "pages/index/search_job",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "我的",
+					"pathName": "pages/user/user_center",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "编辑个人信息",
+					"pathName": "pages/user/user_info",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "实名认证",
+					"pathName": "pages/user/name_prove",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 6,
+					"name": "我的投递",
+					"pathName": "pages/user/my_delivery",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 7,
+					"name": "微简历",
+					"pathName": "pages/user/resume_edit",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 8,
+					"name": "微信授权",
+					"pathName": "pages/index/loading",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 9,
+					"name": "示例代码",
+					"pathName": "pages/example/example",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 10,
+					"name": "企业详情",
+					"pathName": "pages/index/company_info",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 11,
+					"name": "消息",
+					"pathName": "pages/message/message",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 12,
+					"name": "投递记录",
+					"pathName": "pages/user/delivery_record",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 13,
+					"name": "我的分享",
+					"pathName": "pages/user/my_share",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 14,
+					"name": "分享记录",
+					"pathName": "pages/user/share_record",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 15,
+					"name": "钱包",
+					"pathName": "pages/user/wallet",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 16,
+					"name": "抽奖结果",
+					"pathName": "pages/interact/draw_results",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

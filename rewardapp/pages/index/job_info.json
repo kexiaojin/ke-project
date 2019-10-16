@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "职位详情",
+    "usingComponents": {
+        "share": "/components/sharemodal/share",
+        "navbar": "/components/navbar/navbar"
+    }
+}

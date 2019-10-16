@@ -1,0 +1,92 @@
+<!--pages/user/share_record.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <navigator url="/pages/index/job_info?jobId={{jobInfo.jobOrderId}}" open-type="navigate">
+            <view class="d-flex align-items-center">
+                <view class="pr-2">
+                    <image class="user-pic" src="{{jobInfo.companyLogo}}" mode="widthFix"></image>
+                </view>
+                <view class="flex-fill">
+                    <view class="text-truncate">
+                        <text class="fz-lg">{{jobInfo.positionName}}</text>
+                    </view>
+                    <view class="text-truncate text-muted">
+                        <text>{{jobInfo.companyName}}</text>
+                    </view>
+                </view>
+                <view>
+                    <text class="fa fa-fw fa-angle-right text-muted"></text>
+                </view>
+            </view>
+        </navigator>
+    </view>
+    <view class="cell-box" wx:if="{{recommendEntryInfo.state!=0}}">
+        <view class="text-center pt-2 pb-2">
+            <text class="fz-lg">恭喜您，推荐入职成功！</text>
+        </view>
+        <view class="ti-base pb-2">
+            <text>您已成功推荐人员入职</text>
+            <text class="text-primary">{{recommendEntryInfo.positionName}}（{{recommendEntryInfo.companyName}}）</text>
+            <text>职位，人事经理曾女士兑现承诺，推荐奖励</text>
+            <text class="text-primary fz-lg"> {{recommendEntryInfo.recommendAward}} </text>
+            <text>元/人，总推荐奖励</text>
+            <text class="text-primary fz-lg"> {{recommendEntryInfo.recommendAwardTotal}} </text>
+            <text>元已按照入职顺序依次存入您的钱包，请注意查收。</text>
+        </view>
+        <view class="pt-2 pb-2">
+            <text>入职人数：</text>
+            <text class="fz-lg text-red">{{recommendEntryInfo.entryNumber}}</text>
+        </view>
+        <view class="weui-grids mb-2">
+            <block wx:for="{{recommendEntryInfo.list}}" wx:key="userId">
+                <view class="weui-grid p-2">
+                    <view class="d-flex align-items-center">
+                        <view class="pr-1">
+                            <image class="user-pic-sm" src="{{item.headFileName}}" mode="widthFix"></image>
+                        </view>
+                        <view>
+                            <text>{{item.realName}}</text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="cell-box" wx:if="{{recommendDeliveryInfo.state!=0}}">
+        <view class="pb-2">
+            <text>投递人数：</text>
+            <text class="fz-lg text-red">{{recommendDeliveryInfo.deliveryNumber}}</text>
+        </view>
+        <view class="weui-grids mb-2">
+            <block wx:for="{{recommendDeliveryInfo.list}}" wx:key="userId">
+                <view class="weui-grid p-2">
+                    <view class="d-flex align-items-center">
+                        <view class="pr-1">
+                            <image class="user-pic-sm" src="{{item.headFileName}}" mode="widthFix"></image>
+                        </view>
+                        <view>
+                            <text>{{item.realName}}</text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="cell-box">
+        <view class="timeline">
+            <block wx:for="{{recordInfo}}" wx:key="time">
+                <view class="timeline-text">
+                    <view>
+                        <text class="text-muted">{{item.time}}</text>
+                    </view>
+                    <view>
+                        <text class="fz-lg">{{item.title}}</text>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="midline-title">
+        <text class="midline-title-text">www.doerjob.com</text>
+    </view>
+</view>

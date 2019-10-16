@@ -1,0 +1,13 @@
+/* pages/interact/draw_results.wxss */
+.content{
+    background-color: #fff;
+}
+.result-top{
+    background-color: #E64340;
+    text-align: center;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    color: #fff4e5;
+    padding: 0 30rpx 100rpx 30rpx;
+    margin-bottom: 100rpx;
+}

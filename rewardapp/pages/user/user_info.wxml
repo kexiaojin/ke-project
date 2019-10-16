@@ -1,0 +1,124 @@
+<!--pages/user/user_info.wxml-->
+<view class="weui-cells">
+    <view class="line-title">
+        <view class="line-title-text">
+            <text>基本信息</text>
+            <text class="line-title-assist" wx:if="{{baseInfo.nameProve==0}}">（实名认证将获得更高的信誉和曝光）</text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">头像</view>
+        </view>
+        <view class="weui-cell__bd"></view>
+        <view class="weui-cell__ft">
+            <image class="user-pic" src="{{baseInfo.headFileName}}" mode="widthFix" bindtap="getImage"></image>
+        </view>
+    </view>
+    <view class="weui-cell weui-cell_vcode">
+        <view class="weui-cell__hd">
+            <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{baseInfo.realName}}" bindinput="getRealName"/>
+        </view>
+        <view class="weui-cell__ft">
+            <view class="weui-vcode-btn text-green" wx:if="{{baseInfo.nameProve==1}}">
+                <navigator url="/pages/user/name_prove" open-type="navigate">
+                    <text class="fa fa-fw fa-check"></text>
+                    <text>已认证</text>
+                </navigator>
+            </view>
+            <view class="weui-vcode-btn text-primary" wx:else>
+                <navigator url="/pages/user/name_prove" open-type="navigate">
+                    <text>实名认证</text>
+                </navigator>
+            </view>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">性别</view>
+        </view>
+        <view class="weui-cell__bd">
+            <radio-group bindchange="getSex">
+                <label class="weui-input gap-x" wx:for="{{baseItem.sex}}" wx:key="value">
+                    <radio value="{{item.id}}" checked="{{item.checked}}" color="#e69422"/>
+                    {{item.value}}
+                </label>
+            </radio-group>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">学历</view>
+        </view>
+        <view class="weui-cell__bd">
+            <degreetype picker-data="{{baseInfo.lastDegreeName}}" bindsave="degreeTypeSave"></degreetype>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">当前状态</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker bindchange="getState" value="{{baseItem.state.index}}" range="{{baseItem.state.itemList}}" range-key="{{'name'}}">
+                <view class="picker">
+                    <input type="text" class="weui-input" placeholder="请选择内容" value="{{baseInfo.stateName}}" disabled/>
+                </view>
+            </picker>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-down"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">出生日期</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker mode="date" fields="month" bindchange="getBirthDate" value="{{baseInfo.birthDate}}">
+                <view class="picker">
+                    <input type="text" class="weui-input" placeholder="请选择内容" value="{{baseInfo.birthDate}}" disabled/>
+                </view>
+            </picker>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-calendar-alt"></text>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">参加工作</view>
+        </view>
+        <view class="weui-cell__bd">
+            <picker mode="date" fields="month" bindchange="getWorkyears" value="{{baseInfo.workyears}}">
+                <view class="picker">
+                    <input type="text" class="weui-input" placeholder="请选择内容" value="{{baseInfo.workyears}}" disabled/>
+                </view>
+            </picker>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-calendar-alt"></text>
+        </view>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">我的优势</text>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__bd">
+            <textarea maxlength="200" placeholder="详细描述一下你自己，字数控制在200字以内" value="{{baseInfo.memo}}" bindinput="textNumber" bindblur="getMemo"/>
+            <view class="text-right text-muted">
+                {{textNumber}}/200
+            </view>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="saveBaseInfo">
+        保存
+    </button>
+</view>

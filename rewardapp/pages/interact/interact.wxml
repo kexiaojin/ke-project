@@ -1,0 +1,6 @@
+<!--pages/interact/interact.wxml-->
+<view class="content">
+    <view class="midline-title">
+        <text class="midline-title-text">互动功能暂未开放</text>
+    </view>
+</view>

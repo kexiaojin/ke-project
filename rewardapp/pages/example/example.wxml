@@ -1,0 +1,46 @@
+<!--pages/example/example.wxml-->
+<cover-view class="warn-tips" hidden="{{!warnTips.show}}">
+    <cover-view>{{warnTips.msg}}</cover-view>
+</cover-view>
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">验证表单</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{info.validateInput}}" bindinput="getValidateInput"/>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="getValidate">
+        验证表单
+    </button>
+</view>
+<view class="cell-box">
+    <navigator url="/pages/public/msg_success" open-type="navigate">
+        <button hover-class="btn-hover" type='primary'>
+            成功页
+        </button>
+    </navigator>
+    <navigator url="/pages/public/msg_fail" open-type="navigate">
+        <button hover-class="btn-hover" type='primary'>
+            失败页
+        </button>
+    </navigator>
+    <navigator url="/pages/public/error_404" open-type="navigate">
+        <button hover-class="btn-hover" type='primary'>
+            404页
+        </button>
+    </navigator>
+    <navigator url="/pages/public/preview" open-type="navigate">
+        <button hover-class="btn-hover" type='primary'>
+            账单页
+        </button>
+    </navigator>
+    <navigator url="/pages/user/user_login" open-type="navigate">
+        <button hover-class="btn-hover" type='primary'>
+            登录注册页
+        </button>
+    </navigator>
+</view>

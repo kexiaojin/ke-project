@@ -1,0 +1,167 @@
+<!--pages/user/my_share.wxml-->
+<view class="topbar fixed-top">
+    <view class="topbar-item {{tabId==0?'active':''}}" data-id="0" bindtap="topbarTap">
+        <text>已分享</text>
+    </view>
+    <view class="topbar-item {{tabId==1?'active':''}}" data-id="1" bindtap="topbarTap">
+        <text>已推荐投递</text>
+    </view>
+    <view class="topbar-item {{tabId==2?'active':''}}" data-id="2" bindtap="topbarTap">
+        <text>已推荐入职</text>
+    </view>
+</view>
+<view class="content">
+    <view hidden="{{tabId!=0}}">
+        <block wx:if="{{shared.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{shared.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/share_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.shareTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green">【分享成功】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!shared.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+    <view hidden="{{tabId!=1}}">
+        <block wx:if="{{recommendDelivery.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{recommendDelivery.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/share_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.shareTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-primary">【{{item.deliveryNumber}}人已投递】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!recommendDelivery.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+    <view hidden="{{tabId!=2}}">
+        <block wx:if="{{recommendEntry.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{recommendEntry.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/share_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.shareTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green">【{{item.entryNumber}}人已入职】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!recommendEntry.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+</view>

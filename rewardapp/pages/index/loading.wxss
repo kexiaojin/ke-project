@@ -1,0 +1,11 @@
+/* pages/index/loading.wxss */
+page{
+    background-color: #fff;
+}
+.header {
+    padding: 40rpx 0;
+    text-align: center;
+}
+.header image {
+    width: 200rpx;
+}

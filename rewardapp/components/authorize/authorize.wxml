@@ -1,0 +1,26 @@
+<!--components/authorize/authorize.wxml-->
+<block wx:if="{{!isLogin}}">
+    <view class="dialog" hidden="{{!showDialog}}">
+        <view class="dialog-body">
+            <view class='content'>
+                <view class="text-center fz-xlg p-3">
+                    登录急聘君
+                </view>
+                <view class="mb-2 mt-2 text-muted">
+                    <text>急聘君申请获取您的微信绑定的手机号，手机号将作为您的登录账号</text>
+                </view>
+            </view>
+            <view class="bottom">
+                <button hover-class="btn-hover" type='primary' open-type="getPhoneNumber" bindgetphonenumber="bindGetPhoneNumber">
+                    授权手机号
+                </button>
+                <button hover-class="btn-hover" type='secondary' class="mt-2" bindtap="getToLogin">
+                    手机号登录/注册
+                </button>
+            </view>
+            <view class="dialog-close" bindtap="close">
+                <text class="fa fa-times"></text>
+            </view>
+        </view>
+    </view>
+</block>

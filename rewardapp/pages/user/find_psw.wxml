@@ -1,0 +1,40 @@
+<!--pages/user/find_psw.wxml-->
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd fz-lg pr-3">
+            <text class="fa fa-fw fa-mobile-alt"></text>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="number" class="weui-input" placeholder="11位手机号" value="{{info.phoneNumber}}" bindinput="getPhoneNumber"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd fz-lg pr-3">
+            <text class="fa fa-fw fa-lock"></text>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="8-20位密码" value="{{info.psw}}" bindinput="getPsw"/>
+        </view>
+    </view>
+    <view class="weui-cell weui-cell_vcode">
+        <view class="weui-cell__hd fz-lg pr-3">
+            <text class="fa fa-fw fa-shield-alt"></text>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="number" class="weui-input" placeholder="短信验证码" value="{{info.code}}" bindinput="getCode"/>
+        </view>
+        <view class="weui-cell__ft">
+            <view class="weui-vcode-btn text-primary" bindtap="getMsg" wx:if="{{!info.getSuccess}}">
+                <text>获取</text>
+            </view>
+            <view class="weui-vcode-btn" wx:if="{{info.getSuccess}}">
+                <text>{{info.second}}s</text>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="getBind">
+        确定
+    </button>
+</view>

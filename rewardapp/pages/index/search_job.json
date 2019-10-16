@@ -1,0 +1,8 @@
+{
+    "navigationBarTitleText": "职位搜索",
+    "usingComponents": {
+        "position": "/components/choosemodal/position",
+        "city": "/components/choosemodal/city",
+        "require": "/components/choosemodal/require"
+    }
+}

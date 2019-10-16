@@ -1,0 +1,198 @@
+<!--pages/index/job_info.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <view class="d-flex align-items-center">
+            <view class="flex-fill">
+                <text class="fz-xlg text-truncate">{{jobInfo.positionName}}</text>
+            </view>
+            <view class="flex-shrink-0">
+                <text class="fz-lg text-primary">{{jobInfo.salaryCNName}}</text>
+            </view>
+        </view>
+        <view class="pt-1 pb-2 text-muted">
+            <text>{{jobInfo.addressPost}}</text>
+            <text class="pl-3 pr-3 text-gray">|</text>
+            <text>{{jobInfo.recruitNumber}}人</text>
+            <text class="pl-3 pr-3 text-gray">|</text>
+            <text>{{jobInfo.needDegreeCNName}}</text>
+            <text class="pl-3 pr-3 text-gray">|</text>
+            <text>{{jobInfo.workYears}}</text>
+        </view>
+        <view class="memo-box">
+            <view class="d-flex align-items-center justify-content-between">
+                <view class="text-center">
+                    <view>
+                        <text class="fz-lg text-red">{{jobInfo.entryAward}}</text>
+                    </view>
+                    <view>
+                        <text>入职奖励</text>
+                    </view>
+                </view>
+                <view class="text-center">
+                    <view>
+                        <text class="fz-lg text-red">{{jobInfo.recommendAward}}</text>
+                    </view>
+                    <view>
+                        <text>推荐奖励</text>
+                    </view>
+                </view>
+                <view>
+                    <button hover-class="btn-hover" type='secondary' size="mini" bindtap="drawResults" wx:if="{{jobInfo.luckDrawed}}">
+                        查看结果
+                    </button>
+                    <button hover-class="btn-hover" type='primary' size="mini" bindtap="luckDraw" wx:else>
+                        互动抽奖
+                    </button>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="cell-box">
+        <navigator url="/pages/index/company_info?companyId={{companyInfo.companyId}}" open-type="navigate">
+            <view class="d-flex align-items-center">
+                <view class="flex-shrink-0 pr-2">
+                    <image class="user-pic" src="{{companyInfo.iconFile}}" mode="widthFix"></image>
+                </view>
+                <view class="flex-fill">
+                    <view class="text-truncate">
+                        <text class="fz-lg">{{companyInfo.companyName}}</text>
+                    </view>
+                    <view class="text-truncate text-muted">
+                        <text>{{companyInfo.tradeType}}</text>
+                        <text>-</text>
+                        <text>{{companyInfo.companyTypeName}}</text>
+                        <text>-</text>
+                        <text>{{companyInfo.companySizeName}}</text>
+                    </view>
+                </view>
+                <view>
+                    <text class="fa fa-fw fa-angle-right text-muted"></text>
+                </view>
+            </view>
+        </navigator>
+    </view>
+    <view class="cell-box">
+        <view class="mb-2">
+            <text class="fz-lg">职位详情</text>
+        </view>
+        <view class="lh-lg">
+            <text>{{jobInfo.positionDesc}}</text>
+        </view>
+        <view class="mt-4 mb-2">
+            <text class="fz-lg">工作地址</text>
+        </view>
+        <view class="lh-lg d-flex align-items-center" bindtap="getMap">
+            <view class="pr-1">
+                <text class="fa fa-fw fa-map-marker-alt text-muted"></text>
+            </view>
+            <view class="flex-fill">
+                <text class="text-truncate">{{jobInfo.address}}</text>
+            </view>
+            <view>
+                <text class="fa fa-fw fa-angle-right text-muted"></text>
+            </view>
+        </view>
+    </view>
+    <view class="line-title">
+        <text class="line-title-text">相似职位</text>
+    </view>
+    <block wx:if="{{jobList.length>0}}">
+        <view class="weui-cells">
+            <block wx:for="{{jobList}}" wx:key="jobOrderId">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd pt-1 pb-2">
+                        <navigator url="/pages/index/job_info?jobId={{item.jobOrderId}}" open-type="navigate">
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                </view>
+                                <view class="flex-shrink-0">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                </view>
+                            </view>
+                            <view class="pt-1 pb-2 text-muted">
+                                <text>{{item.addressPost}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.recruitNumber}}人</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.needDegreeCNName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.workYears}}</text>
+                            </view>
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <view class="d-flex align-items-center">
+                                        <view class="pr-1">
+                                            <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                        </view>
+                                        <view class="flex-fill text-muted">
+                                            <text class="text-truncate">{{item.companyName}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                                <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                    <view class="square-box bg-gray text-red">
+                                        <text class="fz-lg">{{item.rewardMoney}}</text>
+                                        <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+    <view class="midline-title">
+        <text class="midline-title-text">www.doerjob.com</text>
+    </view>
+</view>
+<view class="fixed-bottom">
+    <view class="cell-box">
+        <view class="d-flex align-items-center">
+            <navigator url="/pages/index/index" open-type="switchTab">
+                <view class="pr-4 pl-1 text-center text-primary">
+                    <view>
+                        <text class="fz-xlg fa fa-fw fa-building"></text>
+                    </view>
+                    <view>
+                        <text>首页</text>
+                    </view>
+                </view>
+            </navigator>
+            <view class="pr-4 pl-1 text-center text-primary" bindtap="share">
+                <view>
+                    <text class="fz-xlg fa fa-fw fa-share-alt"></text>
+                </view>
+                <view>
+                    <text>分享</text>
+                </view>
+            </view>
+            <view class="flex-fill">
+                <button hover-class="btn-hover" type='primary' bindtap="delivery" disabled="{{hasDeliver}}">
+                    <text wx:if="{{hasDeliver}}">已投递</text>
+                    <text wx:else>投递简历</text>
+                </button>
+            </view>
+        </view>
+    </view>
+</view>
+<share id="share" share-data="{{longImgData}}"></share>
+<canvas canvas-id="imgCanvas" class="canvas-box" style="width:300px;height:240px;"></canvas>
+<!-- <navbar></navbar> -->
+<view class="dialog" wx:if="{{drawTips.showModal}}">
+    <view class='dialog-body'>
+        <view class='p-3 text-center'>
+            <image src="/images/red_envelopes.png" mode="widthFix" style="width: 400rpx"></image>
+            <view class="fz-lg">
+                <text>{{drawTips.content}}</text>
+            </view>
+            <button hover-class="btn-hover" type='primary' class="mt-4" bindtap="getDraw">
+                确定
+            </button>
+        </view>
+    </view>
+</view>

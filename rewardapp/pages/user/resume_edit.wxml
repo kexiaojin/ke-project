@@ -1,0 +1,222 @@
+<!--pages/user/resume_edit.wxml-->
+<view class="content">
+    <navigator url="/pages/user/user_info" open-type="navigate" class="cell-box">
+        <view class="d-flex align-items-center">
+            <view class="flex-fill">
+                <view>
+                    <text class="fz-xlg mr-2">{{base.realName}}</text>
+                    <text class="fa fa-fw fa-edit text-primary"></text>
+                </view>
+                <view class="d-flex">
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-graduation-cap text-muted"></text>
+                        <text> {{base.lastDegree}}</text>
+                    </view>
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-briefcase text-muted"></text>
+                        <text> {{base.workyears}}</text>
+                    </view>
+                    <view class="gap-x">
+                        <text class="fa fa-fw fa-birthday-cake text-muted"></text>
+                        <text> {{base.birthDate}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="flex-shrink-0 position-relative">
+                <image class="user-pic" src="{{base.headFileName}}" mode="widthFix"></image>
+                <view class="sexbox">
+                    <text class="fa fa-fw fa-mars text-blue" wx:if="{{base.sex=='男'}}"></text>
+                    <text class="fa fa-fw fa-venus text-red" wx:else></text>
+                </view>
+            </view>
+        </view>
+        <view class="mt-2 memo-box">
+            <text>{{base.memo}}</text>
+        </view>
+    </navigator>
+    <view class="cell-box">
+        <view class="d-flex justify-content-between align-items-center">
+            <view>
+                <view>
+                    <text class="fz-lg">简历公开</text>
+                </view>
+                <view>
+                    <text class="text-muted">{{resume.state}}</text>
+                </view>
+            </view>
+            <view>
+                <switch color="#e69422" checked="{{resume.resumeOpen}}" bindchange="switchChange"/>
+            </view>
+        </view>
+    </view>
+    <view>
+        <view class="line-title">
+            <text class="line-title-text">求职意向</text>
+        </view>
+        <view class="cell-box">
+            <block wx:for="{{resume.intention}}" wx:key="intentionId">
+                <view class="line-list">
+                    <view class="d-flex align-items-center">
+                        <view class="flex-fill" bindtap="addIntention" data-type="{{item.intentionId}}">
+                            <view class="d-flex">
+                                <view class="flex-fill">
+                                    <view class="text-truncate">
+                                        <text class="fa fa-fw fa-edit text-primary mr-2"></text>
+                                        <text class="fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                </view>
+                                <view class="flex-shrink-0 text-primary">
+                                    <text>{{item.salaryCNName}}</text>
+                                </view>
+                            </view>
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <view class="text-truncate">
+                                        <text class="text-muted">{{item.addressPost}}</text>
+                                        <text class="pl-3 pr-3 text-gray">|</text>
+                                        <text class="text-muted">{{item.tradeName}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="pl-4 lh-lg text-red" data-id="{{item.intentionId}}" bindtap="intentionDel">
+                            <text class="fa fa-fw fa-trash-alt"></text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="line-list">
+                <view class="text-center p-1" bindtap="addIntention" data-type="add">
+                    <text class="fa fa-fw fa-plus fz-lg text-primary"></text>
+                    <text class="fz-normal">添加求职意向</text>
+                </view>
+            </view>
+        </view>
+        <view class="line-title">
+            <text class="line-title-text">工作经历</text>
+        </view>
+        <view class="cell-box">
+            <block wx:for="{{resume.experience}}" wx:key="experienceId">
+                <view class="line-list">
+                    <view class="d-flex align-items-center">
+                        <view class="flex-fill" bindtap="addExperience" data-type="{{item.experienceId}}">
+                            <view class="text-truncate">
+                                <text class="fa fa-fw fa-edit text-primary mr-2"></text>
+                                <text class="fz-lg">{{item.positionName}}</text>
+                            </view>
+                            <view class="text-truncate">
+                                <text class="text-muted">{{item.companyName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text class="text-muted">{{item.workTime}}</text>
+                            </view>
+                            <view class="pt-1 pb-1">工作内容：</view>
+                            <view class="text-muted">
+                                <text>{{item.positionDesc}}</text>
+                            </view>
+                        </view>
+                        <view class="pl-4 lh-lg text-red" data-id="{{item.experienceId}}" bindtap="experienceDel">
+                            <text class="fa fa-fw fa-trash-alt"></text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="line-list">
+                <view class="text-center p-1" bindtap="addExperience" data-type="add">
+                    <text class="fa fa-fw fa-plus fz-lg text-primary"></text>
+                    <text class="fz-normal">添加工作经历</text>
+                </view>
+            </view>
+        </view>
+        <view class="line-title">
+            <text class="line-title-text">项目经验</text>
+        </view>
+        <view class="cell-box">
+            <block wx:for="{{resume.project}}" wx:key="projectId">
+                <view class="line-list">
+                    <view class="d-flex align-items-center">
+                        <view class="flex-fill" bindtap="addProject" data-type="{{item.projectId}}">
+                            <view class="text-truncate">
+                                <text class="fa fa-fw fa-edit text-primary mr-2"></text>
+                                <text class="fz-lg">{{item.projectName}}</text>
+                            </view>
+                            <view class="text-truncate">
+                                <text class="text-muted">{{item.positionName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text class="text-muted">{{item.workTime}}</text>
+                            </view>
+                            <view class="pt-1 pb-1">工作内容：</view>
+                            <view class="text-muted">
+                                <text>{{item.projectDesc}}</text>
+                            </view>
+                        </view>
+                        <view class="pl-4 lh-lg text-red" data-id="{{item.projectId}}" bindtap="projectDel">
+                            <text class="fa fa-fw fa-trash-alt"></text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="line-list">
+                <view class="text-center p-1" bindtap="addProject" data-type="add">
+                    <text class="fa fa-fw fa-plus fz-lg text-primary"></text>
+                    <text class="fz-normal">添加项目经验</text>
+                </view>
+            </view>
+        </view>
+        <view class="line-title">
+            <text class="line-title-text">教育经历</text>
+        </view>
+        <view class="cell-box">
+            <block wx:for="{{resume.education}}" wx:key="educationId">
+                <view class="line-list">
+                    <view class="d-flex align-items-center">
+                        <view class="flex-fill" bindtap="addEducation" data-type="{{item.educationId}}">
+                            <view class="text-truncate">
+                                <text class="fa fa-fw fa-edit text-primary mr-2"></text>
+                                <text class="fz-lg">{{item.university}}</text>
+                            </view>
+                            <view class="text-truncate">
+                                <text class="text-muted">【{{item.degree}}】{{item.major}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text class="text-muted">{{item.studyTime}}</text>
+                            </view>
+                        </view>
+                        <view class="pl-4 lh-lg text-red" data-id="{{item.educationId}}" bindtap="educationDel">
+                            <text class="fa fa-fw fa-trash-alt"></text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="line-list">
+                <view class="text-center p-1" bindtap="addEducation" data-type="add">
+                    <text class="fa fa-fw fa-plus fz-lg text-primary"></text>
+                    <text class="fz-normal">添加教育经历</text>
+                </view>
+            </view>
+        </view>
+        <view class="line-title">
+            <text class="line-title-text">图片简历</text>
+        </view>
+        <view class="cell-box">
+            <view class="weui-uploader">
+                <view class="weui-uploader__bd">
+                    <view class="weui-uploader__files">
+                        <block wx:for="{{resume.photo}}" wx:key="*this">
+                            <view class="weui-uploader__file">
+                                <image class="weui-uploader__img" src="{{item}}" data-src="{{item}}" mode="aspectFit" bindtap="showBig"></image>
+                                <view class="image-del" data-index="{{index}}" bindtap="delImage">
+                                    <text class="fa fa-times"></text>
+                                </view>
+                            </view>
+                        </block>
+                    </view>
+                    <view class="weui-uploader__input-box">
+                        <view class="weui-uploader__input" bindtap="getImage"></view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="midline-title">
+        <text class="midline-title-text">www.doerjob.com</text>
+    </view>
+</view>

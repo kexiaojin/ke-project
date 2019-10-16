@@ -1,0 +1,72 @@
+/* pages/user/wallet.wxss */
+.dialog{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: rgba(0,0,0,.6)
+}
+.dialog-body{
+    position: fixed;
+    top: 60rpx;
+    left: 60rpx;
+    right: 60rpx;
+    z-index: 10;
+    background: #fff;
+    border-radius: 10rpx;
+    animation: showdialog 0.5s;
+}
+@keyframes showdialog{
+    from{
+        transform: translateY(1000rpx)
+    }
+    to{
+        transform: translateY(0);
+    }
+}
+.dialog-close{
+    position: absolute;
+    right: -20rpx;
+    top: -20rpx;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 52rpx;
+    color: #fff;
+    background-color: #E64340;
+    border: solid 4rpx #fff;
+}
+.input-row{
+    height: 98rpx;
+    display: flex;
+    align-items: center;
+    border: 1rpx solid #e6e6e6;
+    border-radius: 20rpx;
+}
+.input-item{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-right: 1rpx solid #e6e6e6;
+}
+.input-item:nth-last-of-type(1) { 
+    border-right: 0; 
+} 
+.input-item text { 
+    width: 30rpx; 
+    height: 30rpx; 
+    border-radius: 30rpx; 
+    background-color: #333;
+}
+.input-control { 
+    position: absolute; 
+    left: -200rpx; 
+    bottom: 0; 
+    width: 100rpx; 
+    height: 100rpx;
+}

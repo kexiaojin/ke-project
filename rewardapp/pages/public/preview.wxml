@@ -1,0 +1,23 @@
+<!--pages/public/preview.wxml-->
+<view class="content">
+    <view class="weui-form-preview">
+        <view class="weui-form-preview__hd">
+            <view class="weui-form-preview__item">
+                <view class="weui-form-preview__value_in-hd {{title.type==1?'text-green':title.type==2?'text-red':''}}">
+                    <text wx:if="{{title.type==1}}">+</text>
+                    <text wx:if="{{title.type==2}}">-</text>
+                    <text>{{title.amount}}</text>
+                </view>
+                <view class="weui-form-preview__label_in-hd">{{title.text}}</view>
+            </view>
+        </view>
+        <view class="weui-form-preview__bd">
+            <block wx:for="{{info}}" wx:key="label">
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">{{item.label}}</view>
+                    <view class="weui-form-preview__value">{{item.text}}</view>
+                </view>
+            </block>
+        </view>
+    </view>
+</view>

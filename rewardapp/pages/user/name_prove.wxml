@@ -1,0 +1,66 @@
+<!--pages/user/name_prove.wxml-->
+<view class="weui-cells">
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{proveInfo.realName}}" bindinput="getRealName"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">身份证号</view>
+        </view>
+        <view class="weui-cell__bd">
+            <input type="text" class="weui-input" placeholder="请输入内容" value="{{proveInfo.cardId}}" bindinput="getCardId"/>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">身份证正面</view>
+            <view class="mt-2">
+                <image src="/images/id-positive.png" mode="widthFix" style="width:160rpx"></image>
+            </view>
+        </view>
+        <view class="weui-cell__bd">
+            <view class="upload-image" hidden="{{proveInfo.positivePic==''}}">
+                <image src="{{proveInfo.positivePic}}" data-src="{{proveInfo.positivePic}}" mode="widthFix" style="width:100%;" bindtap="showBig"></image>
+                <view class="image-del" data-id="positive" bindtap="delImage">
+                    <text class="fa fa-times"></text>
+                </view>
+            </view>
+            <view class="upload-box" hidden="{{proveInfo.positivePic!=''}}">
+                <view class="weui-uploader__input-box">
+                    <view class="weui-uploader__input" data-id="positive" bindtap="getImage"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="weui-cell">
+        <view class="weui-cell__hd">
+            <view class="weui-label">身份证反面</view>
+            <view class="mt-2">
+                <image src="/images/id-opposite.png" mode="widthFix" style="width:160rpx"></image>
+            </view>
+        </view>
+        <view class="weui-cell__bd">
+            <view class="upload-image" hidden="{{proveInfo.oppositePic==''}}">
+                <image src="{{proveInfo.oppositePic}}" data-src="{{proveInfo.oppositePic}}" mode="widthFix" style="width:100%;" bindtap="showBig"></image>
+                <view class="image-del" data-id="opposite" bindtap="delImage">
+                    <text class="fa fa-times"></text>
+                </view>
+            </view>
+            <view class="upload-box" hidden="{{proveInfo.oppositePic!=''}}">
+                <view class="weui-uploader__input-box">
+                    <view class="weui-uploader__input" data-id="opposite" bindtap="getImage"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="cell-pd">
+    <button hover-class="btn-hover" type='primary' bindtap="saveProveInfo">
+        提交
+    </button>
+</view>

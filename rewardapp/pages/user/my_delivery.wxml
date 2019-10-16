@@ -1,0 +1,241 @@
+<!--pages/user/my_delivery.wxml-->
+<view class="topbar fixed-top">
+    <view class="topbar-item {{tabId==0?'active':''}}" data-id="0" bindtap="topbarTap">
+        <text>已投递</text>
+    </view>
+    <view class="topbar-item {{tabId==1?'active':''}}" data-id="1" bindtap="topbarTap">
+        <text>面试中</text>
+    </view>
+    <view class="topbar-item {{tabId==2?'active':''}}" data-id="2" bindtap="topbarTap">
+        <text>已入职</text>
+    </view>
+    <view class="topbar-item {{tabId==3?'active':''}}" data-id="3" bindtap="topbarTap">
+        <text>不合适</text>
+    </view>
+</view>
+<view class="content">
+    <view hidden="{{tabId!=0}}">
+        <block wx:if="{{delivered.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{delivered.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/delivery_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.deliveryTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==0}}">【投递成功】</text>
+                                    <text class="text-primary" wx:if="{{item.deliveryType==1}}">【面试邀请待确认】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==2}}">【面试中】</text>
+                                    <text class="text-red" wx:if="{{item.deliveryType==3}}">【已拒绝面试】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==4}}">【已入职】</text>
+                                    <text class="text-muted" wx:if="{{item.deliveryType==5}}">【不合适】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!delivered.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+    <view hidden="{{tabId!=1}}">
+        <block wx:if="{{interview.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{interview.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/delivery_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.deliveryTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==0}}">【投递成功】</text>
+                                    <text class="text-primary" wx:if="{{item.deliveryType==1}}">【面试邀请待确认】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==2}}">【面试中】</text>
+                                    <text class="text-red" wx:if="{{item.deliveryType==3}}">【已拒绝面试】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==4}}">【已入职】</text>
+                                    <text class="text-muted" wx:if="{{item.deliveryType==5}}">【不合适】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!interview.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+    <view hidden="{{tabId!=2}}">
+        <block wx:if="{{enrolled.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{enrolled.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/delivery_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.deliveryTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==0}}">【投递成功】</text>
+                                    <text class="text-primary" wx:if="{{item.deliveryType==1}}">【面试邀请待确认】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==2}}">【面试中】</text>
+                                    <text class="text-red" wx:if="{{item.deliveryType==3}}">【已拒绝面试】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==4}}">【已入职】</text>
+                                    <text class="text-muted" wx:if="{{item.deliveryType==5}}">【不合适】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!enrolled.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+    <view hidden="{{tabId!=3}}">
+        <block wx:if="{{improper.list.length>0}}">
+            <view class="weui-cells">
+                <block wx:for="{{improper.list}}" wx:key="jobOrderId">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd pt-1 pb-2">
+                            <navigator url="/pages/user/delivery_record?jobId={{item.jobOrderId}}" open-type="navigate">
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                    </view>
+                                    <view class="flex-shrink-0">
+                                        <text class="text-muted">{{item.deliveryTime}}</text>
+                                    </view>
+                                </view>
+                                <view class="pt-1 pb-2">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                    <text class="pl-3 pr-2 text-gray">|</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==0}}">【投递成功】</text>
+                                    <text class="text-primary" wx:if="{{item.deliveryType==1}}">【面试邀请待确认】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==2}}">【面试中】</text>
+                                    <text class="text-red" wx:if="{{item.deliveryType==3}}">【已拒绝面试】</text>
+                                    <text class="text-green" wx:if="{{item.deliveryType==4}}">【已入职】</text>
+                                    <text class="text-muted" wx:if="{{item.deliveryType==5}}">【不合适】</text>
+                                </view>
+                                <view class="d-flex align-items-center">
+                                    <view class="flex-fill">
+                                        <view class="d-flex align-items-center">
+                                            <view class="pr-1">
+                                                <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                            </view>
+                                            <view class="flex-fill text-muted">
+                                                <text class="text-truncate">{{item.companyName}}</text>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                        <view class="square-box bg-gray text-red">
+                                            <text class="fz-lg">{{item.rewardMoney}}</text>
+                                            <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </navigator>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <view class="no-msg" wx:else>
+            <text>暂无数据</text>
+        </view>
+        <view class="midline-title" hidden="{{!improper.allLoaded}}">
+            <text class="midline-title-text">全部加载完毕</text>
+        </view>
+    </view>
+</view>

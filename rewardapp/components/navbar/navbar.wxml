@@ -1,0 +1,10 @@
+<!--components/navbar/navbar.wxml-->
+<movable-area style="width:{{moveView.areaWidth}}px;height:{{moveView.areaHeight}}px;" class="move-box">
+    <movable-view x="{{moveView.x}}" y="{{moveView.y}}" direction="all" style="width:{{moveView.areaWidth/2}}px;height:0;">
+        <view class="nav-box">
+            <view class="nav-bar" bindtap="jumpLink">
+                <text class="fa fa-building"></text>
+            </view>
+        </view>
+    </movable-view>
+</movable-area>

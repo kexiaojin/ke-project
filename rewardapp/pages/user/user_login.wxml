@@ -1,0 +1,91 @@
+<!--pages/user/user_login.wxml-->
+<view class="content">
+    <view class="fz-xlg p-4" hidden="{{tabId==1}}">
+        <text>登录</text>
+    </view>
+    <view class="fz-xlg p-4" hidden="{{tabId==0}}">
+        <text>注册</text>
+    </view>
+    <view hidden="{{tabId==1}}">
+        <view class="weui-cells">
+            <view class="weui-cell">
+                <view class="weui-cell__hd fz-lg pr-3">
+                    <text class="fa fa-fw fa-mobile-alt"></text>
+                </view>
+                <view class="weui-cell__bd">
+                    <input type="number" class="weui-input" placeholder="请输入您的手机号" value="{{info.phoneNumber}}" bindinput="getPhoneNumber"/>
+                </view>
+            </view>
+            <view class="weui-cell weui-cell_vcode">
+                <view class="weui-cell__hd fz-lg pr-3">
+                    <text class="fa fa-fw fa-shield-alt"></text>
+                </view>
+                <view class="weui-cell__bd">
+                    <input type="number" class="weui-input" placeholder="请输入短信验证码" value="{{info.code}}" bindinput="getCode"/>
+                </view>
+                <view class="weui-cell__ft">
+                    <view class="weui-vcode-btn text-primary" bindtap="getMsg" hidden="{{getSuccess}}">
+                        <text>获取</text>
+                    </view>
+                    <view class="weui-vcode-btn" hidden="{{!getSuccess}}">
+                        <text>{{second}}s</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="cell-pd mt-4">
+            <button class="gap-y" hover-class="btn-hover" type='primary' bindtap="getLogin">
+                登录
+            </button>
+            <button class="gap-y" hover-class="btn-hover" type='default' data-id="1" bindtap="topbarTap">
+                还没有账号？立即注册
+            </button>
+            <view class="mt-2 text-center">
+                <text class="text-muted"></text>登录代表已同意
+                <navigator class="d-inline-block text-primary" url="/pages/help/privacy" open-type="navigate">《用户隐私条款》</navigator>
+                <navigator class="d-inline-block text-primary" url="/pages/help/serviceagreement" open-type="navigate">《平台服务协议》</navigator>
+            </view>
+        </view>
+    </view>
+    <view hidden="{{tabId==0}}">
+        <view class="weui-cells">
+            <view class="weui-cell">
+                <view class="weui-cell__hd fz-lg pr-3">
+                    <text class="fa fa-fw fa-mobile-alt"></text>
+                </view>
+                <view class="weui-cell__bd">
+                    <input type="number" class="weui-input" placeholder="请输入您的手机号" value="{{info.phoneNumber}}" bindinput="getPhoneNumber"/>
+                </view>
+            </view>
+            <view class="weui-cell weui-cell_vcode">
+                <view class="weui-cell__hd fz-lg pr-3">
+                    <text class="fa fa-fw fa-shield-alt"></text>
+                </view>
+                <view class="weui-cell__bd">
+                    <input type="number" class="weui-input" placeholder="请输入短信验证码" value="{{info.code}}" bindinput="getCode"/>
+                </view>
+                <view class="weui-cell__ft">
+                    <view class="weui-vcode-btn text-primary" bindtap="getMsg" hidden="{{getSuccess}}">
+                        <text>获取</text>
+                    </view>
+                    <view class="weui-vcode-btn" hidden="{{!getSuccess}}">
+                        <text>{{second}}s</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="cell-pd mt-4">
+            <button class="gap-y" hover-class="btn-hover" type='primary' bindtap="getRegister">
+                注册
+            </button>
+            <button class="gap-y" hover-class="btn-hover" type='default' data-id="0" bindtap="topbarTap">
+                已有账号？直接登录
+            </button>
+            <view class="mt-2 text-center">
+                <text class="text-muted"></text>注册代表已同意
+                <navigator class="d-inline-block text-primary" url="/pages/help/privacy" open-type="navigate">《用户隐私条款》</navigator>
+                <navigator class="d-inline-block text-primary" url="/pages/help/serviceagreement" open-type="navigate">《平台服务协议》</navigator>
+            </view>
+        </view>
+    </view>
+</view>

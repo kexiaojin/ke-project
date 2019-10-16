@@ -1,0 +1,104 @@
+<!--pages/user/delivery_record.wxml-->
+<view class="content">
+    <view class="cell-box">
+        <navigator url="/pages/index/job_info?jobId={{jobInfo.jobOrderId}}" open-type="navigate">
+            <view class="d-flex align-items-center">
+                <view class="pr-2">
+                    <image class="user-pic" src="{{jobInfo.companyLogo}}" mode="widthFix"></image>
+                </view>
+                <view class="flex-fill">
+                    <view class="text-truncate">
+                        <text class="fz-lg">{{jobInfo.positionName}}</text>
+                    </view>
+                    <view class="text-truncate text-muted">
+                        <text>{{jobInfo.companyName}}</text>
+                    </view>
+                </view>
+                <view>
+                    <text class="fa fa-fw fa-angle-right text-muted"></text>
+                </view>
+            </view>
+        </navigator>
+    </view>
+    <view class="cell-box" wx:if="{{enrolledInfo.state!=0}}">
+        <view class="text-center pt-2 pb-2">
+            <text class="fz-lg">恭喜您，入职成功！</text>
+        </view>
+        <view class="ti-base pb-2">
+            <text>您已成功入职</text>
+            <text class="text-primary">{{enrolledInfo.positionName}}（{{enrolledInfo.companyName}}）</text>
+            <text>职位，人事经理曾女士兑现承诺，入职奖励</text>
+            <text class="text-primary fz-lg"> {{enrolledInfo.entryAward}} </text>
+            <text>元已存入您的钱包，请注意查收。</text>
+        </view>
+    </view>
+    <view class="cell-box position-relative" wx:if="{{interviewInfo.state!=0}}">
+        <view class="text-center pt-2 pb-2">
+            <text class="fz-lg">面试邀请函</text>
+        </view>
+        <view class="pb-2">
+            <text>{{interviewInfo.invitee}}：</text>
+        </view>
+        <view class="ti-base">
+            <text>您的学识、经历给我们留下了良好的印象。为了彼此进一步了解，本公司将邀请您前来参加面试。</text>
+            <text>如果您面试时间上不方便，请及时与</text>
+            <text class="text-primary">{{interviewInfo.contactMan}}（{{interviewInfo.contactPhone}}）</text>
+            <text>联系。</text>
+        </view>
+        <view class="pt-4 pb-2">
+            <view class="weui-form-preview__item gap-y">
+                <view class="weui-form-preview__label lh-lg">时间</view>
+                <view class="weui-form-preview__value fz-lg">{{interviewInfo.interviewTime}}</view>
+            </view>
+            <view class="weui-form-preview__item gap-y">
+                <view class="weui-form-preview__label lh-lg">地点</view>
+                <view class="weui-form-preview__value fz-lg">{{interviewInfo.interviewPlace}}</view>
+            </view>
+            <view class="weui-form-preview__item gap-y">
+                <view class="weui-form-preview__label lh-lg">备注</view>
+                <view class="weui-form-preview__value fz-lg">{{interviewInfo.remarks}}</view>
+            </view>
+        </view>
+        <view class="text-right pt-2 pb-2">
+            <view>
+                <text>{{interviewInfo.inviter}}</text>
+            </view>
+            <view>
+                <text>{{interviewInfo.invitationTime}}</text>
+            </view>
+        </view>
+        <view class="stamp-accept" wx:if="{{interviewInfo.state==2}}"></view>
+        <view class="stamp-refuse" wx:elif="{{interviewInfo.state==3}}"></view>
+        <view class="pt-2 pb-2" wx:else>
+            <view class="d-flex">
+                <view class="flex-fill">
+                    <button hover-class="btn-hover" type='secondary' bindtap="refuse">
+                        <text>拒绝</text>
+                    </button>
+                </view>
+                <view class="flex-fill">
+                    <button hover-class="btn-hover" type='primary' bindtap="accept">
+                        <text>接受</text>
+                    </button>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="cell-box">
+        <view class="timeline">
+            <block wx:for="{{recordInfo}}" wx:key="time">
+                <view class="timeline-text">
+                    <view>
+                        <text class="text-muted">{{item.time}}</text>
+                    </view>
+                    <view>
+                        <text class="fz-lg">{{item.title}}</text>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </view>
+    <view class="midline-title">
+        <text class="midline-title-text">www.doerjob.com</text>
+    </view>
+</view>

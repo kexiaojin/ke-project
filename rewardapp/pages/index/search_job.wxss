@@ -1,0 +1,4 @@
+/* pages/index/search_job.wxss */
+.content{
+    padding-top: 162rpx;
+}

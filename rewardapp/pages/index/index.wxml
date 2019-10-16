@@ -1,0 +1,70 @@
+<!--pages/index/index.wxml-->
+<view class="index-header">
+    <view class="fz-xlg">
+        <text>君子爱“才”，取之有“道”</text>
+    </view>
+    <view class="index-header-search">
+        <view class="index-header-box">
+            <navigator url="search_job" open-type="navigate">
+                <text class="fa fa-fw fa-search"></text>
+                <text class="ml-1">搜索职位</text>
+            </navigator>
+        </view>
+    </view>
+</view>
+<view class="content">
+    <block wx:if="{{jobList.length>0}}">
+        <view class="weui-cells">
+            <block wx:for="{{jobList}}" wx:key="jobOrderId">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd pt-1 pb-2">
+                        <navigator url="/pages/index/job_info?jobId={{item.jobOrderId}}" open-type="navigate">
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <text class="text-truncate fz-lg">{{item.positionName}}</text>
+                                </view>
+                                <view class="flex-shrink-0">
+                                    <text class="text-primary">{{item.salaryCNName}}</text>
+                                </view>
+                            </view>
+                            <view class="pt-1 pb-2 text-muted">
+                                <text>{{item.addressPost}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.recruitNumber}}人</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.needDegreeCNName}}</text>
+                                <text class="pl-3 pr-3 text-gray">|</text>
+                                <text>{{item.workYears}}</text>
+                            </view>
+                            <view class="d-flex align-items-center">
+                                <view class="flex-fill">
+                                    <view class="d-flex align-items-center">
+                                        <view class="pr-1">
+                                            <image class="user-pic-sm" src="{{item.companyLogo}}" mode="widthFix"></image>
+                                        </view>
+                                        <view class="flex-fill text-muted">
+                                            <text class="text-truncate">{{item.companyName}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                                <view class="flex-shrink-0" wx:if="{{item.rewardMoney}}">
+                                    <view class="square-box bg-gray text-red">
+                                        <text class="fz-lg">{{item.rewardMoney}}</text>
+                                        <text class="fz-sm weui-badge bg-secondary ml-1">赏</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </view>
+            </block>
+        </view>
+    </block>
+    <view class="no-msg" wx:else>
+        <text>暂无数据</text>
+    </view>
+    <view class="midline-title" hidden="{{!allLoaded}}">
+        <text class="midline-title-text">全部加载完毕</text>
+    </view>
+</view>
+

@@ -1,0 +1,84 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/index/loading",
+        "pages/index/search_job",
+        "pages/index/job_info",
+        "pages/index/company_info",
+        "pages/interact/interact",
+        "pages/interact/draw_results",
+        "pages/message/message",
+        "pages/user/user_center",
+        "pages/user/user_info",
+        "pages/user/name_prove",
+        "pages/user/resume_edit",
+        "pages/user/add_intention",
+        "pages/user/add_experience",
+        "pages/user/add_project",
+        "pages/user/add_education",
+        "pages/user/my_delivery",
+        "pages/user/delivery_record",
+        "pages/user/my_share",
+        "pages/user/share_record",
+        "pages/user/wallet",
+        "pages/user/money_detail",
+        "pages/user/withdraw_psw",
+        "pages/user/gift_vouchers",
+        "pages/user/user_address",
+        "pages/user/user_login",
+        "pages/user/find_psw",
+        "pages/public/error_404",
+        "pages/public/msg_fail",
+        "pages/public/msg_success",
+        "pages/public/preview",
+        "pages/public/cropper",
+        "pages/help/help",
+        "pages/help/handbook",
+        "pages/help/privacy",
+        "pages/help/serviceagreement",
+        "pages/example/example"
+    ],
+    "tabBar": {
+        "color": "#999",
+        "selectedColor": "#e69422",
+        "backgroundColor": "#fff",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "images/icon_index.png",
+                "selectedIconPath": "images/icon_index_active.png"
+            },
+            {
+                "pagePath": "pages/interact/interact",
+                "text": "互动",
+                "iconPath": "images/icon_interact.png",
+                "selectedIconPath": "images/icon_interact_active.png"
+            },
+            {
+                "pagePath": "pages/message/message",
+                "text": "消息",
+                "iconPath": "images/icon_message.png",
+                "selectedIconPath": "images/icon_message_active.png"
+            },
+            {
+                "pagePath": "pages/user/user_center",
+                "text": "我的",
+                "iconPath": "images/icon_user.png",
+                "selectedIconPath": "images/icon_user_active.png"
+            }
+        ]
+    },
+    "window": {
+        "navigationBarTitleText": "急聘君",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black"
+    },
+    "permission": {
+        "scope.userLocation": {
+            "desc": "你的位置信息将用于小程序位置接口的效果展示"
+        }
+    },
+    "sitemapLocation": "sitemap.json"
+}

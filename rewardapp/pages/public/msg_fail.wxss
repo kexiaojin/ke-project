@@ -1,0 +1,19 @@
+/* pages/public/msg_fail.wxss */
+.header {
+    padding: 120rpx 0 60rpx 0;
+    text-align: center;
+}
+.header image {
+    width: 200rpx;
+    height: 200rpx;
+}
+.content {
+    padding: 30rpx;
+    text-align: center;
+}
+.content text {
+    color: #999;
+}
+.bottom {
+    padding: 30rpx;
+}

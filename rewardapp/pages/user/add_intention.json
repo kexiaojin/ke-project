@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "编辑求职意向",
+    "usingComponents": {
+        "position": "/components/choosemodal/position",
+        "trade": "/components/choosemodal/trade",
+        "city": "/components/choosemodal/city",
+        "salarytype": "/components/select/salarytype"
+    }
+}

@@ -1,0 +1,32 @@
+/* pages/index/job_info.wxss */
+.content{
+    padding-bottom: 140rpx;
+}
+.dialog{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: rgba(0,0,0,.6)
+}
+.dialog-body{
+    position: fixed;
+    top: 50%;
+    left: 60rpx;
+    right: 60rpx;
+    margin-top: -400rpx;
+    z-index: 10;
+    background: #fff;
+    border-radius: 10rpx;
+    animation: showdialog 0.5s;
+}
+@keyframes showdialog{
+    from{
+        transform: translateY(1000rpx)
+    }
+    to{
+        transform: translateY(0);
+    }
+}

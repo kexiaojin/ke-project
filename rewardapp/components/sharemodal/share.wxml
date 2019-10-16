@@ -1,0 +1,45 @@
+<!--components/sharemodal/share.wxml-->
+<action-sheet hidden="{{!showDialog}}" bindchange="onshow">
+    <action-sheet-item>
+        <button hover-class="btn-hover" type='normal' open-type="share">
+            <view class="d-flex align-items-center">
+                <view class="share-icon">
+                    <text class="fa fa-share"></text>
+                </view>
+                <view class="text-left">
+                    <text>转发给好友或群聊</text>
+                </view>
+            </view>
+        </button>
+    </action-sheet-item>
+    <action-sheet-item>
+        <button hover-class="btn-hover" type='normal' bindtap="getImage">
+            <view class="d-flex align-items-center">
+                <view class="share-icon">
+                    <text class="fa fa-image"></text>
+                </view>
+                <view class="text-left">
+                    <text>生成朋友圈分享图</text>
+                </view>
+            </view>
+        </button>
+    </action-sheet-item>
+    <action-sheet-item>
+        <button hover-class="btn-hover" type='normal' bindtap="getPoster">
+            <view class="d-flex align-items-center">
+                <view class="share-icon">
+                    <text class="fa fa-window-maximize"></text>
+                </view>
+                <view class="text-left">
+                    <text>生成职位海报</text>
+                    <view class="fz-normal text-muted">
+                        <text>可将生成的海报发到任何社交圈子</text>
+                    </view>
+                </view>
+            </view>
+        </button>
+    </action-sheet-item>
+    <action-sheet-cancel>取消</action-sheet-cancel>
+</action-sheet>
+<canvas canvas-id="shareCanvas" class="canvas-box" style="width:750px;height:1334px;"></canvas>
+<canvas canvas-id="posterCanvas" class="canvas-box" style="width:750px;height:{{posterHeight}}px;"></canvas>

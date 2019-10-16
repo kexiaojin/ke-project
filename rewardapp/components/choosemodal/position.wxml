@@ -1,0 +1,70 @@
+<!--components/position/position.wxml-->
+<view class="dialog" hidden="{{!showDialog}}">
+    <view class="dialog-content">
+        <scroll-view scroll-y class="dialog-body">
+            <!-- <view class="cell-weui">
+                <view class="d-flex">
+                    <view class="flex-fill">
+                        <input type="text" class="weui-input" placeholder="请输入搜索内容" value="{{search}}" bindinput="getSearch"/>
+                    </view>
+                    <view class="flex-shrink-0" bindtap="search">
+                        <text class="fa fa-fw fa-search"></text>
+                    </view>
+                </view>
+            </view> -->
+            <view class="pt-2 pb-2">
+                <block wx:for="{{list}}" wx:key="id" wx:for-item="root">
+                    <view class="line-title">
+                        <text class="line-title-text">{{root.name}}</text>
+                    </view>
+                    <view class="cell-pd">
+                        <block class="label-box" wx:for="{{root.middleList}}" wx:key="id" wx:for-item="mid">
+                            <view class="label-item {{mid.id==activeId?'active':''}}" bindtap="getActive" data-id="{{mid.id}}">
+                                <picker bindchange="getList" data-name="{{mid.detailList.nameList}}" data-id="{{mid.detailList.idList}}" range="{{mid.detailList.nameList}}">
+                                    <view class="picker">
+                                        <text>{{mid.name}}</text>
+                                    </view>
+                                </picker>
+                            </view>
+                        </block>
+                    </view>
+                </block>
+            </view>
+            <view class="seize-box"></view>
+        </scroll-view>
+        <view class="dialog-footer">
+            <view class="text-muted pl-3 pt-2">
+                <text>已选择（{{multi?'最多五项':'单选'}}）：</text>
+            </view>
+            <view class="pl-3">
+                <scroll-view scroll-x>
+                    <view class="d-flex align-items-center">
+                        <view class="label-item" wx:for="{{newPicker}}" wx:key="id">
+                            <view bindtap="del" data-index="{{index}}">
+                                <text>{{item.name}}</text>
+                                <text class="fa fa-fw fa-times text-red"></text>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </view>
+            <view class="p-3">
+                <view class="d-flex">
+                    <view class="flex-fill" wx:if="{{unlimited}}">
+                        <button hover-class="btn-hover" type='secondary' bindtap="unlimited">
+                            不限
+                        </button>
+                    </view>
+                    <view class="flex-fill">
+                        <button hover-class="btn-hover" type='primary' bindtap="save">
+                            保存
+                        </button>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="dialog-close" bindtap="close">
+            <text class="fa fa-times"></text>
+        </view>
+    </view>
+</view>

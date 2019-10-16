@@ -1,0 +1,23 @@
+<!--pages/public/error_404.wxml-->
+<view class="error-bg" style="height:{{pageHeight}}px">
+    <view class="fire fire01"></view>
+    <view class="fire fire02"></view>
+    <view class="fire fire03"></view>
+    <view class="error-content">
+        <view class="error-title">
+            <text>404</text>
+        </view>
+        <view class="p-4">
+            <view class="fz-lg">
+                <text>很抱歉，您访问的页面已丢失</text>
+            </view>
+            <view>
+                <text class="text-red">{{countDown}}</text>
+                <text> 秒后自动跳转</text>
+            </view>
+        </view>
+        <button hover-class="btn-hover" type='primary' size="mini" bindtap="goReward">
+            进入急聘君
+        </button>
+    </view>
+</view>

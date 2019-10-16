@@ -1,0 +1,38 @@
+<!--pages/help/help.wxml-->
+<view class="weui-cells">
+    <navigator url="/pages/help/handbook" open-type="navigate" class="weui-cell">
+        <view class="weui-cell__bd">
+            <text class="fa fa-fw fa-atlas weui-list-icon"></text>
+            <text class="weui-list-text">使用手册</text>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-right"></text>
+        </view>
+    </navigator>
+    <navigator url="/pages/help/privacy" open-type="navigate" class="weui-cell">
+        <view class="weui-cell__bd">
+            <text class="fa fa-fw fa-user-shield weui-list-icon"></text>
+            <text class="weui-list-text">用户隐私条款</text>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-right"></text>
+        </view>
+    </navigator>
+    <navigator url="/pages/help/serviceagreement" open-type="navigate" class="weui-cell">
+        <view class="weui-cell__bd">
+            <text class="fa fa-fw fa-balance-scale weui-list-icon"></text>
+            <text class="weui-list-text">平台服务协议</text>
+        </view>
+        <view class="weui-cell__ft">
+            <text class="fa fa-fw fa-angle-right"></text>
+        </view>
+    </navigator>
+</view>
+<view class="cell-pd">
+    <button class="gap-y" hover-class="btn-hover" type='primary' open-type="contact">
+        <text>联系客服</text>
+    </button>
+    <button class="gap-y" hover-class="btn-hover" type='secondary' open-type="feedback">
+        <text>反馈与建议</text>
+    </button>
+</view>

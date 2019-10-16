@@ -1,0 +1,51 @@
+/* components/authorize/authorize.wxss */
+@import '/weui.rpx.wxss';
+@import '/font-awesome.wxss';
+@import '/utilities-base.wxss';
+.dialog{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    background: rgba(0,0,0,.6)
+}
+.dialog-body{
+    position: fixed;
+    top: 50%;
+    left: 60rpx;
+    right: 60rpx;
+    margin-top: -400rpx;
+    z-index: 10;
+    background: #fff;
+    border-radius: 10rpx;
+    animation: showdialog 0.5s;
+}
+@keyframes showdialog{
+    from{
+        transform: translateY(1000rpx)
+    }
+    to{
+        transform: translateY(0);
+    }
+}
+.dialog-close{
+    position: absolute;
+    right: -20rpx;
+    top: -20rpx;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 52rpx;
+    color: #fff;
+    background-color: #E64340;
+    border: solid 4rpx #fff;
+}
+.content {
+    padding: 30rpx;
+}
+.bottom {
+    padding: 30rpx;
+}
