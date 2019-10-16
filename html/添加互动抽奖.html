@@ -1,0 +1,393 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="progress-nav mb-4">
+                <div class="progress-nav-item active">
+                    1、选择互动类型
+                </div>
+                <div class="progress-nav-item" v-bind:class="{'active':progress!=1}">
+                    2、互动设置
+                </div>
+                <div class="progress-nav-item" v-bind:class="{'active':progress==3||progress==4}">
+                    3、支付费用
+                </div>
+                <div class="progress-nav-item" v-bind:class="{'active':progress==4}">
+                    4、完成
+                </div>
+            </div>
+            <div v-show="progress==1">
+                <div class="row pt-4">
+                    <div class="col-4">
+                        <div class="card bg-primary text-white pointer" v-on:click="getInteractType(0)">
+                            <div class="card-body">
+                                <div class="fz-lg text-center mb-4">红包互动</div>
+                                <div>我是玩法简介</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card text-muted">
+                            <div class="card-body">
+                                <div class="fz-lg text-center mb-4">礼券互动</div>
+                                <div>功能暂未开发，敬请期待</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card text-muted">
+                            <div class="card-body">
+                                <div class="fz-lg text-center mb-4">线下体验券互动</div>
+                                <div>功能暂未开发，敬请期待</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="progress==2">
+                <form action="">
+                    <fieldset class="mb-4">
+                        <legend>红包互动</legend>
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">互动名称</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="请输入内容" v-model="redEnvelopes.title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">红包个数</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="请输入内容" v-model="redEnvelopes.number">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">发布日期</span>
+                                        </div>
+                                        <input type="text" size="10" class="form-control get-time" placeholder="开始时间" readonly v-model="redEnvelopes.startTime">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">总金额</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="请输入内容" v-model="redEnvelopes.award">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">中奖率</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="请输入内容" v-model="redEnvelopes.winningRate">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">玩法<i class="invisible">字</i></span>
+                                        </div>
+                                        <input type="text" class="form-control" value="拼手气" disabled>
+                                        <!-- <div class="input-group-append flex-fill">
+                                            <span class="input-group-text flex-fill">
+                                                <label class="custom-control custom-radio">
+                                                    <input type="radio" name="playWay" class="custom-control-input" value="拼手气" v-model="redEnvelopes.playWay">
+                                                    <span class="custom-control-label">拼手气</span>
+                                                </label>
+                                                <label class="custom-control custom-radio ml-2">
+                                                    <input type="radio" name="playWay" class="custom-control-input" value="等额" v-model="redEnvelopes.playWay">
+                                                    <span class="custom-control-label">等额</span>
+                                                </label>
+                                            </span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>是否开具电子发票（7%税费）</div>
+                                    <label class="custom-switch">
+                                        <input type="checkbox" class="custom-control-input" name="makeInvoice" v-model="redEnvelopes.makeInvoice">
+                                        <span class="custom-switch-label"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>实际支付</div>
+                                    <div class="fz-xlg text-danger">
+                                        ￥{{realPay}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-lg btn-default gap-x" v-on:click="redEnvelopesPrev(1)">上一步</button>
+                        <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="redEnvelopesNext">下一步</button>
+                    </div>
+                </form>
+                <dl class="mt-4 lh-lg">
+                    <dt>玩法说明：</dt>
+                    <dd>1、红包互动抽奖由贵公司向所有参与者提供。</dd>
+                    <dd>2、急聘君团队免费向未中奖用户提供金豆点券以兹鼓励。</dd>
+                    <dd>3、低于0.3元的红包受技术限制，只能保存到零钱中。</dd>
+                </dl>
+            </div>
+            <div v-show="progress==3">
+                <div class="pt-4 pb-4">
+                    <div class="weui-form-preview m-auto box-has-shadow" style="width: 500px;">
+                        <div class="weui-form-preview__hd">
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">实际支付</div>
+                                <div class="weui-form-preview__value fz-xlg text-danger">￥{{orderInfo.needPay}}</div>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__bd">
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">订单号</div>
+                                <div class="weui-form-preview__value">{{orderInfo.orderNumber}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">红包总金额</div>
+                                <div class="weui-form-preview__value">{{orderInfo.award}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">红包个数</div>
+                                <div class="weui-form-preview__value">{{orderInfo.number}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">中奖率</div>
+                                <div class="weui-form-preview__value">{{orderInfo.winningRate}}%</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">发布日期</div>
+                                <div class="weui-form-preview__value">{{orderInfo.startTime}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">玩法</div>
+                                <div class="weui-form-preview__value">{{orderInfo.playWay}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">电子发票</div>
+                                <div class="weui-form-preview__value">{{orderInfo.makeInvoice?'开具':'不开'}}</div>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__ft">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="text-center">
+                                    <div class="mb-2">
+                                        <i class="icon-weixinpay"></i>
+                                        微信扫码，支付
+                                        <span class="fz-xlg">
+                                            {{orderInfo.needPay}}
+                                        </span>
+                                        元
+                                    </div>
+                                    <img v-bind:src="orderInfo.weixinCode" alt="图片" class="w-md">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-lg btn-default gap-x" v-on:click="redEnvelopesPrev(2)">上一步</button>
+                    <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="finishPay">支付完成</button>
+                </div>
+            </div>
+            <div v-show="progress==4">
+                <div class="pt-4 pb-4 text-center">
+                    <div>
+                        <i class="fa fa-fw fa-check fz-xxlg text-success"></i>
+                    </div>
+                    <div class="pb-4 fz-lg">
+                        订单支付成功
+                    </div>
+                    <div class="pt-4 pb-4">
+                        <div class="pb-2">互动抽奖已自动关联所有已发布的职位</div>
+                        <!-- <div class="w-lg m-auto border box-body">
+                            <div class="pb-4 mb-4 border-bottom d-flex justify-content-between">
+                                <div class="fw-lg">职位列表</div>
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" v-model="allChecked" v-on:click="getAllChecked">
+                                    <span class="custom-control-label">全选</span>                                
+                                </label>
+                            </div>
+                            <div class="gap-y text-left" v-for="(item,index) in position.list" v-bind:key="'position'+index">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" v-bind:value="item.id" v-model="position.checked">
+                                    <span class="custom-control-label">{{item.name}}</span>
+                                </label>
+                            </div>
+                        </div> -->
+                    </div>
+                    <button type="button" class="btn btn-lg btn-primary" v-on:click="saveRedEnvelopes">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+
+        },
+        data: {
+            // progress表示进度，1为第一步，2为第二步，3为第三步，4为第四步
+            progress: 1,
+            // interactType表示选择的互动类型，-1为还没有选，0为红包互动，1为礼券互动，2为线下体验券互动
+            interactType: -1,
+            redEnvelopes: {
+                title: '现金红包抽奖',
+                award: '500.00',
+                number: '1000',
+                // playWay: '拼手气',
+                winningRate: '100',
+                startTime: '2019-08-01',
+                makeInvoice: true
+            },
+            orderInfo: {
+                orderNumber: 'xxxxxx',
+                award: '500.00',
+                number: '1000',
+                playWay: '拼手气',
+                winningRate: '100',
+                startTime: '2019-08-01',
+                makeInvoice: true,
+                needPay: '535.00',
+                alipayCode: 'images/no-pic.png',
+                weixinCode: 'images/no-pic.png'
+            },
+            // 是否关联所有职位
+            // position: {
+            //     checked: ['1','2'],
+            //     list: [
+            //         {
+            //             name: '职位一',
+            //             id: '1'
+            //         },
+            //         {
+            //             name: '职位二',
+            //             id: '2'
+            //         }
+            //     ]
+            // }
+        },
+        // 计算属性
+        computed: {
+            // 实际支付计算
+            realPay: function(){
+                var totalPay = (this.redEnvelopes.award*100) / 100;
+                var invoicePay = (this.redEnvelopes.award*100) * 0.07 / 100;
+                if(this.redEnvelopes.makeInvoice){
+                    return (totalPay+invoicePay).toFixed(2);
+                }else{
+                    return totalPay.toFixed(2);
+                }
+            },
+            // 全选计算
+            // allChecked: function(){
+            //     if(this.position.checked.length == this.position.list.length){
+            //         return true;
+            //     }else{
+            //         return false;
+            //     }
+            // }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 选择互动类型
+            getInteractType: function(e){
+                this.interactType = e;
+                this.progress = 2;
+            },
+            // 红包互动上一步
+            redEnvelopesPrev: function(e){
+                this.interactType = -1;
+                this.progress = e;
+            },
+            // 红包互动下一步
+            redEnvelopesNext: function(e){
+                this.progress = 3;
+            },
+            // 支付完成
+            finishPay: function(e){
+                this.progress = 4;
+            },
+            // 全选
+            // getAllChecked: function(event){
+            //     if(event.target.checked == true){
+            //         var checkNumber = [];
+            //         for (i=0; i<this.position.list.length; i++){
+            //             checkNumber.push(this.position.list[i].id)
+            //         };
+            //         this.position.checked = checkNumber;
+            //     }else{
+            //         this.position.checked = [];
+            //     }
+            // },
+            // 第四步确定
+            saveRedEnvelopes: function(e){
+                $('#deladdInteract', window.parent.document).trigger("click");
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $('.get-time').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 'month',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+        }
+    })
+</script>

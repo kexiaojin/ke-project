@@ -1,0 +1,440 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 选择职位组件 -->
+    <script type="text/javascript" src="components/positionchoose.js"></script>
+    <!-- 翻页组件 -->
+    <script type="text/javascript" src="components/page.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 选择职位 -->
+        <doer-positionchoose ref="componentPositionChoose" v-on:positionchooseclick="positionCallBack"></doer-positionchoose>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="nav-line pr-5">
+                <div class="nav-line-item">
+                    <a href="javascript:;" v-bind:class="{'active':state==0}" v-on:click="tabChange(0)">收到的简历</a>
+                    <a href="javascript:;" v-bind:class="{'active':state==1}" v-on:click="tabChange(1)">收藏的简历</a>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==0}">
+                    <form action="">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="姓名/手机号" v-model="received.receivedSearch.nameInput">
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="received.receivedSearch.deliveryPosition.selected">
+                                    <option value="" disabled>请选择投递的职位</option>
+                                    <option v-for="(option,index) in received.receivedSearch.deliveryPosition.options" v-bind:key="'deliveryPosition'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请选择求职意向" v-bind:value="received.receivedSearch.intentionList.name" v-on:click="positionGetChoose(received.receivedSearch.intentionList,'received','single')" readonly>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="received.receivedSearch.lastDegree.selected">
+                                    <option value="" disabled>请选择学历</option>
+                                    <option v-for="(option,index) in received.receivedSearch.lastDegree.options" v-bind:key="'lastDegree'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="received.receivedSearch.sex.selected">
+                                    <option value="" disabled>请选择性别</option>
+                                    <option v-for="(option,index) in received.receivedSearch.sex.options" v-bind:key="'sex'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="received.receivedSearch.sort.selected">
+                                    <option value="" disabled>请选择排序方式</option>
+                                    <option v-for="(option,index) in received.receivedSearch.sort.options" v-bind:key="'sort'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary" v-on:click="receivedSearchSubmit">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div v-if="received.list.length>0">
+                        <div class="row">
+                            <div class="col-4 pt-4" v-for="(item,index) in received.list" v-bind:key="'received'+index">
+                                <div class="resume-card" v-on:click="getResumeInfo(item.resumeId,item.realName)">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-fill">
+                                            <div class="fz-lg text-primary">
+                                                {{item.realName}}
+                                            </div>
+                                            <div class="d-flex lh-lg">
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-graduation-cap text-muted"></span>
+                                                    <span> {{item.lastDegree}}</span>
+                                                </div>
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-briefcase text-muted"></span>
+                                                    <span> {{item.workyears}}</span>
+                                                </div>
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-birthday-cake text-muted"></span>
+                                                    <span> {{item.birthDate}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 marker-box">
+                                            <img class="border border-white rounded-circle w-img2 h-img2" v-bind:src="item.headFileName" alt="图片">
+                                            <div class="marker-item">
+                                                <span class="fa fa-fw fa-mars text-info" v-if="item.sex=='男'"></span>
+                                                <span class="fa fa-fw fa-venus text-danger" v-else></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center pt-3 mt-3 border-dashed-top">
+                                        <div class="flex-fill">
+                                            <div class="text-truncate">{{item.intention}}</div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="text-muted">{{item.deliveryTime}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="received.pageList" v-on:pageclick="newPageReceived" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==1}">
+                    <form action="">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="姓名/手机号" v-model="collect.collectSearch.nameInput">
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="collect.collectSearch.deliveryPosition.selected">
+                                    <option value="" disabled>请选择投递的职位</option>
+                                    <option v-for="(option,index) in collect.collectSearch.deliveryPosition.options" v-bind:key="'deliveryPosition2'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请选择求职意向" v-bind:value="collect.collectSearch.intentionList.name" v-on:click="positionGetChoose(collect.collectSearch.intentionList,'collect','single')" readonly>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="collect.collectSearch.lastDegree.selected">
+                                    <option value="" disabled>请选择学历</option>
+                                    <option v-for="(option,index) in collect.collectSearch.lastDegree.options" v-bind:key="'lastDegree2'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="collect.collectSearch.sex.selected">
+                                    <option value="" disabled>请选择性别</option>
+                                    <option v-for="(option,index) in collect.collectSearch.sex.options" v-bind:key="'sex2'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select v-select2 name="" id="" class="form-control" v-model="collect.collectSearch.sort.selected">
+                                    <option value="" disabled>请选择排序方式</option>
+                                    <option v-for="(option,index) in collect.collectSearch.sort.options" v-bind:key="'sort2'+index" v-bind:value="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary" v-on:click="collectSearchSubmit">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div v-if="collect.list.length>0">
+                        <div class="row">
+                            <div class="col-4 pt-4" v-for="(item,index) in collect.list" v-bind:key="'collect'+index">
+                                <div class="resume-card" v-on:click="getResumeInfo(item.resumeId,item.realName)">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-fill">
+                                            <div class="fz-lg text-primary">
+                                                {{item.realName}}
+                                            </div>
+                                            <div class="d-flex lh-lg">
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-graduation-cap text-muted"></span>
+                                                    <span> {{item.lastDegree}}</span>
+                                                </div>
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-briefcase text-muted"></span>
+                                                    <span> {{item.workyears}}</span>
+                                                </div>
+                                                <div class="gap-x">
+                                                    <span class="fa fa-fw fa-birthday-cake text-muted"></span>
+                                                    <span> {{item.birthDate}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 marker-box">
+                                            <img class="border border-white rounded-circle w-img2 h-img2" v-bind:src="item.headFileName" alt="图片">
+                                            <div class="marker-item">
+                                                <span class="fa fa-fw fa-mars text-info" v-if="item.sex=='男'"></span>
+                                                <span class="fa fa-fw fa-venus text-danger" v-else></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center pt-3 mt-3 border-dashed-top">
+                                        <div class="flex-fill">
+                                            <div class="text-truncate">{{item.intention}}</div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="text-muted">{{item.deliveryTime}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="collect.pageList" v-on:pageclick="newPageCollect" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 选择职位组件
+            'doer-positionchoose': positionchoose,
+            // 翻页组件
+            'doer-page': doerPage
+        },
+        data: {
+            // tab切换，0为收到的简历，1为收藏的简历
+            state: 0,
+            // 收到的简历
+            received: {
+                receivedSearch: {
+                    nameInput: '',
+                    // 投递的职位
+                    deliveryPosition: {
+                        selected: '',
+                        options: [
+                            {text: '职位一', value: '01'},
+                            {text: '职位二', value: '02'},
+                            {text: '职位三', value: '03'}
+                        ]
+                    },
+                    // 求职意向
+                    intentionList: {
+                        name: '技术支持/维护工程师',
+                        id: '2102'
+                    },
+                    // 学历
+                    lastDegree: {
+                        selected: '',
+                        options: [
+                            {text: '大专', value: '01'},
+                            {text: '本科', value: '02'},
+                            {text: '研究生', value: '03'}
+                        ]
+                    },
+                    // 性别
+                    sex: {
+                        selected: '',
+                        options: [
+                            {text: '男', value: '01'},
+                            {text: '女', value: '02'}
+                        ]
+                    },
+                    // 排序方式
+                    sort: {
+                        selected: '',
+                        options: [
+                            {text: '投递时间', value: '01'},
+                            {text: '简历更新时间', value: '02'},
+                            {text: '年龄', value: '03'},
+                            {text: '工龄', value: '04'},
+                            {text: '学历', value: '05'}
+                        ]
+                    }
+                },
+                // 简历列表
+                list: [
+                    {
+                        resumeId: '001',
+                        realName: '吕国红',
+                        headFileName: 'images/headpic.png',
+                        sex: '男',
+                        lastDegree: '本科',
+                        workyears: '5年',
+                        birthDate: '37',
+                        deliveryTime: '2019-08-10',
+                        intention: 'JAVA工程师、PHP工程师'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 收藏的简历
+            collect: {
+                collectSearch: {
+                    nameInput: '',
+                    // 投递的职位
+                    deliveryPosition: {
+                        selected: '',
+                        options: [
+                            {text: '职位一', value: '01'},
+                            {text: '职位二', value: '02'},
+                            {text: '职位三', value: '03'}
+                        ]
+                    },
+                    // 求职意向
+                    intentionList: {
+                        name: '技术支持/维护工程师',
+                        id: '2102'
+                    },
+                    // 学历
+                    lastDegree: {
+                        selected: '',
+                        options: [
+                            {text: '大专', value: '01'},
+                            {text: '本科', value: '02'},
+                            {text: '研究生', value: '03'}
+                        ]
+                    },
+                    // 性别
+                    sex: {
+                        selected: '',
+                        options: [
+                            {text: '男', value: '01'},
+                            {text: '女', value: '02'}
+                        ]
+                    },
+                    // 排序方式
+                    sort: {
+                        selected: '',
+                        options: [
+                            {text: '投递时间', value: '01'},
+                            {text: '简历更新时间', value: '02'},
+                            {text: '年龄', value: '03'},
+                            {text: '工龄', value: '04'},
+                            {text: '学历', value: '05'}
+                        ]
+                    }
+                },
+                // 简历列表
+                list: [
+                    {
+                        resumeId: '001',
+                        realName: '吕国红',
+                        headFileName: 'images/headpic.png',
+                        sex: '男',
+                        lastDegree: '本科',
+                        workyears: '5年',
+                        birthDate: '37',
+                        deliveryTime: '2019-08-10',
+                        intention: 'JAVA工程师、PHP工程师'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // tab切换
+            tabChange: function(state){
+                this.state = state;
+                this.$nextTick(function(){
+                    $("select.form-control").select2({
+                        minimumResultsForSearch: -1
+                    });
+                })
+            },
+            // 选择职位
+            positionGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentPositionChoose.positionChooseModal(selected,triggerName,chooseType);
+            },
+            positionCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName == "received"){
+                    this.received.receivedSearch.intentionList = backData.selected;
+                }else if(backData.triggerName == "collect"){
+                    this.collect.collectSearch.intentionList = backData.selected;
+                }
+            },
+            // 提交收到的简历查询表单
+            receivedSearchSubmit: function(e){
+                console.log(this.received.receivedSearch)
+            },
+            // 提交收藏的简历查询表单
+            collectSearchSubmit: function(e){
+                console.log(this.collect.collectSearch)
+            },
+            getResumeInfo: function(resumeId,realName){
+                window.parent.vueList.getNavigation('resumeInfo'+resumeId,realName,'简历详情.html?resumeId='+resumeId);
+            },
+            // 翻页的回调
+            newPageReceived: function(page){
+                this.received.pageList.currentPageNo = page;
+            },
+            newPageCollect: function(page){
+                this.collect.pageList.currentPageNo = page;
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $("select.form-control").select2({
+                minimumResultsForSearch: -1
+            });
+        }
+    })
+</script>

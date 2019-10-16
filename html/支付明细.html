@@ -1,0 +1,170 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <form action="">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" size="10" class="form-control get-month" placeholder="开始时间" readonly v-model="searchForm.startTime">
+                            <div class="input-group-prepend input-group-append">
+                                <span class="input-group-text">-</span>
+                            </div>
+                            <input type="text" size="10" class="form-control get-month" placeholder="结束时间" readonly v-model="searchForm.endTime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" v-on:click="searchSubmit">查询</button>
+                    </div>
+                </div>
+            </form>
+            <div class="pt-4">
+                <div v-if="detailList.length>0">
+                    <div v-for="(item,index) in detailList" v-bind:key="'detailList'+index">
+                        <div class="title-hasline title-offset mb-4">
+                            {{item.month}}
+                        </div>
+                        <div class="box-body box-has-shadow mb-4">
+                            <div v-for="(itemOrder,indexOrder) in item.order" v-bind:key="'order'+index">
+                                <div class="timeline d-flex">
+                                    <div class="timeline-left">
+                                        {{itemOrder.orderDate}}
+                                    </div>
+                                    <div class="timeline-right">
+                                        <div class="timeline-main" v-bind:class="itemOrder.orderState==1?'text-success':itemOrder.orderState==2?'text-danger':''">
+                                            <i class="fa fa-fw fa-plus" v-if="itemOrder.orderState==1"></i>
+                                            <i class="fa fa-fw fa-minus" v-if="itemOrder.orderState==2"></i>
+                                            {{itemOrder.orderMoney}}
+                                        </div>
+                                        <div class="timeline-sub">
+                                            {{itemOrder.orderType}}
+                                            <span class="text-muted" v-if="itemOrder.state==0">（交易关闭）</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no-msg" v-else>
+                    暂无数据
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            
+        },
+        data: {
+            searchForm: {
+                startTime: '',
+                endTime: ''
+            },
+            // 明细列表，orderState代表正负，0是正常，1是+，2是-，state代表交易状态，0为交易关闭，1为正常
+            detailList: [
+                {
+                    month: '2018-12',
+                    order: [
+                        {
+                            orderId: '201812001', 
+                            orderState: 2, 
+                            state: 1, 
+                            orderDate: '2018-12-08 20:30', 
+                            orderType: '创建活动', 
+                            orderMoney: '100'
+                        },
+                        {
+                            orderId: '201812002', 
+                            orderState: 2, 
+                            state: 1, 
+                            orderDate: '2018-12-05 12:00', 
+                            orderType: '兑现悬赏', 
+                            orderMoney: '200',
+                        }
+                    ]
+                },
+                {
+                    month: '2018-11',
+                    order: [
+                        {
+                            orderId: '201811001', 
+                            orderState: 0, 
+                            state: 0, 
+                            orderDate: '2018-11-30 10:30', 
+                            orderType: '创建活动', 
+                            orderMoney: '300'
+                        },
+                        {
+                            orderId: '201811002', 
+                            orderState: 2, 
+                            state: 1, 
+                            orderDate: '2018-11-01 20:30', 
+                            orderType: '购买金豆', 
+                            orderMoney: '400'
+                        }
+                    ]
+                }
+            ]
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 提交查询表单
+            searchSubmit: function(){
+                console.log(this.searchForm)
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $('.get-month').datetimepicker({
+                format: 'yyyy-mm',
+                minView: 'year',
+                startView: 'year',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+        }
+    })
+</script>

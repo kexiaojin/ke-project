@@ -1,0 +1,750 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 选择地区组件 -->
+    <script type="text/javascript" src="components/citychoose.js"></script>
+    <!-- 选择职位组件 -->
+    <script type="text/javascript" src="components/positionchoose.js"></script>
+    <!-- 选择行业组件 -->
+    <script type="text/javascript" src="components/tradechoose.js"></script>
+    <!-- 选择专业组件 -->
+    <script type="text/javascript" src="components/majorchoose.js"></script>
+    <!-- 选择印象标签组件 -->
+    <script type="text/javascript" src="components/labelchoose.js"></script>
+    <!-- 图片剪裁组件，依赖cropper.js -->
+    <script type="text/javascript" src="js/cropper-4.0.0.min.js"></script>
+    <script type="text/javascript" src="components/clipimg.js"></script>
+    <!-- 翻页组件 -->
+    <script type="text/javascript" src="components/page.js"></script>
+    <!-- 轮播图 -->
+    <script type="text/javascript" src="js/swiper-4.2.2.min.js"></script>
+    <style>
+        .gallery-box .swiper-slide {
+            width: 80%;
+        }
+        .gallery-box .swiper-custom {
+            padding: 20px;
+        }
+        .gallery-box .swiper-custom .swiper-custom-pic img {
+            width: 100%;
+        }
+        .gallery-box .swiper-custom .swiper-custom-text {
+            margin-top: 20px;
+            display: none;
+        }
+        .gallery-box .swiper-slide-active .swiper-custom .swiper-custom-pic img {
+            width: 110%;
+            box-shadow: 0 0 10px rgba(0,0,0,.2);
+        }
+        .gallery-box .swiper-slide-active .swiper-custom .swiper-custom-text {
+            display: block;
+        }
+        .gallery-thumbs {
+            height: 50px;
+            line-height: 50px;
+            box-sizing: border-box;
+            border-bottom: solid 1px #e6e6e6;
+        }
+        .gallery-thumbs .swiper-slide {
+            width: auto;
+            padding: 0 20px;
+        }
+        .gallery-thumbs .swiper-slide-thumb-active {
+            font-size: 18px;
+            color: red;
+            box-shadow: inset 0 -4px 0 red;
+        }
+    </style>
+</head>
+<body>
+    <noscript>
+        <div class="doer-warning">
+            <i class="fa fa-fw fa-exclamation-triangle"></i>
+            您的浏览器阻止了Javascript的运行，导致无法正常浏览本网站，请点击浏览器提示信息选择允许阻止的内容
+        </div>
+    </noscript>
+    <!--[if lte IE 9]>
+        <div class="doer-warning">
+            <div class="warning-title">
+                <div class="warning-img"></div>
+                <p>检测到史前IE浏览器</p>
+            </div>
+            <div class="warning-text">
+                <p>我们使用了最新的技术来搭建网站，使本网站更快和更容易使用，很遗憾的是，您的浏览器并不支持这些技术。</p>
+                <p>点击下载以下其中一种现代浏览器，让您得到更好的浏览体验！</p>
+            </div>
+            <div class="warning-update">
+                <a href="https://pc.qq.com/detail/11/detail_351.html" target="_blank">
+                    <div class="warning-icon browser-qq"></div>
+                    <p>QQ浏览器</p>
+                </a>
+                <a href="https://browser.360.cn/ee/" target="_blank">
+                    <div class="warning-icon browser-360"></div>
+                    <p>360极速</p>
+                </a>
+                <a href="https://pc.qq.com/detail/1/detail_2661.html" target="_blank">
+                    <div class="warning-icon browser-google"></div>
+                    <p>谷歌浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_2867.html" target="_blank">
+                    <div class="warning-icon browser-firefox"></div>
+                    <p>火狐浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_11527.html" target="_blank">
+                    <div class="warning-icon browser-ie"></div>
+                    <p>升级IE</p>
+                </a>
+            </div>
+        </div>
+    <![endif]-->
+    <div class="swiper-container gallery-thumbs">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">金沙滩</div>
+            <div class="swiper-slide">北极广场</div>
+            <div class="swiper-slide">乌桕滩</div>
+            <div class="swiper-slide">金沙滩2</div>
+            <div class="swiper-slide">北极广场2</div>
+            <div class="swiper-slide">乌桕滩2</div>
+        </div>
+    </div>
+    <div class="swiper-container gallery-box">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="swiper-custom">
+                    <div class="swiper-custom-pic">
+                        <img src="images/reward_index_bg_1.png" alt="">
+                    </div>
+                    <div class="swiper-custom-text">我是描述文字</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="box-has-shadow">
+            <div class="box-header">
+                <div class="position-relative">
+                    <div class="btn-refresh" v-refresh>
+                        <i class="fa fa-fw fa-redo-alt"></i>
+                    </div>
+                </div>
+                <form action="">
+                    <div class="mb-2">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">多行文本</span>
+                                </div>
+                                <div class="flex-fill">
+                                    <textarea v-textarea rows="5" class="form-control" maxlength="200" placeholder="请输入内容（限200字以内）" v-model="searchForm.searchTextarea"></textarea>
+                                    <div class="textarea-number">
+                                        <span></span>&nbsp;/&nbsp;200
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control get-time-clock" placeholder="年月日时分" readonly v-model="searchForm.timeClock">
+                                <div class="input-group-prepend input-group-append">
+                                    <span class="input-group-text">-</span>
+                                </div>
+                                <input type="text" size="10" class="form-control get-time" placeholder="年月日" readonly v-model="searchForm.time">
+                                <div class="input-group-prepend input-group-append">
+                                    <span class="input-group-text">-</span>
+                                </div>
+                                <input type="text" size="10" class="form-control get-time-only" placeholder="时分" v-model="searchForm.timeOnly" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select v-select2 name="" id="" class="form-control" v-model="searchForm.type.selected">
+                                <option value="" disabled>请选择内容</option>
+                                <option v-for="(option,index) in searchForm.type.options" v-bind:key="'type'+index" v-bind:value="option.value">{{option.text}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-reset">
+                                <input v-reset type="text" class="form-control" placeholder="请输入内容" v-model="searchForm.searchInput">
+                                <div class="input-reset-btn">&times;</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" v-on:click="searchSubmit">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="jobfair-calendar pt-4">
+                    <div class="jobfair-calendar-title">
+                        招聘会日历
+                    </div>
+                    <div class="jobfari-calendar-body">
+                        <div id="jobfair-date"></div>
+                    </div>
+                    <div class="pl-3 pr-3 pt-2">
+                        <span class="text-danger">*</span>
+                        <span class="text-muted">有色背景日期表示当日有招聘会举办</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <!-- 选择地区 -->
+                <doer-citychoose ref="componentCityChoose" v-on:citychooseclick="cityCallBack"></doer-citychoose>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="cityGetChoose(example.cityList,'cityList','multi')">
+                        多选地区
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.cityList?example.cityList:''}}
+                    </span>
+                </div>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="cityGetChoose(example.cityListTwo,'cityListTwo','single')">
+                        单选地区
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.cityListTwo?example.cityListTwo:''}}
+                    </span>
+                </div>
+                <!-- 选择职位 -->
+                <doer-positionchoose ref="componentPositionChoose" v-on:positionchooseclick="positionCallBack"></doer-positionchoose>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="positionGetChoose(example.positionList,'positionList','multi')">
+                        多选职位
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.positionList?example.positionList:''}}
+                    </span>
+                </div>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="positionGetChoose(example.positionListTwo,'positionListTwo','single')">
+                        单选职位
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.positionListTwo?example.positionListTwo:''}}
+                    </span>
+                </div>
+                <!-- 选择行业 -->
+                <doer-tradechoose ref="componentTradeChoose" v-on:tradechooseclick="tradeCallBack"></doer-tradechoose>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="tradeGetChoose(example.tradeList,'tradeList','multi')">
+                        多选行业
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.tradeList?example.tradeList:''}}
+                    </span>
+                </div>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="tradeGetChoose(example.tradeListTwo,'tradeListTwo','single')">
+                        单选行业
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.tradeListTwo?example.tradeListTwo:''}}
+                    </span>
+                </div>
+                <!-- 选择专业 -->
+                <doer-majorchoose ref="componentMajorChoose" v-on:majorchooseclick="majorCallBack"></doer-majorchoose>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="majorGetChoose(example.majorList,'majorList','multi')">
+                        多选专业
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.majorList?example.majorList:''}}
+                    </span>
+                </div>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="majorGetChoose(example.majorListTwo,'majorListTwo','single')">
+                        单选专业
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.majorListTwo?example.majorListTwo:''}}
+                    </span>
+                </div>
+                <!-- 选择印象标签 -->
+                <doer-labelchoose ref="componentLabelChoose" v-on:labelchooseclick="labelCallBack"></doer-labelchoose>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="labelGetChoose(example.companyImpression,'company')">
+                        企业标签
+                        <i class="fas fa-fw fa-caret-down"></i>
+                    </button>
+                    <span>
+                        {{example.companyImpression?example.companyImpression:''}}
+                    </span>
+                </div>
+                <!-- 图片剪裁 -->
+                <doer-clipimg ref="componentClipimg" v-on:clipimgclick="clipimgCallBack"></doer-clipimg>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-primary" v-on:click="getClip('logo')">
+                        剪裁图片
+                        <i class="fa fa-fw fa-camera"></i>
+                    </button>
+                    <img v-bind:src="example.iconFile" alt="图片" class="border border-white rounded-circle w-sm h-sm" v-bind:data-src="example.iconFile" v-bigimg>
+                </div>
+                <!-- 翻页 -->
+                <doer-page v-bind:pagelist="example.pageList" v-on:pageclick="newPage" ref="componentPage"></doer-page>
+            </div>
+            <div class="box-footer">
+                <div class="mb-2">
+                    <button type="button" class="btn btn-less" v-tooltip="'我是提示信息'">提示信息</button>
+                    <div v-moreclip:10="'我有很多个字，但是只显示10个'"></div>
+                </div>
+                <div class="mb-2">
+                    <button type="button" class="btn btn-less" v-on:click="toast(1)">错误提示</button>
+                    <button type="button" class="btn btn-less" v-on:click="toast(2)">注意提示</button>
+                    <button type="button" class="btn btn-less" v-on:click="toast(3)">纯文本提示</button>
+                    <button type="button" class="btn btn-less" v-on:click="toast(4)">成功提示</button>
+                    <button type="button" class="btn btn-less" v-on:click="loading">加载中提示</button>
+                    <button type="button" class="btn btn-less" v-on:click="alert">alert</button>
+                    <button type="button" class="btn btn-less" v-on:click="confirm">confirm</button>
+                    <button type="button" class="btn btn-less" v-on:click="prompt">prompt</button>
+                    <button type="button" class="btn btn-less" v-on:click="modal">modal</button>
+                </div>
+                <div class="mb-2">
+                    <div class="no-msg">暂无数据</div>
+                </div>
+                <div class="loading"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var thumbsSwiper = new Swiper('.gallery-thumbs',{
+        slidesPerView: 'auto',
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true
+    })
+    var gallerySwiper = new Swiper('.gallery-box',{
+        slidesPerView: 'auto',
+        autoHeight: true,
+        loop: true,
+        loopedSlides: 4,
+        thumbs: {
+            swiper: thumbsSwiper
+        }
+    })
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 选择地区组件
+            'doer-citychoose': citychoose,
+            // 选择职位组件
+            'doer-positionchoose': positionchoose,
+            // 选择行业组件
+            'doer-tradechoose': tradechoose,
+            // 选择专业组件
+            'doer-majorchoose': majorchoose,
+            // 选择印象标签组件
+            'doer-labelchoose': labelchoose,
+            // 图片剪裁组件
+            'doer-clipimg': clipimg,
+            // 翻页组件
+            'doer-page': doerPage
+        },
+        data: {
+            // 组件示例
+            example: {
+                // 已选地区，一开始没有任何数据的时候需要设为false
+                cityList: [
+                    {
+                        province: '广西',
+                        provinceId: '20',
+                        city: '桂林市',
+                        cityId: '409',
+                        county: '象山区',
+                        countyId: '1025'
+                    },
+                    {
+                        province: '广西',
+                        provinceId: '20',
+                        city: '桂林市',
+                        cityId: '409',
+                        county: '七星区',
+                        countyId: '1023'
+                    }
+                ],
+                cityListTwo: {
+                    province: '广西',
+                    provinceId: '20',
+                    city: '桂林市',
+                    cityId: '409',
+                    county: '七星区',
+                    countyId: '1023'
+                },
+                // 已选职位，一开始没有任何数据的时候需要设为false
+                positionList: [
+                    {
+                        name: '硬件工程师',
+                        id: '2097'
+                    },
+                    {
+                        name: '技术支持/维护工程师',
+                        id: '2102'
+                    }
+                ],
+                positionListTwo: {
+                    name: '技术支持/维护工程师',
+                    id: '2102'
+                },
+                // 已选行业，一开始没有任何数据的时候需要设为false
+                tradeList: [
+                    {
+                        name: '计算机软件',
+                        id: '1051'
+                    },
+                    {
+                        name: '会计/审计',
+                        id: '1101'
+                    }
+                ],
+                tradeListTwo: {
+                    name: '会计/审计',
+                    id: '1101'
+                },
+                // 已选专业，一开始没有任何数据的时候需要设为false
+                majorList: [
+                    {
+                        name: '伦理学',
+                        id: '4032'
+                    },
+                    {
+                        name: '经济管理',
+                        id: '4114'
+                    }
+                ],
+                majorListTwo: {
+                    name: '伦理学',
+                    id: '4032'
+                },
+                // 已选印象标签
+                companyImpression: [
+                    {
+                        name: '带薪年假',
+                        id: '701'
+                    },
+                    {
+                        name: '我是自定义标签一',
+                        id: '0'
+                    },
+                    {
+                        name: '我是自定义标签二',
+                        id: '0'
+                    }
+                ],
+                // 剪裁图片
+                iconFile: 'images/no-pic.png',
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 查询表单
+            searchForm: {
+                timeClock: '',
+                time: '',
+                timeOnly: '',
+                type: {
+                    selected: '',
+                    options: [
+                        {text: '全部状态', value: '01'},
+                        {text: '正常企业', value: '02'},
+                        {text: '再次提交', value: '03'}
+                    ]
+                },
+                searchInput: '',
+                searchTextarea: ''
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // toast简单提示
+            toast: function(type){
+                if(type==1){
+                    $.toast("错误提示","cancel");
+                }else if(type==2){
+                    $.toast("注意提示","forbidden");
+                }else if(type==3){
+                    $.toast("纯文本提示","text");
+                }else if(type==4){
+                    $.toast("成功提示");
+                }
+            },
+            // loading提示
+            loading: function(){
+                $.showLoading();
+                // 这里模拟5S后关闭loading
+                setTimeout(function(){
+                    $.hideLoading();
+                },5000)
+            },
+            // 对话框
+            alert: function(){
+                $.alert({
+                    title: '标题',
+                    icon: 'error',
+                    text: '内容文字',
+                    onOK: function () {}
+                });
+            },
+            confirm: function(){
+                $.confirm({
+                    title: '标题',
+                    icon: 'question',
+                    text: '内容文字',
+                    onOK: function () {},
+                    onCancel: function () {}
+                });
+            },
+            prompt: function(){
+                $.prompt({
+                    title: '标题',
+                    icon: 'info',
+                    text: '内容文字',
+                    input: '我是传入的默认值',
+                    onOK: function (input) {},
+                    onCancel: function () {}
+                });
+            },
+            modal: function(){
+                $.modal({
+                    title: "标题",
+                    customImg: 'images/red_envelopes.png',
+                    text: "内容文字",
+                    buttons: [
+                        { text: "按钮一", className: "btn-default", onClick: function(){} },
+                        { text: "按钮二", className: "btn-primary", onClick: function(){} },
+                        { text: "按钮三", className: "btn-secondary", onClick: function(){} },
+                    ]
+                });
+            },
+            // 选择地区
+            cityGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentCityChoose.cityChooseModal(selected,triggerName,chooseType);
+            },
+            cityCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName == "cityList"){
+                    this.example.cityList = backData.selected;
+                }else if(backData.triggerName == "cityListTwo"){
+                    this.example.cityListTwo = backData.selected;
+                }
+            },
+            // 选择职位
+            positionGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentPositionChoose.positionChooseModal(selected,triggerName,chooseType);
+            },
+            positionCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName == "positionList"){
+                    this.example.positionList = backData.selected;
+                }else if(backData.triggerName == "positionListTwo"){
+                    this.example.positionListTwo = backData.selected;
+                }
+            },
+            // 选择行业
+            tradeGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentTradeChoose.tradeChooseModal(selected,triggerName,chooseType);
+            },
+            tradeCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName == "tradeList"){
+                    this.example.tradeList = backData.selected;
+                }else if(backData.triggerName == "tradeListTwo"){
+                    this.example.tradeListTwo = backData.selected;
+                }
+            },
+            // 选择专业
+            majorGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentMajorChoose.majorChooseModal(selected,triggerName,chooseType);
+            },
+            majorCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName == "majorList"){
+                    this.example.majorList = backData.selected;
+                }else if(backData.triggerName == "majorListTwo"){
+                    this.example.majorListTwo = backData.selected;
+                }
+            },
+            // 选择印象标签
+            labelGetChoose: function(selected,labelType){
+                // 给子组件传入两个参数，selected是已选，labelType是标签类型（企业标签、职位标签、个人标签）
+                this.$refs.componentLabelChoose.labelChooseModal(selected,labelType);
+            },
+            labelCallBack: function(backData){
+                // backData返回值里包括了已选selected
+                this.example.companyImpression = backData.selected;
+            },
+            // 剪裁图片
+            getClip: function(triggerName){
+                // triggerName是作用于这个组件的数据名称
+                this.$refs.componentClipimg.clipimgModal(triggerName);
+            },
+            clipimgCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName=='logo'){
+                    this.example.iconFile = backData.selected;
+                }
+            },
+            // 翻页的回调
+            newPage: function(page){
+                this.example.pageList.currentPageNo = page;
+            },
+            // 提交查询表单
+            searchSubmit: function(){
+                console.log(this.searchForm)
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $("select.form-control").select2({
+                minimumResultsForSearch: -1
+            });
+            // 年月日
+            $('.get-time').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 'month',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+            // 年月日时分
+            $('.get-time-clock').datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                minView: 'hour',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+            // 时分
+            $('.get-time-only').bind('click',function(event){timePacker($(this),event)});
+            // 招聘会日历
+            $('#jobfair-date').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 'month',
+                // 初始化有招聘会举办的日期，最好是放前后三个月的。提供三种颜色用来区分不同的招聘会类型，0为红色，1为黄色，2为绿色。
+                jobfair: [
+                    {
+                        date: '2019-08-10',
+                        type: 0
+                    },
+                    {
+                        date: '2019-08-30',
+                        type: 1
+                    },
+                    {
+                        date: '2019-09-01',
+                        type: 2
+                    }
+                ]
+            }).on('changeMonth', function(ev){
+                // 改变月份后要做的事情放在这里
+                console.log(ev.date);
+                // 改变有招聘会举办的日期，最好是放前后三个月的。
+                $("#jobfair-date").datetimepicker('setJobfair',[
+                    {
+                        date: '2019-08-30',
+                        type: 1
+                    },
+                    {
+                        date: '2019-09-01',
+                        type: 2
+                    },
+                    {
+                        date: '2019-10-02',
+                        type: 0
+                    }
+                ])
+            }).on('getJobfairInfo', function(ev){
+                // 选择日期后要做的事情放在这里
+                console.log(ev.date);
+            });
+        }
+    })
+</script>

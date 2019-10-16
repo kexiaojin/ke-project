@@ -1,0 +1,130 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="pt-4 pb-4 text-center">
+                <div>
+                    <i class="fa fa-fw fa-check fz-xxlg text-success"></i>
+                </div>
+                <div class="pb-4 fz-lg">
+                    悬赏发布成功
+                </div>
+                <div class="pt-4 pb-4">
+                    <div class="pb-2">现在添加互动抽奖活动提高悬赏职位的传播吧！</div>
+                    <div class="w-lg m-auto border box-body">
+                        <div class="pb-4 mb-4 border-bottom d-flex justify-content-between">
+                            <div class="fw-lg">活动列表</div>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="allChecked" v-on:click="getAllChecked">
+                                <span class="custom-control-label">全选</span>                                
+                            </label>
+                        </div>
+                        <div class="gap-y text-left" v-for="(item,index) in interact.list" v-bind:key="'interact'+index">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-bind:value="item.id" v-model="interact.checked">
+                                <span class="custom-control-label">{{item.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-lg btn-secondary gap-x" v-on:click="addInteract">添加互动抽奖</button>
+                <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="saveRelation">确定</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+
+        },
+        data: {
+            interact: {
+                checked: ['1','2'],
+                list: [
+                    {
+                        name: '活动一',
+                        id: '1'
+                    },
+                    {
+                        name: '活动二',
+                        id: '2'
+                    }
+                ]
+            }
+        },
+        // 计算属性
+        computed: {
+            // 全选计算
+            allChecked: function(){
+                if(this.interact.checked.length == this.interact.list.length){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 添加互动抽奖
+            addInteract: function(id){
+                window.parent.vueList.getNavigation('addInteract','添加互动抽奖','添加互动抽奖.html');
+            },
+            // 全选
+            getAllChecked: function(event){
+                if(event.target.checked == true){
+                    var checkNumber = [];
+                    for (i=0; i<this.interact.list.length; i++){
+                        checkNumber.push(this.interact.list[i].id)
+                    };
+                    this.interact.checked = checkNumber;
+                }else{
+                    this.interact.checked = [];
+                }
+            },
+            // 确定
+            saveRelation: function(id){
+                window.parent.vueList.getNavigation(2,'职位管理','职位管理.html');
+                $('#delpostReward', window.parent.document).trigger("click");
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+
+        }
+    })
+</script>

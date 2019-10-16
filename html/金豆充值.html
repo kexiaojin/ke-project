@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div v-show="progress==1">
+            <div class="m-auto" style="width: 500px;">
+                <div class="d-flex align-items-center justify-content-between pt-4 pb-4">
+                    <div class="text-primary">
+                        <i class="fa fa-fw fa-fire fz-lg"></i>
+                        <span class="fz-xlg">{{beansCount}}</span>
+                    </div>
+                    <div v-tooltip="'1金豆=1元，充值数量越多折扣越划算'">
+                        <i class="fa fa-fw fa-question-circle"></i>
+                    </div>
+                </div>
+                <div class="pb-4">
+                    <table class="table table-bordered table-grids">
+                        <tbody>
+                            <tr>
+                                <td v-bind:class="{'active':buyNumber==10}" v-on:click="getBeans(10)">
+                                    <div class="table-grids-main">10</div>
+                                </td>
+                                <td v-bind:class="{'active':buyNumber==50}" v-on:click="getBeans(50)">
+                                    <div class="table-grids-main">50</div>
+                                    <div class="table-grids-sub">9.5折</div>
+                                </td>
+                                <td v-bind:class="{'active':buyNumber==100}" v-on:click="getBeans(100)">
+                                    <div class="table-grids-main">100</div>
+                                    <div class="table-grids-sub">9.0折</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td v-bind:class="{'active':buyNumber==200}" v-on:click="getBeans(200)">
+                                    <div class="table-grids-main">200</div>
+                                    <div class="table-grids-sub">8.5折</div>
+                                </td>
+                                <td v-bind:class="{'active':buyNumber==400}" v-on:click="getBeans(400)">
+                                    <div class="table-grids-main">400</div>
+                                    <div class="table-grids-sub">8.0折</div>
+                                </td>
+                                <td v-bind:class="{'active':buyNumber==800}" v-on:click="getBeans(800)">
+                                    <div class="table-grids-main">800</div>
+                                    <div class="table-grids-sub">7.5折</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pb-4">
+                    <div>是否开具电子发票（7%税费）</div>
+                    <label class="custom-switch">
+                        <input type="checkbox" class="custom-control-input" name="makeInvoice" v-model="makeInvoice">
+                        <span class="custom-switch-label"></span>
+                    </label>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pb-4">
+                    <div>实际支付</div>
+                    <div class="fz-xlg text-danger">
+                        ￥{{realPay}}
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-lg btn-block btn-primary" v-on:click="beansNext">下一步</button>
+                    <button type="button" class="btn btn-lg btn-block btn-default" v-on:click="getBeansDetail">充值明细</button>
+                </div>
+            </div>
+        </div>
+        <div v-show="progress==2">
+            <div class="pt-4 pb-4">
+                <div class="weui-form-preview m-auto box-has-shadow" style="width: 500px;">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <div class="weui-form-preview__label">实际支付</div>
+                            <div class="weui-form-preview__value fz-xlg text-danger">￥{{orderInfo.needPay}}</div>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <div class="weui-form-preview__label">订单号</div>
+                            <div class="weui-form-preview__value">{{orderInfo.orderNumber}}</div>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <div class="weui-form-preview__label">金豆数量</div>
+                            <div class="weui-form-preview__value">{{orderInfo.buyNumber}}</div>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <div class="weui-form-preview__label">电子发票</div>
+                            <div class="weui-form-preview__value">{{orderInfo.makeInvoice?'开具':'不开'}}</div>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__ft">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <div class="mb-2">
+                                    <i class="icon-weixinpay"></i>
+                                    微信扫码，支付
+                                    <span class="fz-xlg">
+                                        {{orderInfo.needPay}}
+                                    </span>
+                                    元
+                                </div>
+                                <img v-bind:src="orderInfo.weixinCode" alt="图片" class="w-md">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-lg btn-default gap-x" v-on:click="beansPrev">上一步</button>
+                <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="finishPay">支付完成</button>
+            </div>
+        </div>
+        <div v-show="progress==3">
+            <div class="pt-4 pb-4 text-center">
+                <div>
+                    <i class="fa fa-fw fa-check fz-xxlg text-success"></i>
+                </div>
+                <div class="pb-4 fz-lg">
+                    订单支付成功
+                </div>
+                <button type="button" class="btn btn-lg btn-primary" v-on:click="closeBeans">关闭</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            
+        },
+        data: {
+            // progress表示进度，1为第一步，2为第二步，3为第三步
+            progress: 1,
+            // 剩余金豆数量
+            beansCount: '50',
+            // 购买数量
+            buyNumber: 100,
+            // 是否开具发票
+            makeInvoice: true,
+            orderInfo: {
+                orderNumber: 'xxxxxx',
+                buyNumber: 100,
+                makeInvoice: true,
+                needPay: '2140.00',
+                alipayCode: 'images/no-pic.png',
+                weixinCode: 'images/no-pic.png'
+            }
+        },
+        // 计算属性
+        computed: {
+            // 实际支付计算
+            realPay: function(){
+                if(this.buyNumber == 10){
+                    var totalPay = 10;
+                    var invoicePay = totalPay * 0.07;
+                }else if(this.buyNumber == 50){
+                    var totalPay = 50 * 0.95;
+                    var invoicePay = totalPay * 0.07;
+                }else if(this.buyNumber == 100){
+                    var totalPay = 100 * 0.90;
+                    var invoicePay = totalPay * 0.07;
+                }else if(this.buyNumber == 200){
+                    var totalPay = 200 * 0.85;
+                    var invoicePay = totalPay * 0.07;
+                }else if(this.buyNumber == 400){
+                    var totalPay = 400 * 0.80;
+                    var invoicePay = totalPay * 0.07;
+                }else if(this.buyNumber == 800){
+                    var totalPay = 800 * 0.75;
+                    var invoicePay = totalPay * 0.07;
+                }
+                if(this.makeInvoice){
+                    return (totalPay+invoicePay).toFixed(2);
+                }else{
+                    return totalPay.toFixed(2);
+                }
+            }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 选择金豆数量
+            getBeans: function(number){
+                this.buyNumber = number;
+            },
+            // 充值明细
+            getBeansDetail: function(){
+                window.parent.vueList.getNavigation('beansDetail','金豆明细','金豆明细.html');
+            },
+            // 上一步
+            beansPrev: function(e){
+                this.progress = 1;
+            },
+            // 下一步
+            beansNext: function(){
+                this.progress = 2;
+            },
+            // 支付完成
+            finishPay: function(e){
+                this.progress = 3;
+            },
+            // 关闭
+            closeBeans: function(e){
+                $('#del3', window.parent.document).trigger("click");
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            
+        }
+    })
+</script>

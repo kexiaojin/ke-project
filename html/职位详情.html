@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="mb-4 d-flex align-items-center">
+                <div class="flex-fill">
+                    <div class="fz-xlg">
+                        {{jobInfo.positionName}}
+                    </div>
+                    <div>
+                        <span class="gap-text text-primary">
+                            {{jobInfo.salaryCNName}}
+                        </span>
+                        <span class="gap-text">
+                            {{jobInfo.addressPost}}
+                        </span>
+                        <span class="gap-text">
+                            {{jobInfo.recruitNumber}}人
+                        </span>
+                        <span class="gap-text">
+                            {{jobInfo.needDegreeCNName}}
+                        </span>
+                        <span class="gap-text">
+                            {{jobInfo.workYears}}
+                        </span>
+                    </div>
+                </div>
+                <div class="bg-primary-light d-flex pl-4 pr-4 pb-2 pt-2">
+                    <div class="gap-x">
+                        <span>入职奖励：</span>
+                        <span class="text-danger fz-xlg">{{jobInfo.entryAward}}</span>
+                    </div>
+                    <div class="gap-x">
+                        <span>推荐奖励：</span>
+                        <span class="text-danger fz-xlg">{{jobInfo.recommendAward}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="title-hasline title-offset mb-4">职位详情</div>
+            <div v-html="jobInfo.positionDesc"></div>
+            <div class="title-hasline title-offset mb-4 mt-4">工作地址</div>
+            <div>
+                <i class="fa fa-fw fa-map-marker-alt text-muted"></i>
+                {{jobInfo.address}}
+            </div>
+            <div id="mapBox" class="mt-4">这是放地图的地方</div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+
+        },
+        data: {
+            jobInfo: {
+                positionName: "JAVA工程师",
+                salaryCNName: "5K-6K",
+                workYears: "3-5年",
+                needDegreeCNName: "本科",
+                recruitNumber: '5',
+                addressPost: "桂林市",
+                entryAward: "200.00",
+                recommendAward: "500.00",
+                positionDesc: '1、负责Web前端、移动应用研发工作。',
+                address: '桂林市翠竹路2号'
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+
+        }
+    })
+</script>

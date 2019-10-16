@@ -1,0 +1,416 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 翻页组件 -->
+    <script type="text/javascript" src="components/page.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 修改发布日期弹窗 -->
+        <div class="modal fade" id="interactTime">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">修改发布日期</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">发布日期</span>
+                                </div>
+                                <input type="text" size="10" class="form-control get-time" placeholder="开始时间" readonly v-model="modal.interactTime.startTime">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveInteractTime">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="nav-line">
+                <div class="nav-line-item">
+                    <a href="javascript:;" v-bind:class="{'active':state==0}" v-on:click="tabChange(0)">预约</a>
+                    <a href="javascript:;" v-bind:class="{'active':state==1}" v-on:click="tabChange(1)">进行中</a>
+                    <a href="javascript:;" v-bind:class="{'active':state==2}" v-on:click="tabChange(2)">已结束</a>
+                </div>
+            </div>
+            <div class="pl-4 pr-4 pt-2 pb-2 bg-primary-light mt-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <i class="fa fa-fw fa-exclamation-circle text-danger"></i>
+                        <span>用户的单次抽奖，将随机参与多个进行中的互动抽奖中的一种，中奖率由参与的互动抽奖设置的中奖概率决定。</span>
+                    </div>
+                    <button type="button" class="btn btn-primary" v-on:click="addInteract">添加互动抽奖</button>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==0}">
+                    <div v-if="interactNotbegin.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in interactNotbegin.list" v-bind:key="'notbegin'+item.id">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3">
+                                            <div class="fz-lg">{{item.title}}</div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">￥{{item.award}}</span>
+                                            <span class="gap-text">{{item.number}}个</span>
+                                            <span class="gap-text">{{item.playWay}}</span>
+                                            <span class="gap-text">{{item.winningRate}}%中奖率</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        <button type="button" class="btn btn-secondary" v-on:click="changeInteract(item.id)">修改发布日期</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="interactNotbegin.pageList" v-on:pageclick="newPageNotbegin" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==1}">
+                    <div v-if="interactOngoing.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in interactOngoing.list" v-bind:key="'ongoing'+item.id">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <div class="pr-2" v-if="item.upType==1">
+                                                <span class="badge badge-pill badge-danger">已下架</span>
+                                            </div>
+                                            <div class="fz-lg">{{item.title}}</div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">￥{{item.award}}</span>
+                                            <span class="gap-text">{{item.number}}个</span>
+                                            <span class="gap-text">{{item.playWay}}</span>
+                                            <span class="gap-text">{{item.winningRate}}%中奖率</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2 lh-lg">
+                                        <div>
+                                            <i class="fa fa-fw fa-street-view" v-tooltip="'参与人数'"></i>
+                                            <span class="text-danger">{{item.joinNumber}}</span>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-fw fa-cookie-bite" v-tooltip="'已领数量'"></i>
+                                            <span class="text-danger">{{item.received}}</span>
+                                            <span>/{{item.number}}</span>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-fw fa-hand-holding-usd" v-tooltip="'支出金额'"></i>
+                                            <span class="text-danger">{{item.payed}}</span>
+                                            <span>/{{item.award}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <button type="button" class="btn btn-danger" v-on:click="endInteract(item.id)" v-if="item.upType==0">下架</button>
+                                    <button type="button" class="btn btn-success" v-on:click="upInteract(item.id)" v-if="item.upType==1">上架</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="interactOngoing.pageList" v-on:pageclick="newPageOngoing" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==2}">
+                    <div v-if="interactOver.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in interactOver.list" v-bind:key="'over'+item.id">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3">
+                                            <div class="fz-lg">{{item.title}}</div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">￥{{item.award}}</span>
+                                            <span class="gap-text">{{item.number}}个</span>
+                                            <span class="gap-text">{{item.playWay}}</span>
+                                            <span class="gap-text">{{item.winningRate}}%中奖率</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2 lh-lg">
+                                        <div>
+                                            <i class="fa fa-fw fa-street-view" v-tooltip="'参与人数'"></i>
+                                            <span class="text-danger">{{item.joinNumber}}</span>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-fw fa-cookie-bite" v-tooltip="'已领数量'"></i>
+                                            <span class="text-danger">{{item.received}}</span>
+                                            <span>/{{item.number}}</span>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-fw fa-hand-holding-usd" v-tooltip="'支出金额'"></i>
+                                            <span class="text-danger">{{item.payed}}</span>
+                                            <span>/{{item.award}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="interactOver.pageList" v-on:pageclick="newPageOver" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 翻页组件
+            'doer-page': doerPage
+        },
+        data: {
+            // tab切换，0为预约，1为进行中，2为已结束
+            state: 1,
+            // 预约列表，interactType表示互动类型，0为红包互动，1为礼券互动，2为线下体验券互动，upType为上下架状态，0为上架状态，1为已下架状态。
+            interactNotbegin: {
+                list: [
+                    {
+                        interactType: 0,
+                        id: '001',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01'
+                    },
+                    {
+                        interactType: 0,
+                        id: '002',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 进行中列表
+            interactOngoing: {
+                list: [
+                    {
+                        interactType: 0,
+                        id: '001',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01',
+                        joinNumber: '350',
+                        received: '295',
+                        payed: '125.31',
+                        upType: 0
+                    },
+                    {
+                        interactType: 0,
+                        id: '002',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01',
+                        joinNumber: '350',
+                        received: '295',
+                        payed: '125.31',
+                        upType: 1
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 已结束列表
+            interactOver: {
+                list: [
+                    {
+                        interactType: 0,
+                        id: '001',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01',
+                        joinNumber: '350',
+                        received: '295',
+                        payed: '125.31'
+                    },
+                    {
+                        interactType: 0,
+                        id: '002',
+                        title: '现金红包抽奖',
+                        award: '500.00',
+                        number: '1000',
+                        playWay: '拼手气',
+                        winningRate: '100',
+                        startTime: '2019-08-01',
+                        joinNumber: '350',
+                        received: '295',
+                        payed: '125.31'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 弹窗
+            modal: {
+                interactTime: {
+                    startTime: '2019-08-01'
+                }
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // tab切换
+            tabChange: function(state){
+                this.state = state;
+            },
+            // 添加互动抽奖
+            addInteract: function(){
+                window.parent.vueList.getNavigation('addInteract','添加互动抽奖','添加互动抽奖.html');
+            },
+            // 修改发布日期
+            changeInteract: function(id){
+                $("#interactTime").modal();
+            },
+            // 保存发布日期
+            saveInteractTime: function(){
+                $("#interactTime").modal("hide");
+            },
+            // 下架
+            endInteract: function(id){
+                $.confirm({
+                    title: '确定下架此活动？',
+                    icon: 'question',
+                    text: '下架将会结束此活动，用户将不能再进行抽奖',
+                    onOK: function () {},
+                    onCancel: function () {}
+                });
+            },
+            // 上架
+            upInteract: function(id){
+                $.toast("上架成功");
+            },
+            // 翻页的回调
+            newPageNotbegin: function(page){
+                this.interactNotbegin.pageList.currentPageNo = page;
+            },
+            newPageOngoing: function(page){
+                this.interactOngoing.pageList.currentPageNo = page;
+            },
+            newPageOver: function(page){
+                this.interactOver.pageList.currentPageNo = page;
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $('.get-time').datetimepicker({
+                format: 'yyyy-mm-dd',
+                minView: 'month',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+        }
+    })
+</script>

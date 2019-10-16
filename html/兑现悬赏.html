@@ -1,0 +1,370 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 翻页组件 -->
+    <script type="text/javascript" src="components/page.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="progress-nav mb-4">
+                <div class="progress-nav-item active">
+                    1、选择入职者
+                </div>
+                <div class="progress-nav-item" v-bind:class="{'active':progress!=1}">
+                    2、支付费用
+                </div>
+                <div class="progress-nav-item" v-bind:class="{'active':progress==3}">
+                    3、完成
+                </div>
+            </div>
+            <div v-show="progress==1">
+                <div class="row pt-4">
+                    <div class="col-6">
+                        <div class="d-flex mb-4">
+                            <div class="fw-lg flex-fill" style="line-height: 35px;">选择入职者</div>
+                            <form action="" class="flex-shrink-0">
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="姓名/手机号" v-model="searchForm.nameInput">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-secondary" v-on:click="searchSubmit">查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="border border-primary box-body">
+                            <div class="line-list" v-for="(item,index) in resumeList" v-bind:key="'resumeList'+index">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-fill">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 marker-box mr-3">
+                                                <img class="border border-white rounded-circle w-img2 h-img2" v-bind:src="item.headFileName" alt="图片">
+                                                <div class="marker-item">
+                                                    <span class="fa fa-fw fa-mars text-info" v-if="item.sex=='男'"></span>
+                                                    <span class="fa fa-fw fa-venus text-danger" v-else></span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-fill">
+                                                <div>
+                                                    <span class="fz-lg">{{item.realName}}</span>
+                                                </div>
+                                                <div class="d-flex lh-lg">
+                                                    <div class="gap-x">
+                                                        <span class="fa fa-fw fa-graduation-cap text-muted"></span>
+                                                        <span> {{item.lastDegree}}</span>
+                                                    </div>
+                                                    <div class="gap-x">
+                                                        <span class="fa fa-fw fa-briefcase text-muted"></span>
+                                                        <span> {{item.workyears}}</span>
+                                                    </div>
+                                                    <div class="gap-x">
+                                                        <span class="fa fa-fw fa-birthday-cake text-muted"></span>
+                                                        <span> {{item.birthDate}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" v-bind:value="item.resumeId" v-model="checked">
+                                        <span class="custom-control-label"></span>                                
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="pageList" v-on:pageclick="newPage" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex mb-4" style="line-height: 35px;">
+                            <div class="fw-lg flex-fill">已选入职者（{{checkedList.length}}）</div>
+                            <div class="text-muted">入职者获得30%，推荐人获得70%</div>
+                        </div>
+                        <div v-show="checkedList.length>0">
+                            <div class="box-has-shadow box-body mb-4" v-for="(item,index) in checkedList" v-bind:key="'checked'+index">
+                                <div class="gap-y">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-fill">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 mr-2">
+                                                    <img class="border border-white rounded-circle w-img1 h-img1" v-bind:src="item.headFileName" alt="图片">
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <span class="fz-lg">
+                                                        {{item.realName}}
+                                                    </span>
+                                                    <span class="text-muted">
+                                                        （入职者）
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            ￥{{entryAward}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gap-y">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-fill">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 mr-2">
+                                                    <img class="border border-white rounded-circle w-img1 h-img1" v-bind:src="item.recommend.headFileName" alt="图片">
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <span class="fz-lg">
+                                                        {{item.recommend.realName}}
+                                                    </span>
+                                                    <span class="text-muted">
+                                                        （推荐人）
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            ￥{{recommendAward}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pb-4">
+                                <div>是否开具电子发票（7%税费）</div>
+                                <label class="custom-switch">
+                                    <input type="checkbox" class="custom-control-input" name="makeInvoice" v-model="makeInvoice">
+                                    <span class="custom-switch-label"></span>
+                                </label>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pb-4">
+                                <div>实际支付</div>
+                                <div class="fz-xlg text-danger">
+                                    ￥{{realPay}}
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-lg btn-block btn-primary" v-on:click="cashRewardNext">下一步</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="progress==2">
+                <div class="pt-4 pb-4">
+                    <div class="weui-form-preview m-auto box-has-shadow" style="width: 500px;">
+                        <div class="weui-form-preview__hd">
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">实际支付</div>
+                                <div class="weui-form-preview__value fz-xlg text-danger">￥{{orderInfo.needPay}}</div>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__bd">
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">订单号</div>
+                                <div class="weui-form-preview__value">{{orderInfo.orderNumber}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">悬赏金额</div>
+                                <div class="weui-form-preview__value">{{orderInfo.rewardMoney}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">入职人数</div>
+                                <div class="weui-form-preview__value">{{orderInfo.entryNumber}}</div>
+                            </div>
+                            <div class="weui-form-preview__item">
+                                <div class="weui-form-preview__label">电子发票</div>
+                                <div class="weui-form-preview__value">{{orderInfo.makeInvoice?'开具':'不开'}}</div>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__ft">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="text-center">
+                                    <div class="mb-2">
+                                        <i class="icon-weixinpay"></i>
+                                        微信扫码，支付
+                                        <span class="fz-xlg">
+                                            {{orderInfo.needPay}}
+                                        </span>
+                                        元
+                                    </div>
+                                    <img v-bind:src="orderInfo.weixinCode" alt="图片" class="w-md">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-lg btn-default gap-x" v-on:click="cashRewardPrev">上一步</button>
+                    <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="finishPay">支付完成</button>
+                </div>
+            </div>
+            <div v-show="progress==3">
+                <div class="pt-4 pb-4 text-center">
+                    <div>
+                        <i class="fa fa-fw fa-check fz-xxlg text-success"></i>
+                    </div>
+                    <div class="pb-4 fz-lg">
+                        订单支付成功
+                    </div>
+                    <button type="button" class="btn btn-lg btn-primary" v-on:click="closeCashReward">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 翻页组件
+            'doer-page': doerPage
+        },
+        data: {
+            // progress表示进度，1为第一步，2为第二步，3为第三步
+            progress: 1,
+            searchForm: {
+                nameInput: '',
+            },
+            // 是否开具发票
+            makeInvoice: true,
+            // 选择入职者
+            checked: [],
+            entryAward: "300.00",
+            recommendAward: "700.00",
+            resumeList: [
+                {
+                    resumeId: '001',
+                    realName: '吕国红',
+                    headFileName: 'images/headpic.png',
+                    sex: '男',
+                    lastDegree: '本科',
+                    workyears: '5年',
+                    birthDate: '37',
+                    recommend: {
+                        realName: '吴嘉',
+                        headFileName: 'images/headpic.png'
+                    }
+                },
+                {
+                    resumeId: '002',
+                    realName: '柯小金',
+                    headFileName: 'images/headpic.png',
+                    sex: '男',
+                    lastDegree: '本科',
+                    workyears: '5年',
+                    birthDate: '37',
+                    recommend: {
+                        realName: '吴嘉',
+                        headFileName: 'images/headpic.png'
+                    }
+                }
+            ],
+            // 翻页数据
+            pageList: {
+                // 总页数
+                totalPageCount: 25,
+                // 当前页
+                currentPageNo: 1
+            },
+            orderInfo: {
+                orderNumber: 'xxxxxx',
+                rewardMoney: '1000.00',
+                entryNumber: '2',
+                makeInvoice: true,
+                needPay: '2140.00',
+                alipayCode: 'images/no-pic.png',
+                weixinCode: 'images/no-pic.png'
+            }
+        },
+        // 计算属性
+        computed: {
+            // 已选计算
+            checkedList: function(){
+                var newList = [];
+                if(this.checked.length>0){
+                    for(var i=0; i<this.checked.length; i++){
+                        for(var j=0; j<this.resumeList.length; j++){
+                            if(this.checked[i]==this.resumeList[j].resumeId){
+                                newList.push(this.resumeList[j]);
+                            }
+                        }
+                    }
+                }
+                return newList;
+            },
+            // 实际支付计算
+            realPay: function(){
+                var totalPay = ((this.entryAward*100 + this.recommendAward*100) * this.checked.length / 100);
+                var invoicePay = ((this.entryAward*100 + this.recommendAward*100) * this.checked.length * 0.07 / 100);
+                if(this.makeInvoice){
+                    return (totalPay+invoicePay).toFixed(2);
+                }else{
+                    return totalPay.toFixed(2);
+                }
+            }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 提交查询表单
+            searchSubmit: function(e){
+                console.log(this.searchForm);
+            },
+            // 翻页的回调
+            newPage: function(page){
+                this.pageList.currentPageNo = page;
+            },
+            // 上一步
+            cashRewardPrev: function(e){
+                this.progress = 1;
+            },
+            // 下一步
+            cashRewardNext: function(e){
+                this.progress = 2;
+            },
+            // 支付完成
+            finishPay: function(e){
+                this.progress = 3;
+            },
+            // 关闭
+            closeCashReward: function(e){
+                $('#delcashReward', window.parent.document).trigger("click");
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+
+        }
+    })
+</script>

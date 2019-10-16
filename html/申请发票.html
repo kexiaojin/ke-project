@@ -1,0 +1,352 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div v-show="progress==1">
+                <form action="">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" size="10" class="form-control get-month" placeholder="开始时间" readonly v-model="searchForm.startTime">
+                                <div class="input-group-prepend input-group-append">
+                                    <span class="input-group-text">-</span>
+                                </div>
+                                <input type="text" size="10" class="form-control get-month" placeholder="结束时间" readonly v-model="searchForm.endTime">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" v-on:click="searchSubmit">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row pt-4">
+                    <div class="col-6">
+                        <div class="mb-4" style="line-height: 35px;">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="allChecked" v-on:click="getAllChecked">
+                                <span class="custom-control-label">全选</span>                                
+                            </label>
+                        </div>
+                        <div v-if="detailList.length>0">
+                            <div v-for="(item,index) in detailList" v-bind:key="'detailList'+index">
+                                <div class="title-hasline title-offset mb-4">
+                                    {{item.month}}
+                                </div>
+                                <div class="box-body box-has-shadow mb-4">
+                                    <div v-for="(itemOrder,indexOrder) in item.order" v-bind:key="'order'+index">
+                                        <div class="timeline d-flex">
+                                            <div class="timeline-left">
+                                                {{itemOrder.orderDate}}
+                                                <div>
+                                                    {{itemOrder.handleMan}}
+                                                    <span class="text-muted">（操作人）</span>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-right">
+                                                <div class="timeline-main text-danger">
+                                                    ￥{{itemOrder.orderMoney}}
+                                                </div>
+                                                <div class="timeline-sub">
+                                                    {{itemOrder.orderType}}
+                                                </div>
+                                            </div>
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" v-bind:value="itemOrder.orderId" v-model="checked">
+                                                <span class="custom-control-label"></span>                                
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="no-msg" v-else>
+                            暂无数据
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fw-lg mb-4" style="line-height: 35px;">已选开票项目（{{checked.length}}）</div>
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">抬头类型</span>
+                                    </div>
+                                    <div class="input-group-append flex-fill">
+                                        <span class="input-group-text flex-fill">
+                                            <label class="custom-control custom-radio">
+                                                <input type="radio" name="playWay" class="custom-control-input" value="0" v-model="ticketInfo.ticketType">
+                                                <span class="custom-control-label">企业</span>
+                                            </label>
+                                            <label class="custom-control custom-radio ml-2">
+                                                <input type="radio" name="playWay" class="custom-control-input" value="1" v-model="ticketInfo.ticketType">
+                                                <span class="custom-control-label">个人/非企业</span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">发票抬头</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.ticket">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">税号<i class="invisible">字字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.taxId">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">发票内容</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.ticketTontent" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">发票金额</span>
+                                    </div>
+                                    <input type="text" class="form-control text-danger" placeholder="请输入内容" v-model="ticketInfo.ticketMoney" readonly>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">接收邮箱</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.email">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">收件人<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.contactMan">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">联系电话</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.contactPhone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">邮寄地址</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="ticketInfo.contactAddress">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">备注<i class="invisible">字字</i></span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <textarea v-textarea rows="5" class="form-control" maxlength="200" placeholder="请输入内容（限200字以内）" v-model="ticketInfo.remarks"></textarea>
+                                        <div class="textarea-number">
+                                            <span></span>&nbsp;/&nbsp;200
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-lg btn-block btn-primary" v-on:click="saveTicket">提交</button>
+                            <button type="button" class="btn btn-lg btn-block btn-default" v-on:click="getTicketDetail">发票明细</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="progress==2">
+                <div class="pt-4 pb-4 text-center">
+                    <div>
+                        <i class="fa fa-fw fa-check fz-xxlg text-success"></i>
+                    </div>
+                    <div class="pb-4 fz-lg">
+                        发票申请成功
+                    </div>
+                    <button type="button" class="btn btn-lg btn-primary" v-on:click="closeTicket">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            
+        },
+        data: {
+            // progress表示进度，1为第一步，2为第二步
+            progress: 1,
+            searchForm: {
+                startTime: '',
+                endTime: ''
+            },
+            // 明细列表
+            detailList: [
+                {
+                    month: '2018-12',
+                    order: [
+                        {
+                            orderId: '201812001', 
+                            orderDate: '2018-12-08 20:30', 
+                            orderType: '创建活动', 
+                            orderMoney: '100',
+                            handleMan: '吕国红'
+                        },
+                        {
+                            orderId: '201812002', 
+                            orderDate: '2018-12-05 12:00', 
+                            orderType: '兑现悬赏', 
+                            orderMoney: '200',
+                            handleMan: '吕国红'
+                        }
+                    ]
+                },
+                {
+                    month: '2018-11',
+                    order: [
+                        {
+                            orderId: '201811001', 
+                            orderDate: '2018-11-30 10:30', 
+                            orderType: '创建活动', 
+                            orderMoney: '300',
+                            handleMan: '吕国红'
+                        },
+                        {
+                            orderId: '201811002', 
+                            orderDate: '2018-11-01 20:30', 
+                            orderType: '购买金豆', 
+                            orderMoney: '400',
+                            handleMan: '吕国红'
+                        }
+                    ]
+                }
+            ],
+            // 选择开票项目
+            checked: [],
+            // 发票内容
+            ticketInfo: {
+                // ticketType表示抬头类型，0为企业，1为个人/非企业
+                ticketType: 0,
+                ticket: '',
+                taxId: '',
+                ticketTontent: '服务费',
+                ticketMoney: '400.00',
+                remarks: '',
+                contactMan: '',
+                contactPhone: '',
+                contactAddress: '',
+                // email: '55358660@qq.com'
+            }
+        },
+        // 计算属性
+        computed: {
+            // 全选计算
+            allChecked: function(){
+                var orderNumber = 0;
+                for(var i=0; i<this.detailList.length; i++){
+                    orderNumber += this.detailList[i].order.length;
+                }
+                if(this.checked.length == orderNumber){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 提交查询表单
+            searchSubmit: function(){
+                console.log(this.searchForm)
+            },
+            // 全选
+            getAllChecked: function(event){
+                if(event.target.checked == true){
+                    var checkNumber = [];
+                    for (i=0; i<this.detailList.length; i++){
+                        for (j=0; j<this.detailList[i].order.length; j++){
+                            checkNumber.push(this.detailList[i].order[j].orderId)
+                        }
+                    };
+                    this.checked = checkNumber;
+                }else{
+                    this.checked = [];
+                }
+            },
+            saveTicket: function(){
+                this.progress = 2;
+            },
+            getTicketDetail: function(){
+                window.parent.vueList.getNavigation('ticketDetail','发票明细','发票明细.html');
+            },
+            closeTicket: function(){
+                $('#del6', window.parent.document).trigger("click");
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $('.get-month').datetimepicker({
+                format: 'yyyy-mm',
+                minView: 'year',
+                startView: 'year',
+                clearBtn: true,
+                autoclose: true
+            }).on('changeDate', function(ev){
+                eventToUpdate(ev.target,'input');
+            });
+        }
+    })
+</script>

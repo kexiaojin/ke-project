@@ -1,0 +1,593 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 翻页组件 -->
+    <script type="text/javascript" src="components/page.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 互动管理弹窗 -->
+        <!-- <div class="modal fade" id="interactMan">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">互动管理</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <div>
+                                <i class="fa fa-fw fa-exclamation-circle text-danger"></i>
+                                如果单个职位关联多个互动抽奖，用户的单次抽奖，将随机参与其中的一种。
+                            </div>
+                            <div class="pl-4">
+                                <button type="button" class="btn btn-primary" v-on:click="addInteract">添加互动抽奖</button>
+                            </div>
+                        </div>
+                        <div v-if="modal.interact.list.length>0">
+                            <div class="gap-y" v-for="(item,index) in modal.interact.list" v-bind:key="'interact'+index">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" v-bind:value="item.id" v-model="modal.interact.checked">
+                                    <span class="custom-control-label">{{item.name}}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="no-msg" v-else>
+                            暂无数据
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="flex-fill d-flex justify-content-between">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="allChecked" v-on:click="getAllChecked">
+                                <span class="custom-control-label">全选</span>                                
+                            </label>
+                            <div>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" v-on:click="saveRelation">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="nav-line">
+                <div class="nav-line-item">
+                    <a href="javascript:;" v-bind:class="{'active':state==0}" v-on:click="tabChange(0)">正在招聘（{{recruitment.total}}）</a>
+                    <a href="javascript:;" v-bind:class="{'active':state==1}" v-on:click="tabChange(1)">招聘结束（{{recruitEnd.total}}）</a>
+                    <a href="javascript:;" v-bind:class="{'active':state==2}" v-on:click="tabChange(2)">待审核（{{recruitExamine.total}}）</a>
+                </div>
+                <div class="w-sm">
+                    <button type="button" class="btn btn-primary btn-block" v-on:click="postReward('add')">发布急聘</button>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==0}">
+                    <div v-if="recruitment.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in recruitment.list" v-bind:key="'recruitment'+item.positionId">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <a href="javascript:;" class="fz-lg" v-on:click="getPosition(item.positionId,item.positionName)">{{item.positionName}}</a>
+                                            <div class="solid-label bg-light ml-2">
+                                                <span class="fz-lg text-danger">{{item.rewardMoney}}</span>
+                                                <span class="badge badge-pill badge-secondary">赏</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">{{item.salaryCNName}}</span>
+                                            <span class="gap-text">{{item.addressPost}}</span>
+                                            <span class="gap-text">{{item.recruitNumber}}人</span>
+                                            <span class="gap-text">{{item.needDegreeCNName}}</span>
+                                            <span class="gap-text">{{item.workYears}}</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted" v-if="item.haveInteract">
+                                                <span class="text-muted">参与互动：</span>
+                                                <span>{{item.haveInteract}}</span>
+                                            </li>
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2">
+                                        <a href="javascript:;" class="btn btn-outline-primary btn-block" v-on:click="viewResume(item.positionId)">新增简历({{item.newDeliveryNumber}})</a>
+                                        <a href="javascript:;" class="btn btn-outline-primary btn-block" v-on:click="cashReward(item.positionId,item.deliveryNumber)">兑现悬赏</a>
+                                        <a href="javascript:;" class="btn btn-outline-primary btn-block" data-toggle="popover" v-bind:data-content="item.shareCode" v-bind:data-id="item.positionId">分享</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pl-4 pr-4 pt-2 pb-2 bg-default">
+                                <div class="d-flex justify-content-between">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item gap-x" v-tooltip="'分享人数'">
+                                            <i class="fa fa-fw fa-share-alt"></i>
+                                            <span>{{item.shareNumber}}</span>
+                                        </li>
+                                        <li class="list-inline-item gap-x" v-tooltip="'查看人数'">
+                                            <i class="fa fa-fw fa-eye"></i>
+                                            <span>{{item.viewNumber}}</span>
+                                        </li>
+                                        <li class="list-inline-item gap-x" v-tooltip="'投递人数'">
+                                            <i class="fa fa-fw fa-leaf"></i>
+                                            <span>{{item.deliveryNumber}}</span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <!-- <a href="javascript:;" class="pl-4 dark-link" v-on:click="interactMan(item.positionId)">互动管理</a> -->
+                                        <!-- <a href="javascript:;" class="pl-4 dark-link" v-on:click="cashReward(item.positionId,item.deliveryNumber)">兑现悬赏</a>
+                                        <a href="javascript:;" class="pl-4 dark-link" data-toggle="popover" v-bind:data-content="item.shareCode" v-bind:data-id="item.positionId">分享</a> -->
+                                        <a href="javascript:;" class="pl-4 dark-link" v-on:click="postReward(item.positionId)">修改</a>
+                                        <a href="javascript:;" class="pl-4 dark-link" v-on:click="endReward(item.positionId)">下架</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="recruitment.pageList" v-on:pageclick="newPageRecruitment" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==1}">
+                    <div v-if="recruitEnd.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in recruitEnd.list" v-bind:key="'recruitEnd'+item.positionId">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <a href="javascript:;" class="fz-lg" v-on:click="getPosition(item.positionId,item.positionName)">{{item.positionName}}</a>
+                                            <div class="solid-label bg-light ml-2">
+                                                <span class="fz-lg text-danger">{{item.rewardMoney}}</span>
+                                                <span class="badge badge-pill badge-secondary">赏</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">{{item.salaryCNName}}</span>
+                                            <span class="gap-text">{{item.addressPost}}</span>
+                                            <span class="gap-text">{{item.recruitNumber}}人</span>
+                                            <span class="gap-text">{{item.needDegreeCNName}}</span>
+                                            <span class="gap-text">{{item.workYears}}</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted" v-if="item.haveInteract">
+                                                <span class="text-muted">参与互动：</span>
+                                                <span>{{item.haveInteract}}</span>
+                                            </li>
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                            <li class="text-muted">
+                                                <span class="text-muted">结束日期：</span>
+                                                <span>{{item.endTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2">
+                                        <a href="javascript:;" class="btn btn-outline-primary btn-block" v-on:click="viewResume(item.positionId)">新增简历({{item.newDeliveryNumber}})</a>
+                                        <a href="javascript:;" class="btn btn-outline-primary btn-block" v-on:click="cashReward(item.positionId,item.deliveryNumber)">兑现悬赏</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pl-4 pr-4 pt-2 pb-2 bg-default">
+                                <div class="d-flex justify-content-between">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item gap-x" v-tooltip="'分享人数'">
+                                            <i class="fa fa-fw fa-share-alt"></i>
+                                            <span>{{item.shareNumber}}</span>
+                                        </li>
+                                        <li class="list-inline-item gap-x" v-tooltip="'查看人数'">
+                                            <i class="fa fa-fw fa-eye"></i>
+                                            <span>{{item.viewNumber}}</span>
+                                        </li>
+                                        <li class="list-inline-item gap-x" v-tooltip="'投递人数'">
+                                            <i class="fa fa-fw fa-leaf"></i>
+                                            <span>{{item.deliveryNumber}}</span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <!-- <a href="javascript:;" class="pl-4 dark-link" v-on:click="cashReward(item.positionId,item.deliveryNumber)">兑现悬赏</a> -->
+                                        <a href="javascript:;" class="pl-4 dark-link" v-on:click="postReward(item.positionId)">修改</a>
+                                        <a href="javascript:;" class="pl-4 dark-link" v-on:click="upReward(item.positionState,item.positionId)">上架</a>
+                                        <a href="javascript:;" class="pl-4 dark-link" v-on:click="delReward(item.positionId)">删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="recruitEnd.pageList" v-on:pageclick="newPageRecruitEnd" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+                <div class="tab-pane pt-4" v-bind:class="{'active':state==2}">
+                    <div v-if="recruitExamine.list.length>0">
+                        <div class="border gap-y" v-for="(item,index) in recruitExamine.list" v-bind:key="'recruitExamine'+item.positionId">
+                            <div class="box-body">
+                                <div class="row align-items-center">
+                                    <div class="col-10">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <a href="javascript:;" class="fz-lg" v-on:click="getPosition(item.positionId,item.positionName)">{{item.positionName}}</a>
+                                            <div class="solid-label bg-light ml-2">
+                                                <span class="fz-lg text-danger">{{item.rewardMoney}}</span>
+                                                <span class="badge badge-pill badge-secondary">赏</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="gap-text">{{item.salaryCNName}}</span>
+                                            <span class="gap-text">{{item.addressPost}}</span>
+                                            <span class="gap-text">{{item.recruitNumber}}人</span>
+                                            <span class="gap-text">{{item.needDegreeCNName}}</span>
+                                            <span class="gap-text">{{item.workYears}}</span>
+                                        </div>
+                                        <ul class="list-unstyled lh-lg">
+                                            <li class="text-muted" v-if="item.haveInteract">
+                                                <span class="text-muted">参与互动：</span>
+                                                <span>{{item.haveInteract}}</span>
+                                            </li>
+                                            <li class="text-muted">
+                                                <span class="text-muted">发布日期：</span>
+                                                <span>{{item.startTime}}</span>
+                                            </li>
+                                            <li class="text-muted">
+                                                <span class="text-muted">提审日期：</span>
+                                                <span>{{item.trialTime}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-2 lh-lg">
+                                        <div class="text-muted" v-if="item.state==0">
+                                            工作人员积极审核中...
+                                        </div>
+                                        <div v-else>
+                                            <div class="text-danger">
+                                                <i class="fa fa-fw fa-info-circle" v-tooltip="item.remarks"></i>
+                                                <span>审核未通过</span>
+                                            </div>
+                                            <div class="text-muted">请按要求重新修改职位</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pl-4 pr-4 pt-2 pb-2 bg-default">
+                                <div class="d-flex justify-content-end">
+                                    <a href="javascript:;" class="pl-4 dark-link" v-on:click="postReward(item.positionId)">修改</a>
+                                    <a href="javascript:;" class="pl-4 dark-link" v-on:click="delReward(item.positionId)">删除</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <!-- 翻页 -->
+                            <doer-page v-bind:pagelist="recruitExamine.pageList" v-on:pageclick="newPageRecruitExamine" ref="componentPage"></doer-page>
+                        </div>
+                    </div>
+                    <div class="no-msg" v-else>
+                        暂无数据
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 翻页组件
+            'doer-page': doerPage
+        },
+        data: {
+            // tab切换，0为正在招聘，1为招聘结束，2为待审核
+            state: 0,
+            // 正在招聘列表
+            recruitment: {
+                total: 5,
+                list: [
+                    {
+                        positionId: '001',
+                        shareCode: '<div class="text-center" id="content001"><img src="images/no-pic.png" alt="图片" class="w-md"></div><p class="text-center">微信扫一扫，用小程序打开分享</p>',
+                        positionName: 'JAVA工程师',
+                        salaryCNName: '5K-6K',
+                        workYears: '3-5年',
+                        needDegreeCNName: '本科',
+                        recruitNumber: '5',
+                        addressPost: '桂林市',
+                        rewardMoney: '500.00',
+                        haveInteract: '红包互动',
+                        startTime: '2019-08-01',
+                        shareNumber: '350',
+                        viewNumber: '295',
+                        deliveryNumber: '10',
+                        newDeliveryNumber: '2'
+                    },
+                    {
+                        positionId: '002',
+                        shareCode: '<div class="text-center" id="content002"><i class="weui-loading"></i></div><p class="text-center">微信扫一扫，用小程序打开分享</p>',
+                        positionName: 'JAVA工程师',
+                        salaryCNName: '5K-6K',
+                        workYears: '3-5年',
+                        needDegreeCNName: '本科',
+                        recruitNumber: '5',
+                        addressPost: '桂林市',
+                        rewardMoney: '500.00',
+                        haveInteract: '红包互动',
+                        startTime: '2019-08-01',
+                        shareNumber: '350',
+                        viewNumber: '295',
+                        deliveryNumber: '0',
+                        newDeliveryNumber: '0'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 招聘结束列表
+            recruitEnd: {
+                total: 1,
+                list: [
+                    {
+                        // 0为未完善悬赏规则，1为已完善悬赏规则
+                        positionState: 0,
+                        positionId: '003',
+                        positionName: 'JAVA工程师',
+                        salaryCNName: '5K-6K',
+                        workYears: '3-5年',
+                        needDegreeCNName: '本科',
+                        recruitNumber: '5',
+                        addressPost: '桂林市',
+                        rewardMoney: '500.00',
+                        haveInteract: '红包互动',
+                        startTime: '2019-08-01',
+                        endTime: '2019-08-01',
+                        shareNumber: '350',
+                        viewNumber: '295',
+                        deliveryNumber: '10',
+                        newDeliveryNumber: '1'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            // 待审核列表
+            recruitExamine: {
+                total: 2,
+                list: [
+                    {
+                        positionId: '004',
+                        positionName: 'JAVA工程师',
+                        salaryCNName: '5K-6K',
+                        workYears: '3-5年',
+                        needDegreeCNName: '本科',
+                        recruitNumber: '5',
+                        addressPost: '桂林市',
+                        rewardMoney: '500.00',
+                        haveInteract: '红包互动',
+                        startTime: '2019-08-01',
+                        trialTime: '2019-08-10',
+                        // 状态，0为审核中，1为审核未通过
+                        state: 0
+                    },
+                    {
+                        positionId: '005',
+                        positionName: 'JAVA工程师',
+                        salaryCNName: '5K-6K',
+                        workYears: '3-5年',
+                        needDegreeCNName: '本科',
+                        recruitNumber: '5',
+                        addressPost: '桂林市',
+                        rewardMoney: '500.00',
+                        haveInteract: '红包互动',
+                        startTime: '2019-08-01',
+                        trialTime: '2019-08-10',
+                        // 状态，0为审核中，1为审核未通过
+                        state: 1,
+                        remarks: '我是未通过原因'
+                    }
+                ],
+                // 翻页数据
+                pageList: {
+                    // 总页数
+                    totalPageCount: 25,
+                    // 当前页
+                    currentPageNo: 1
+                }
+            },
+            modal: {
+                interact: {
+                    checked: ['2'],
+                    list: [
+                        {
+                            name: '活动一',
+                            id: '1'
+                        },
+                        {
+                            name: '活动二',
+                            id: '2'
+                        }
+                    ]
+                }
+            }
+        },
+        // 计算属性
+        computed: {
+            // 全选计算
+            // allChecked: function(){
+            //     if(this.modal.interact.checked.length == this.modal.interact.list.length){
+            //         return true;
+            //     }else{
+            //         return false;
+            //     }
+            // }
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // tab切换
+            tabChange: function(state){
+                this.state = state;
+            },
+            // 修改/发布急聘
+            postReward: function(id){
+                window.parent.vueList.getNavigation('postReward','发布急聘','发布悬赏.html?positionId='+id);
+            },
+            // 查看职位
+            getPosition: function(positionId,positionName){
+                window.parent.vueList.getNavigation('position'+positionId,positionName,'职位详情.html?positionId='+positionId);
+            },
+            // 互动管理
+            // interactMan: function(id){
+            //     $("#interactMan").modal();
+            // },
+            // 全选
+            // getAllChecked: function(event){
+            //     if(event.target.checked == true){
+            //         var checkNumber = [];
+            //         for (i=0; i<this.modal.interact.list.length; i++){
+            //             checkNumber.push(this.modal.interact.list[i].id)
+            //         };
+            //         this.modal.interact.checked = checkNumber;
+            //     }else{
+            //         this.modal.interact.checked = [];
+            //     }
+            // },
+            // 添加互动抽奖
+            // addInteract: function(id){
+            //     window.parent.vueList.getNavigation('addInteract','添加互动抽奖','添加互动抽奖.html');
+            // },
+            // 保存互动抽奖
+            // saveRelation: function(id){
+            //     $("#interactMan").modal("hide");
+            // },
+            // 新增简历
+            viewResume: function(positionId){
+                window.parent.vueList.getNavigation(1,'简历管理','简历管理.html?positionId='+positionId);
+            },
+            // 兑现悬赏
+            cashReward: function(positionId,deliveryNumber){
+                if(deliveryNumber>0){
+                    window.parent.vueList.getNavigation('cashReward','兑现悬赏','兑现悬赏.html?positionId='+positionId);
+                }else{
+                    $.alert({
+                        title: '兑现失败',
+                        icon: 'error',
+                        text: '该职位未收到任何简历',
+                        onOK: function () {}
+                    });
+                }
+            },
+            // 上架
+            upReward: function(state,id){
+                if(state==0){
+                    $.confirm({
+                        title: '请先完善悬赏规则',
+                        icon: 'warning',
+                        text: '完善悬赏规则有助于职位更受欢迎',
+                        onOK: function () {
+                            window.parent.vueList.getNavigation('postReward','发布急聘','发布悬赏.html?positionId='+id);
+                        },
+                        onCancel: function () {}
+                    });
+                }else{
+                    $.toast("上架成功")
+                }
+            },
+            // 下架
+            endReward: function(id){
+                $.confirm({
+                    title: '确定下架此职位？',
+                    icon: 'question',
+                    text: '下架将会结束此职位的招聘，用户将不能再查看',
+                    onOK: function () {},
+                    onCancel: function () {}
+                });
+            },
+            // 删除
+            delReward: function(id){
+                $.confirm({
+                    title: '确定删除此职位记录？',
+                    icon: 'question',
+                    text: '职位记录有助于快速创建曾经的职位，您可以重新编辑后上架',
+                    onOK: function () {},
+                    onCancel: function () {}
+                });
+            },
+            // 翻页的回调
+            newPageRecruitment: function(page){
+                this.recruitment.pageList.currentPageNo = page;
+            },
+            newPageRecruitEnd: function(page){
+                this.recruitEnd.pageList.currentPageNo = page;
+            },
+            newPageRecruitExamine: function(page){
+                this.recruitExamine.pageList.currentPageNo = page;
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            var that = this;
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                placement: 'bottom',
+                trigger: 'focus'
+            }).on('shown.bs.popover',function(e){
+                var rcmList = that.recruitment.list;
+                for(var i=0; i<rcmList.length; i++){
+                    if(rcmList[i].positionId == e.target.dataset.id){
+                        that.recruitment.list[i].shareCode = '<div class="text-center" id="content'+e.target.dataset.id+'"><img src="images/no-pic.png" alt="图片" class="w-md"></div><p class="text-center">微信扫一扫，用小程序打开分享</p>'
+                    }
+                }
+                $("#content"+e.target.dataset.id).html('<img src="images/no-pic.png" alt="图片" class="w-md">')
+            });
+        }
+    })
+</script>

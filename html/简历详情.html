@@ -1,0 +1,317 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <div class="resume-info">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="flex-shrink-0 marker-box mr-3">
+                        <img class="border border-white rounded-circle w-xs h-xs" v-bind:src="resumeInfo.baseInfo.headFileName" alt="图片">
+                        <div class="marker-item">
+                            <span class="fa fa-fw fa-mars text-info" v-if="resumeInfo.baseInfo.sex=='男'"></span>
+                            <span class="fa fa-fw fa-venus text-danger" v-else></span>
+                        </div>
+                    </div>
+                    <div class="flex-fill">
+                        <div>
+                            <span class="fz-xlg">{{resumeInfo.baseInfo.realName}}</span>
+                            <span class="text-muted">（{{resumeInfo.baseInfo.resumeUpdate}}&nbsp;更新）</span>
+                        </div>
+                        <div class="d-flex lh-lg">
+                            <div class="gap-x">
+                                <span class="fa fa-fw fa-graduation-cap text-muted"></span>
+                                <span> {{resumeInfo.baseInfo.lastDegree}}</span>
+                            </div>
+                            <div class="gap-x">
+                                <span class="fa fa-fw fa-briefcase text-muted"></span>
+                                <span> {{resumeInfo.baseInfo.workyears}}</span>
+                            </div>
+                            <div class="gap-x">
+                                <span class="fa fa-fw fa-birthday-cake text-muted"></span>
+                                <span> {{resumeInfo.baseInfo.birthDate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="fz-xlg btn btn-link" v-if="resumeInfo.viewed">
+                            <i class="fa fa-phone-square"></i>
+                            <span>{{resumeInfo.baseInfo.phoneNumber}}</span>
+                        </div>
+                        <button type="button" class="btn btn-primary" v-on:click="getPhoneNumber" v-else>
+                            <i class="fa fa-fw fa-phone"></i>
+                            查看号码
+                        </button>
+                        <button type="button" class="btn btn-danger" v-on:click="getPrint(resumeInfo.baseInfo.resumeId)">
+                            <i class="fa fa-fw fa-print"></i>
+                            打印简历
+                        </button>
+                        <button type="button" class="btn btn-success" v-on:click="getCollection(false)" v-show="resumeInfo.collection">
+                            <i class="fa fa-fw fa-check"></i>
+                            已收藏
+                        </button>
+                        <button type="button" class="btn btn-outline-success" v-on:click="getCollection(true)" v-show="!resumeInfo.collection">
+                            <i class="fa fa-fw fa-star"></i>
+                            收藏简历
+                        </button>
+                    </div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.baseInfo.memo">
+                    <div class="pl-4 pr-4 pb-2 pt-2 bg-primary-light mb-4 lh-lg" v-html="resumeInfo.baseInfo.memo"></div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.intention.length>0">
+                    <div class="title-hasline title-offset mb-4">求职意向（{{resumeInfo.baseInfo.state}}）</div>
+                    <div class="row">
+                        <div class="col-4 pb-4" v-for="(item,index) in resumeInfo.intention" v-bind:key="'intention'+index">
+                            <div class="box-has-shadow box-body text-center">
+                                <div class="fz-lg mb-4">
+                                    {{item.positionName}}
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 pr-1">
+                                        <div class="text-primary">{{item.salaryCNName}}</div>
+                                        <div class="text-muted">期望薪资</div>
+                                    </div>
+                                    <div class="flex-fill" v-tooltip="item.tradeName">
+                                        <div class="text-primary text-truncate">{{item.tradeName}}</div>
+                                        <div class="text-muted">期望行业</div>
+                                    </div>
+                                    <div class="flex-shrink-0 pl-1">
+                                        <div class="text-primary">{{item.addressPost}}</div>
+                                        <div class="text-muted">期望地点</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.experience.length>0">
+                    <div class="title-hasline title-offset mb-4">工作经历</div>
+                    <div v-for="(item,index) in resumeInfo.experience" v-bind:key="'experience'+index">
+                        <div class="timeline d-flex">
+                            <div class="timeline-left">
+                                {{item.workTime}}
+                            </div>
+                            <div class="timeline-right">
+                                <div class="timeline-main">
+                                    {{item.positionName}}
+                                </div>
+                                <div class="timeline-sub">
+                                    {{item.companyName}}
+                                </div>
+                                <div class="timeline-depict">
+                                    {{item.positionDesc}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.project.length>0">
+                    <div class="title-hasline title-offset mb-4 mt-4">项目经验</div>
+                    <div v-for="(item,index) in resumeInfo.project" v-bind:key="'project'+index">
+                        <div class="timeline d-flex">
+                            <div class="timeline-left">
+                                {{item.workTime}}
+                            </div>
+                            <div class="timeline-right">
+                                <div class="timeline-main">
+                                    {{item.projectName}}
+                                </div>
+                                <div class="timeline-sub">
+                                    {{item.positionName}}
+                                </div>
+                                <div class="timeline-depict">
+                                    {{item.projectDesc}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.education.length>0">
+                    <div class="title-hasline title-offset mb-4 mt-4">教育经历</div>
+                    <div v-for="(item,index) in resumeInfo.education" v-bind:key="'education'+index">
+                        <div class="timeline d-flex">
+                            <div class="timeline-left">
+                                {{item.studyTime}}
+                            </div>
+                            <div class="timeline-right">
+                                <div class="timeline-main">
+                                    {{item.university}}
+                                </div>
+                                <div class="timeline-sub">
+                                    【{{item.degree}}】{{item.major}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resume-info-item" v-if="resumeInfo.photo.length>0">
+                    <div class="title-hasline title-offset mb-4 mt-4">图片简历</div>
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files">
+                            <li class="weui-uploader__file pointer" v-bind:style="{backgroundImage: 'url('+item+')'}" v-bind:data-src="item" v-bigimg v-for="(item,index) in resumeInfo.photo" v-bind:key="'photo'+index">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+
+        },
+        data: {
+            resumeInfo: {
+                // 是否已收藏
+                collection: false,
+                // 是否已查看号码
+                viewed: false,
+                // 基本信息
+                baseInfo: {
+                    resumeId: '001',
+                    realName: '吕国红',
+                    headFileName: 'images/headpic.png',
+                    sex: '男',
+                    lastDegree: '本科',
+                    workyears: '5年',
+                    birthDate: '37',
+                    phoneNumber: '15295955803',
+                    resumeUpdate: '2019-08-10',
+                    memo: '我的优势就是高大威猛，英俊潇洒，人见人爱，花见花开，车见车爆胎！',
+                    state: '在职-考虑机会'
+                },
+                // 求职意向
+                intention: [
+                    {
+                        positionName: '茶艺师',
+                        salaryCNName: '面议',
+                        addressPost: '桂林市',
+                        tradeName: '生活服务'
+                    },
+                    {
+                        positionName: 'IT工程师',
+                        salaryCNName: '8K-10K',
+                        addressPost: '桂林市',
+                        tradeName: '移动互联网'
+                    }
+                ],
+                // 工作经历
+                experience: [
+                    {
+                        positionName: '销售经理',
+                        companyName: '广西道尔人力资源有限公司',
+                        workTime: '2018-10至2019-02',
+                        positionDesc: '做牛做马，非常的累，早就想辞职了，但是又没钱。'
+                    },
+                    {
+                        positionName: '客服人员',
+                        companyName: '广西中汇劳务有限公司',
+                        workTime: '2019-03至今',
+                        positionDesc: '做牛做马，非常的累，早就想辞职了，但是又没钱。'
+                    }
+                ],
+                // 项目经验
+                project: [
+                    {
+                        projectName: '桂林天网子系统',
+                        positionName: '项目经理',
+                        workTime: '2018-10至2019-02',
+                        projectDesc: '做牛做马，非常的累，早就想辞职了，但是又没钱。'
+                    }
+                ],
+                // 教育经历
+                education: [
+                    {
+                        university: '广西师范大学',
+                        degree: '本科',
+                        major: '电子信息工程',
+                        studyTime: '2012-09至2016-06'
+                    }
+                ],
+                // 图片简历
+                photo: ['https://www.doerjob.com/images/logo.png','https://www.doerjob.com/images/code.png']
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 查看号码
+            getPhoneNumber: function(e){
+                var that = this;
+                $.confirm({
+                    title: '确认查看号码？',
+                    icon: 'question',
+                    text: '首次查看号码将消耗1金豆',
+                    onOK: function () {
+                        that.resumeInfo.viewed = true;
+                    },
+                    onCancel: function () {}
+                });
+            },
+            // 打印简历
+            getPrint: function(resumeId){
+                window.parent.vueList.getNavigation('resumePrint','打印简历','打印简历.html?resumeId='+resumeId);
+            },
+            // 收藏简历
+            getCollection: function(e){
+                var that = this;
+                if(e==true){
+                    that.resumeInfo.collection = true;
+                    $.toast("收藏成功")
+                }else if(e==false){
+                    $.confirm({
+                        title: '确定取消收藏？',
+                        icon: 'question',
+                        text: '收藏简历有助于您管理人才',
+                        onOK: function () {
+                            that.resumeInfo.collection = false;
+                        },
+                        onCancel: function () {}
+                    });
+                }
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+
+        }
+    })
+</script>

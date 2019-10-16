@@ -1,0 +1,496 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 图片剪裁组件，依赖cropper.js -->
+    <script type="text/javascript" src="js/cropper-4.0.0.min.js"></script>
+    <script type="text/javascript" src="components/clipimg.js"></script>
+</head>
+<body class="materialOne" style="overflow-y: auto;">
+    <noscript>
+        <div class="doer-warning">
+            <i class="fa fa-fw fa-exclamation-triangle"></i>
+            您的浏览器阻止了Javascript的运行，导致无法正常浏览本网站，请点击浏览器提示信息选择允许阻止的内容
+        </div>
+    </noscript>
+    <!--[if lte IE 9]>
+        <div class="doer-warning">
+            <div class="warning-title">
+                <div class="warning-img"></div>
+                <p>检测到史前IE浏览器</p>
+            </div>
+            <div class="warning-text">
+                <p>我们使用了最新的技术来搭建网站，使本网站更快和更容易使用，很遗憾的是，您的浏览器并不支持这些技术。</p>
+                <p>点击下载以下其中一种现代浏览器，让您得到更好的浏览体验！</p>
+            </div>
+            <div class="warning-update">
+                <a href="https://pc.qq.com/detail/11/detail_351.html" target="_blank">
+                    <div class="warning-icon browser-qq"></div>
+                    <p>QQ浏览器</p>
+                </a>
+                <a href="https://browser.360.cn/ee/" target="_blank">
+                    <div class="warning-icon browser-360"></div>
+                    <p>360极速</p>
+                </a>
+                <a href="https://pc.qq.com/detail/1/detail_2661.html" target="_blank">
+                    <div class="warning-icon browser-google"></div>
+                    <p>谷歌浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_2867.html" target="_blank">
+                    <div class="warning-icon browser-firefox"></div>
+                    <p>火狐浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_11527.html" target="_blank">
+                    <div class="warning-icon browser-ie"></div>
+                    <p>升级IE</p>
+                </a>
+            </div>
+        </div>
+    <![endif]-->
+    <div id="vueList" v-cloak>
+        <!-- 修改个人信息弹窗 -->
+        <div class="modal fade" id="userInfo">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">修改个人信息</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="mb-4 text-center">
+                                <div class="mb-2">
+                                    <img v-bind:src="modal.headFileName" alt="图片" class="border border-white w-sm h-sm">
+                                </div>
+                                <button type="button" class="btn btn-less" v-on:click="getClip('user')">
+                                    <i class="fa fa-fw fa-camera"></i>
+                                    上传头像
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">姓名<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入真实姓名" v-model="modal.realName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">手机号</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入11位手机号码" v-model="modal.phoneNumber" disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveUserInfo">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 图片剪裁 -->
+        <doer-clipimg ref="componentClipimg" v-on:clipimgclick="clipimgCallBack"></doer-clipimg>
+        <!-- 头部 -->
+        <div class="reward-navbar">
+            <!-- <div class="flex-fill">
+            <div class="d-flex align-items-center" style="width: 1200px; margin:0 auto;"> -->
+                <div class="reward-navbar-left">
+                    <img v-bind:src="logoImg" alt="图片">
+                </div>
+                <div class="reward-navbar-right">
+                    <div class="reward-tabs materialTwo"></div>
+                    <div class="reward-account">
+                        <a href="javascript:;" class="btn-reward-bars" v-on:click="getUserInfo">
+                            <img v-bind:src="header.userInfo.headFileName" alt="图片" class="border border-white rounded-circle w-img1 h-img1 mr-1">
+                            <span>欢迎您，{{header.userInfo.nickName}}</span>
+                        </a>
+                        <a v-bind:href="header.helpLink" class="btn-reward-bars" target="_blank">
+                            <i class="fas fa-fw fa-compass"></i>
+                            帮助
+                        </a>
+                        <a href="javascript:;" class="btn-reward-bars" v-on:click="signOut">
+                            <i class="fas fa-fw fa-sign-out-alt"></i>
+                            退出
+                        </a>
+                    </div>
+                </div>
+            <!-- </div>
+            </div> -->
+        </div>
+        <!-- 主体内容 -->
+        <div class="content-bg">
+            <div class="content">
+                <!-- 导航标签 -->
+                <div class="nav-box">
+                    <div class="nav-pre" v-bind:class="{active:navigation.switch}" v-on:click="navSwitch('pre')">
+                        <i class="fa fa-fw fa-caret-left"></i>
+                    </div>
+                    <div class="nav-list" id="nav-list">
+                        <ul class="nav nav-tabs" id="nav-tabs">
+                            <li class="nav-item">
+                                <a href="#tabhome" class="nav-link active" id="navhome" data-toggle="tab">
+                                    我的工作台
+                                </a>
+                            </li>
+                            <li class="nav-item" v-for="(item,index) in navigation.list" v-bind:key="'navigation'+item.id">
+                                <a v-bind:href="'#tab'+item.id" class="nav-link" v-bind:id="'nav'+item.id" data-toggle="tab">
+                                    {{item.name}}
+                                </a>
+                                <button type="button" class="btn nav-del" v-bind:id="'del'+item.id" v-on:click="navDel(item.id,index)">&times;</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="nav-next" v-bind:class="{active:navigation.switch}" v-on:click="navSwitch('next')">
+                        <i class="fa fa-fw fa-caret-right"></i>
+                    </div>
+                </div>
+                <!-- tab内容 -->
+                <div class="tab-content tab-box">
+                    <div class="tab-pane active" id="tabhome">
+                        <div v-bind:style="{height:navigation.iframeH+'px'}">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="box-body materialThree hover-move pointer" v-on:click="goScreen">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="flex-fill">
+                                                            <div class="fz-lg">待筛选简历</div>
+                                                            <div class="lh-lg text-primary">
+                                                                去筛选<i class="fa fa-fw fa-angle-double-right"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fz-xxlg text-primary pr-1">{{tab.todoItems.screenNumber}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="box-body materialThree hover-move pointer" v-on:click="goHandle">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="flex-fill">
+                                                            <div class="fz-lg">待处理面试</div>
+                                                            <div class="lh-lg text-primary">
+                                                                去处理<i class="fa fa-fw fa-angle-double-right"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fz-xxlg text-primary pr-1">{{tab.todoItems.handleNumber}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="title-hasline title-offset mt-4 mb-4">快捷操作</div>
+                                        <!-- 快捷操作 -->
+                                        <div class="row">
+                                            <div class="col-3" v-for="(item,index) in tab.fastOperation" v-bind:key="'fastOperation'+item.id">
+                                                <div class="reward-card" v-on:click="getNavigation(item.id,item.name,item.url)">
+                                                    <i class="fa fa-fw reward-card-icon" v-bind:class="item.icon" v-bind:style="{color:item.color}"></i>
+                                                    <p class="reward-card-text">{{item.name}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="pr-2">
+                                                <img v-bind:src="tab.companyInfo.iconFile" alt="图片" class="border border-white rounded-circle w-img2 h-img2">
+                                            </div>
+                                            <div class="flex-fill">
+                                                <div class="fz-lg text-truncate">{{tab.companyInfo.companyName}}</div>
+                                                <div class="text-truncate text-muted lh-lg">
+                                                    {{tab.companyInfo.tradeTypeName}}-{{tab.companyInfo.companyTypeName}}-{{tab.companyInfo.companySizeName}}
+                                                </div>
+                                            </div>
+                                            <a href="javascript:;" v-on:click="getCompanyInfo">
+                                                <i class="fa fa-fw fa-edit"></i>
+                                            </a>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center bg-primary-light mt-4 mb-4">
+                                            <div class="d-block text-center flex-fill pt-3 pb-4">
+                                                <div class="fz-xlg text-primary">{{tab.wallet.beansCount}}</div>
+                                                <div class="pt-1">金豆</div>
+                                            </div>
+                                            <div class="d-block text-center flex-fill pt-3 pb-4">
+                                                <div class="fz-xlg text-primary">{{tab.wallet.networkTicket}}</div>
+                                                <div class="pt-1">电子发票</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-block btn-lg" v-on:click="postReward('add')">
+                                                <i class="fa fa-fw fa-plus"></i>
+                                                发布急聘
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" v-bind:id="'tab'+item.id" v-for="(item,index) in navigation.list" v-bind:key="'iframe'+item.id">
+                        <iframe v-bind:src="item.url" class="index-iframe" frameborder="0" v-bind:height="navigation.iframeH"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 图片剪裁组件
+            'doer-clipimg': clipimg
+        },
+        data: {
+            // 浏览器可视区域宽度
+            screenWidth: document.body.clientWidth,
+            // 头部
+            header: {
+                // 用户信息
+                userInfo: {
+                    userId: "1",
+                    nickName: '柯小金',
+                    headFileName: 'images/headpic.png'
+                },
+                // 帮助链接
+                helpLink: '帮助.html'
+            },
+            // 导航标签
+            navigation: {
+                switch: false,
+                iframeH: 0,
+                list: []
+            },
+            // tab内容
+            tab: {
+                // 企业信息
+                companyInfo: {
+                    companyId: "1",
+                    companyName: '广西道尔人力资源有限公司',
+                    iconFile: 'images/no-logo.png',
+                    tradeTypeName: '所属行业',
+                    companyTypeName: '单位性质',
+                    companySizeName: '公司规模'
+                },
+                // 钱包信息
+                wallet: {
+                    beansCount: '100',
+                    networkTicket: '885.00'
+                },
+                // 待办事项
+                todoItems: {
+                    screenNumber: '8',
+                    handleNumber: '2',
+                },
+                // 快捷操作
+                fastOperation: [
+                    {
+                        id: 1,
+                        icon: 'fa-address-book',
+                        color: '#e64340',
+                        name: '简历管理',
+                        url: '简历管理.html'
+                    },
+                    {
+                        id: 2,
+                        icon: 'fa-file-alt',
+                        color: '#ffc107',
+                        name: '职位管理',
+                        url: '职位管理.html'
+                    },
+                    {
+                        id: 3,
+                        icon: 'fa-fire',
+                        color: '#fd7e14',
+                        name: '金豆充值',
+                        url: '金豆充值.html'
+                    },
+                    {
+                        id: 4,
+                        icon: 'fa-list-ol',
+                        color: '#17a2b8',
+                        name: '支付明细',
+                        url: '支付明细.html'
+                    },
+                    {
+                        id: 5,
+                        icon: 'fa-heart',
+                        color: '#e83e8c',
+                        name: '互动管理',
+                        url: '互动管理.html'
+                    },
+                    {
+                        id: 6,
+                        icon: 'fa-receipt',
+                        color: '#20c997',
+                        name: '申请发票',
+                        url: '申请发票.html'
+                    }
+                ]
+            },
+            // 弹窗
+            modal: {
+                headFileName: 'images/headpic.png',
+                realName: '柯小金',
+                phoneNumber: '15295955803'
+            }
+        },
+        // 计算属性
+        computed: {
+            // 计算用大logo还是小logo
+            logoImg: function(){
+                return this.screenWidth<=1280?'images/logo-sm.png':'images/logo.png';
+            }
+        },
+        // 监听属性
+        watch: {
+            
+        },
+        // 存放事件的地方
+        methods: {
+            // 修改个人信息
+            getUserInfo: function(){
+                $("#userInfo").modal();
+            },
+            // 剪裁图片
+            getClip: function(triggerName){
+                // triggerName是作用于这个组件的数据名称
+                this.$refs.componentClipimg.clipimgModal(triggerName);
+            },
+            clipimgCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                this.modal.headFileName = backData.selected;
+            },
+            // 保存个人信息
+            saveUserInfo: function(e){
+                $("#userInfo").modal("hide");
+            },
+            // 去筛选
+            goScreen: function(){
+                this.getNavigation(1,'简历管理','简历管理.html?type=screen');
+            },
+            // 去处理
+            goHandle: function(){
+                this.getNavigation(1,'简历管理','简历管理.html?type=handle');
+            },
+            // 修改企业信息
+            getCompanyInfo: function(){
+                this.getNavigation('companyInfo','修改企业信息','修改企业信息.html');
+            },
+            // 发布急聘
+            postReward: function(id){
+                this.getNavigation('postReward','发布急聘','发布悬赏.html?positionId='+id);
+            },
+            // 退出
+            signOut: function(){
+
+            },
+            // 关闭导航
+            navDel: function(targetId,index){
+                var id = "home";
+                if(index>0){
+                    id = this.navigation.list[index-1].id;
+                }
+                this.navigation.list.splice(index,1);
+                if($("#nav"+targetId).hasClass("active")){
+                    $("#nav"+id).trigger("click");
+                }
+                this.$nextTick(function(){
+                    this.navCount()
+                });
+            },
+            // 打开导航页面
+            getNavigation: function(id,name,url){
+                var list = this.navigation.list,
+                    have = false;
+                for(var i=0; i<list.length; i++){
+                    if(list[i].id == id){
+                        list[i].url = url;
+                        have = true;
+                    }
+                }
+                if(!have){   
+                    list.push({
+                        id: id,
+                        name: name,
+                        url: url
+                    })
+                }
+                this.$nextTick(function(){
+                    $("#nav"+id).trigger("click");
+                    this.navCount()
+                });
+            },
+            // 计算导航长度
+            navCount: function(){
+                var listW = $("#nav-list").width(),
+                    tabsW = $("#nav-tabs").width();
+                if(tabsW>listW){
+                    this.navigation.switch = true;
+                }else{
+                    $("#nav-tabs").css("left","0px");
+                    this.navigation.switch = false;
+                }
+            },
+            // 左右切换导航
+            navSwitch: function(type){
+                if(this.navigation.switch){
+                    var listW = $("#nav-list").width(),
+                        tabsW = $("#nav-tabs").width();
+                    if(type=="pre"){
+                        $("#nav-tabs").css("left","0px");
+                    }else if(type=="next"){
+                        $("#nav-tabs").css("left",(listW-tabsW)+"px");
+                    }
+                }
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            var that = this;
+            window.onresize = function(){
+                that.screenWidth = document.body.clientWidth;
+            }
+            that.navigation.iframeH = $(window).height() - $(".reward-navbar").height() - $(".nav-box").height() - 3;
+            $.modal({
+                title: "您已获得50元助力推广活动",
+                customImg: 'images/red_envelopes.png',
+                text: "使您的职位传播得更快更广",
+                buttons: [
+                    {
+                        text: "查看详情", 
+                        className: "btn-primary", 
+                        onClick: function(){
+                            that.getNavigation(5,'互动管理','互动管理.html');
+                        }
+                    }
+                ]
+            });
+        }
+    })
+</script>

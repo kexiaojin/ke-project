@@ -1,0 +1,179 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 表单验证 -->
+    <script type="text/javascript" src="js/jquery.validate-1.14.0.min.js"></script>
+    <style type="text/css">
+        .canvasBox{
+            position: fixed;
+            width: 100%;
+            height: 300px;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-secondary">
+    <noscript>
+        <div class="doer-warning">
+            <i class="fa fa-fw fa-exclamation-triangle"></i>
+            您的浏览器阻止了Javascript的运行，导致无法正常浏览本网站，请点击浏览器提示信息选择允许阻止的内容
+        </div>
+    </noscript>
+    <!--[if lte IE 9]>
+        <div class="doer-warning">
+            <div class="warning-title">
+                <div class="warning-img"></div>
+                <p>检测到史前IE浏览器</p>
+            </div>
+            <div class="warning-text">
+                <p>我们使用了最新的技术来搭建网站，使本网站更快和更容易使用，很遗憾的是，您的浏览器并不支持这些技术。</p>
+                <p>点击下载以下其中一种现代浏览器，让您得到更好的浏览体验！</p>
+            </div>
+            <div class="warning-update">
+                <a href="https://pc.qq.com/detail/11/detail_351.html" target="_blank">
+                    <div class="warning-icon browser-qq"></div>
+                    <p>QQ浏览器</p>
+                </a>
+                <a href="https://browser.360.cn/ee/" target="_blank">
+                    <div class="warning-icon browser-360"></div>
+                    <p>360极速</p>
+                </a>
+                <a href="https://pc.qq.com/detail/1/detail_2661.html" target="_blank">
+                    <div class="warning-icon browser-google"></div>
+                    <p>谷歌浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_2867.html" target="_blank">
+                    <div class="warning-icon browser-firefox"></div>
+                    <p>火狐浏览器</p>
+                </a>
+                <a href="https://pc.qq.com/detail/7/detail_11527.html" target="_blank">
+                    <div class="warning-icon browser-ie"></div>
+                    <p>升级IE</p>
+                </a>
+            </div>
+        </div>
+    <![endif]-->
+    <div id="vueList" v-cloak>
+        <!-- 主体内容 -->
+        <div class="content-bg">
+            <div class="canvasBox bg-primary"></div>
+            <div class="login-box">
+                <div class="login-icon">
+                    <img v-bind:src="logo" alt="图片">
+                </div>
+                <div class="d-flex pl-4 pr-4 justify-content-between align-items-center">
+                    <div class="text-center pl-4 pr-4 text-primary">
+                        <div class="fz-xlg">01</div>
+                        <div>验证企业邮箱</div>
+                    </div>
+                    <div class="border-top flex-fill"></div>
+                    <div class="text-center pl-4 pr-4 text-primary">
+                        <div class="fz-xlg">02</div>
+                        <div>重置密码</div>
+                    </div>
+                </div>
+                <div class="login-slide">
+                    <form id="resetForm">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-fw fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input type="password" class="form-control" name="registerPwd" placeholder="请输入新密码" v-model="registerData.registerPwd">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-fw fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input type="password" class="form-control" name="registerPwdAgain" placeholder="请再次输入新密码" v-model="registerData.registerPwdAgain">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+
+        },
+        data: {
+            logo: 'images/logo-sm.png',
+            registerData: {
+                registerPwd: '',
+                registerPwdAgain: ''
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            // 表单验证
+            var formValidatorLogin = $("#resetForm").validate({
+                submitHandler:function(form){
+                    $.toast('你通过了验证')
+                    // form.submit();
+                },
+                rules: {
+                    "registerPwd":{required:true},
+                    "registerPwdAgain":{required:true}
+                },
+                messages: {
+                    "registerPwd":{required:'不能为空'},
+                    "registerPwdAgain":{required:'不能为空'}
+                },
+                onkeyup: false,
+                errorPlacement: function(error, element) {
+                    element.wrap('<div class="error-box"></div>');  
+                    error.appendTo(element.parent());  
+                }
+            });
+        }
+    })
+</script>

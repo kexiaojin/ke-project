@@ -1,0 +1,549 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 图片剪裁组件，依赖cropper.js -->
+    <script type="text/javascript" src="js/cropper-4.0.0.min.js"></script>
+    <script type="text/javascript" src="components/clipimg.js"></script>
+    <!-- 选择地区组件 -->
+    <script type="text/javascript" src="components/citychoose.js"></script>
+    <!-- 选择行业组件 -->
+    <script type="text/javascript" src="components/tradechoose.js"></script>
+    <!-- 选择印象标签组件 -->
+    <script type="text/javascript" src="components/labelchoose.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 添加产品弹窗 -->
+        <div class="modal fade" id="addProduct">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">添加/编辑产品</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="mb-4 text-center">
+                                <div class="mb-2">
+                                    <img v-bind:src="modal.productInfo.productImg" alt="图片" class="border border-white w-sm h-sm">
+                                </div>
+                                <button type="button" class="btn btn-less" v-on:click="getClip('product')">
+                                    <i class="fa fa-fw fa-camera"></i>
+                                    上传产品图标
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">产品名称</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="modal.productInfo.productName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">产品网址</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="modal.productInfo.productWebsite">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">产品简介</span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <textarea v-textarea rows="5" class="form-control" maxlength="200" placeholder="请输入产品简介（限200字以内）" v-model="modal.productInfo.productIntro"></textarea>
+                                        <div class="textarea-number">
+                                            <span></span>&nbsp;/&nbsp;200
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" v-on:click="saveProduct">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 图片剪裁 -->
+        <doer-clipimg ref="componentClipimg" v-on:clipimgclick="clipimgCallBack"></doer-clipimg>
+        <!-- 选择地区 -->
+        <doer-citychoose ref="componentCityChoose" v-on:citychooseclick="cityCallBack"></doer-citychoose>
+        <!-- 选择行业 -->
+        <doer-tradechoose ref="componentTradeChoose" v-on:tradechooseclick="tradeCallBack"></doer-tradechoose>
+        <!-- 选择印象标签 -->
+        <doer-labelchoose ref="componentLabelChoose" v-on:labelchooseclick="labelCallBack"></doer-labelchoose>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <form action="">
+                <fieldset class="mb-4">
+                    <legend>必填内容</legend>
+                    <div class="mb-4 text-center">
+                        <div class="mb-2">
+                            <img v-bind:src="companyForm.mustFill.iconFile" alt="图片" class="border border-white rounded-circle w-sm h-sm">
+                        </div>
+                        <button type="button" class="btn btn-less" v-on:click="getClip('logo')">
+                            <i class="fa fa-fw fa-camera"></i>
+                            上传公司logo
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>公司全称<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="companyForm.mustFill.companyName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>公司简称<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="companyForm.mustFill.companyAbbr">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>公司所在地</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请选择内容" v-bind:value="companyForm.mustFill.region.province?companyForm.mustFill.region.city+'-'+companyForm.mustFill.region.county:''" v-on:click="cityGetChoose(companyForm.mustFill.region,'region','single')" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>公司地址<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="companyForm.mustFill.mapLocation">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-less" v-on:click="buildMap">生成地图</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>机构代码</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="companyForm.mustFill.companyCode">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>营业执照</span>
+                                    </div>
+                                    <div class="weui-uploader__bd">
+                                        <ul class="weui-uploader__files" v-show="companyForm.mustFill.licensePic">
+                                            <li class="weui-uploader__file pointer" v-bind:style="{backgroundImage: 'url('+companyForm.mustFill.licensePic+')'}" v-bind:data-src="companyForm.mustFill.licensePic" v-bigimg>
+                                                <a href="javascript:;" class="weui-img-del" v-on:click.stop="licensePicDel">
+                                                    <i class="fa fa-fw fa-trash"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <label class="custom-control custom-img" v-show="!companyForm.mustFill.licensePic">
+                                            <input class="custom-control-input" type="file" accept="image/*" v-on:change="addLicensePic">
+                                            <div class="weui-uploader__input-box"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <p>请上传电子版营业执照原件或加盖公司红章的营业执照复印件
+                                            <a href="javascript:;" v-bind:data-src="licenseExamples" v-bigimg>[查看示例]</a>
+                                        </p>
+                                        <span class="text-muted">要求：jpg、png格式的图片，文件最大不超过4MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" id="mapBox"></div>
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>选填内容</legend>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">工作时间</span>
+                                    </div>
+                                    <input type="text" class="form-control get-time" placeholder="开始时间" v-model="companyForm.freeFill.jobStartDate" readonly>
+                                    <div class="input-group-prepend input-group-append">
+                                        <span class="input-group-text">-</span>
+                                    </div>
+                                    <input type="text" class="form-control get-time" placeholder="结束时间" v-model="companyForm.freeFill.jobEndDate" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">加班情况</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="companyForm.freeFill.overtime.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in companyForm.freeFill.overtime.options" v-bind:key="'overtime'+index" v-bind:value="option.value">{{option.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">休息时间</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="companyForm.freeFill.restDate.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in companyForm.freeFill.restDate.options" v-bind:key="'restDate'+index" v-bind:value="option.value">{{option.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">福利标签</span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <div class="label-box">
+                                            <div v-if="companyForm.freeFill.companyImpression.length>0">
+                                                <span class="solid-label" v-for="(item,index) in companyForm.freeFill.companyImpression" v-bind:key="'companyImpression'+index"> {{item.name}} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-less" v-on:click="labelGetChoose(companyForm.freeFill.companyImpression,'company')"><i class="fa fa-fw fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="box-has-shadow box-body">
+                                    <div class="mb-4" v-if="companyForm.freeFill.productList.length>0">
+                                        <div class="line-list" v-for="(item,index) in companyForm.freeFill.productList" v-bind:key="'productList'+index">
+                                            <div class="d-flex align-items-center">
+                                                <div class="pr-4">
+                                                    <img v-bind:src="item.productImg" alt="图片" class="w-img2 h-img2">
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <div class="text-truncate dark-link pointer" v-on:click="addProduct(item.productId)">
+                                                        <i class="fa fa-fw fa-pen-square text-primary"></i>
+                                                        <span class="fz-lg">{{item.productName}}</span>
+                                                    </div>
+                                                    <div class="text-muted" v-html="item.productIntro"></div>
+                                                    <a v-bind:href="item.productWebsite" target="_blank">
+                                                        {{item.productWebsite}}
+                                                    </a>
+                                                </div>
+                                                <div class="pl-4 text-danger pointer" v-on:click="productDel(item.productId)">
+                                                    <i class="fa fa-fw fa-trash-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-lg btn-block" v-on:click="addProduct(0)">
+                                        <i class="fa fa-fw fa-plus"></i>
+                                        添加产品
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">所属行业</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请选择内容" v-bind:value="companyForm.freeFill.tradeType.name" v-on:click="tradeGetChoose(companyForm.freeFill.tradeType,'tradeType','single')" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">单位性质</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="companyForm.freeFill.companyType.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in companyForm.freeFill.companyType.options" v-bind:key="'companyType'+index" v-bind:value="option.value">{{option.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">公司规模</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="companyForm.freeFill.companySize.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in companyForm.freeFill.companySize.options" v-bind:key="'companySize'+index" v-bind:value="option.value">{{option.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">公司官网</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="companyForm.freeFill.memoUrl">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">公司介绍</span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <textarea v-textarea rows="5" class="form-control" maxlength="500" placeholder="请输入企业简介（限500字以内）" v-model="companyForm.freeFill.memo"></textarea>
+                                        <div class="textarea-number">
+                                            <span></span>&nbsp;/&nbsp;500
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="text-center">
+                    <button type="button" class="btn btn-lg btn-block btn-primary" v-on:click="companySubmit">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 图片剪裁组件
+            'doer-clipimg': clipimg,
+            // 选择地区组件
+            'doer-citychoose': citychoose,
+            // 选择行业组件
+            'doer-tradechoose': tradechoose,
+            // 选择印象标签组件
+            'doer-labelchoose': labelchoose
+        },
+        data: {
+            licenseExamples: 'images/licence.jpg',
+            companyForm: {
+                mustFill: {
+                    companyName: '',
+                    companyAbbr: '',
+                    iconFile: 'images/no-logo.png',
+                    region: {
+                        province: '',
+                        provinceId: '',
+                        city: '',
+                        cityId: '',
+                        county: '',
+                        countyId: ''
+                    },
+                    mapLocation: '',
+                    companyCode: '',
+                    licensePic: ''
+                },
+                freeFill: {
+                    tradeType: {
+                        name: '',
+                        id: ''
+                    },
+                    companyType: {
+                        selected: '',
+                        options: [
+                            {text: '国企', value: '01'},
+                            {text: '民营', value: '02'}
+                        ]
+                    },
+                    companySize: {
+                        selected: '',
+                        options: [
+                            {text: '20人以下', value: '01'},
+                            {text: '10-99人', value: '02'}
+                        ]
+                    },
+                    memoUrl: '',
+                    memo: '',
+                    jobStartDate: '',
+                    jobEndDate: '',
+                    overtime: {
+                        selected: '',
+                        options: [
+                            {text: '不加班', value: '01'},
+                            {text: '偶尔加班', value: '02'}
+                        ]
+                    },
+                    restDate: {
+                        selected: '',
+                        options: [
+                            {text: '周末双休', value: '01'},
+                            {text: '周末单休', value: '02'}
+                        ]
+                    },
+                    companyImpression: [],
+                    productList: [
+                        {
+                            productId: '001',
+                            productImg: 'images/no-logo.png',
+                            productName: '福袋妖怪',
+                            productIntro: '该产品是给小孩子玩的，培养智力和身体协调能力。',
+                            productWebsite: 'http://www.yaoguai.com'
+                        },
+                        {
+                            productId: '002',
+                            productImg: 'images/no-logo.png',
+                            productName: '机器人大作战',
+                            productIntro: '该产品是给大人玩的，消磨时光。',
+                            productWebsite: 'http://www.jiqiren.com'
+                        }
+                    ]
+                }
+            },
+            modal: {
+                // 添加/编辑产品弹窗
+                productInfo: {
+                    productImg: 'images/no-logo.png',
+                    productName: '',
+                    productIntro: '',
+                    productWebsite: ''
+                }
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 选择地区
+            cityGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentCityChoose.cityChooseModal(selected,triggerName,chooseType);
+            },
+            cityCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                this.companyForm.mustFill.region = backData.selected;
+            },
+            // 选择行业
+            tradeGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentTradeChoose.tradeChooseModal(selected,triggerName,chooseType);
+            },
+            tradeCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                this.companyForm.freeFill.tradeType = backData.selected;
+            },
+            // 剪裁图片
+            getClip: function(triggerName){
+                // triggerName是作用于这个组件的数据名称
+                this.$refs.componentClipimg.clipimgModal(triggerName);
+            },
+            clipimgCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                if(backData.triggerName=='product'){
+                    this.modal.productInfo.productImg = backData.selected;
+                }else if(backData.triggerName=='logo'){
+                    this.companyForm.mustFill.iconFile = backData.selected;
+                }
+            },
+            // 选择印象标签
+            labelGetChoose: function(selected,labelType){
+                this.$refs.componentLabelChoose.labelChooseModal(selected,labelType);
+            },
+            labelCallBack: function(backData){
+                this.companyForm.freeFill.companyImpression = backData.selected;
+            },
+            // 添加/编辑产品
+            addProduct: function(id){
+                // id为0是添加，否则是编辑
+                $("#addProduct").modal();
+            },
+            // 删除产品
+            productDel: function(id){
+                console.log(id)
+            },
+            // 保存产品
+            saveProduct: function(){
+                $("#addProduct").modal('hide');
+            },
+            // 上传营业执照
+            addLicensePic: function(event){
+                var that = this;
+                var files = !!event.target.files ? event.target.files : [];
+                var size = event.target.files[0].size / 1024;
+                if (!files.length || !window.FileReader) return;
+                if(size > 4096) {
+                    $.toast("单张图片不能大于4MB","cancel");
+                    return
+                };
+                if (/^image/.test( files[0].type)){
+                    var reader = new FileReader();
+                    reader.readAsDataURL(files[0]);
+                    reader.onloadend = function(){
+                        var imgSrc = this.result
+                        that.companyForm.mustFill.licensePic = imgSrc;
+                    }
+                }else{
+                    $.toast("所选文件并非图片格式","cancel");
+                }
+            },
+            // 删除营业执照图片
+            licensePicDel: function(){
+                this.companyForm.mustFill.licensePic = '';
+            },
+            // 生成地图
+            buildMap: function(){
+                $("#mapBox").html("你点击了生成地图，记得把地图放到这里来")
+            },
+            // 提交表单
+            companySubmit: function(){
+                console.log(this.companyForm)
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            // linkParameter(link,opts)传入地址和键名获取键值。参数为中文时要不要decodeURI()转码，自行决定。参数必须是键名和键值配对的。
+            var parameter = decodeURI(window.location.search.substr(1));
+            var id = linkParameter(parameter,"id");
+            console.log(id)
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $("select.form-control").select2({
+                minimumResultsForSearch: -1
+            });
+            $('.get-time').bind('click',function(event){timePacker($(this),event)});
+        }
+    })
+</script>

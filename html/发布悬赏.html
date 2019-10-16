@@ -1,0 +1,304 @@
+﻿<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>急聘君</title>
+    <meta name="keywords" content="急聘君" />
+    <meta name="description" content="急聘君" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <!-- 基础样式 -->
+    <link rel="stylesheet" type="text/css" href="css/reward-html.css">
+    <!-- 基础脚本 -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-4.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker-2.0.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.min.js"></script>
+    <script type="text/javascript" src="js/reward-html.js"></script>
+    <!-- 选择职位组件 -->
+    <script type="text/javascript" src="components/positionchoose.js"></script>
+    <!-- 选择地区组件 -->
+    <script type="text/javascript" src="components/citychoose.js"></script>
+</head>
+<body class="bg-white">
+    <div id="vueList" v-cloak>
+        <!-- 选择职位 -->
+        <doer-positionchoose ref="componentPositionChoose" v-on:positionchooseclick="positionCallBack"></doer-positionchoose>
+        <!-- 选择地区 -->
+        <doer-citychoose ref="componentCityChoose" v-on:citychooseclick="cityCallBack"></doer-citychoose>
+        <!-- 主体内容 -->
+        <div class="btn-refresh" v-refresh>
+            <i class="fa fa-fw fa-redo-alt"></i>
+        </div>
+        <div class="box-body">
+            <form action="">
+                <fieldset class="mb-4">
+                    <legend>悬赏分配</legend>
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="input-required">*</i>悬赏金额</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="只是承诺，无需充值" v-model="rewardForm.rewardMoney" v-on:blur="getStarRank(rewardForm.rewardMoney)">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">元/人</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group text-muted">
+                                （入职者获得30%，推荐人获得70%）
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-2">
+                                该悬赏金额已超过
+                                <span class="text-danger">{{overPercent}}%</span>
+                                的急聘职位，您发布的急聘职位受欢迎程度为：
+                            </div>
+                            <div class="fz-xxlg text-light">
+                                <i class="fa fa-fw fa-grin-tears" v-bind:class="{'text-danger':starRank==1}"></i>
+                                <i class="fa fa-fw fa-frown" v-bind:class="{'text-primary':starRank==2}"></i>
+                                <i class="fa fa-fw fa-meh" v-bind:class="{'text-secondary':starRank==3}"></i>
+                                <i class="fa fa-fw fa-smile" v-bind:class="{'text-info':starRank==4}"></i>
+                                <i class="fa fa-fw fa-grin-hearts" v-bind:class="{'text-success':starRank==5}"></i>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="mb-4">
+                    <legend>职位信息</legend>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">职位名称<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="rewardForm.positionName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">薪资范围<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="最低薪资" v-model="rewardForm.salaryMin" v-bind:disabled="rewardForm.negotiable">
+                                    <div class="input-group-prepend input-group-append">
+                                        <span class="input-group-text">-</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="最高薪资" v-model="rewardForm.salaryMax" v-bind:disabled="rewardForm.negotiable">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox" name="negotiable" class="custom-control-input" v-model="rewardForm.negotiable">
+                                                <span class="custom-control-label">面议</span>
+                                            </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">招聘人数<i class="invisible">字</i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="rewardForm.recruitNumber">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">人</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">职位类型</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请选择内容" v-model="rewardForm.positionType.name" v-on:click="positionGetChoose(rewardForm.positionType,'positionType','single')" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">经验要求</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="rewardForm.workYears.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in rewardForm.workYears.options" v-bind:key="'workYears'+index" v-bind:value="option.id">{{option.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">最低学历</span>
+                                    </div>
+                                    <select v-select2 name="" id="" class="form-control" v-model="rewardForm.needDegree.selected">
+                                        <option value="" disabled>请选择内容</option>
+                                        <option v-for="(option,index) in rewardForm.needDegree.options" v-bind:key="'needDegree'+index" v-bind:value="option.id">{{option.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">职位详情<i class="invisible">字</i></span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <textarea v-textarea rows="5" class="form-control" maxlength="800" placeholder="详细描述职位，有助于您更好的完成招聘。例如：1、工作内容。2、任职要求。3、特殊要求。（限800字以内）" v-model="rewardForm.positionDesc"></textarea>
+                                        <div class="textarea-number">
+                                            <span></span>&nbsp;/&nbsp;800
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">工作所在地</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请选择内容" v-bind:value="rewardForm.region.province?rewardForm.region.city+'-'+rewardForm.region.county:''" v-on:click="cityGetChoose(rewardForm.region,'region','single')" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">工作地址</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="请输入内容" v-model="rewardForm.mapLocation">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-less" v-on:click="buildMap">生成地图</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" id="mapBox"></div>
+                    </div>
+                </fieldset>
+                <div class="text-center">
+                    <button type="button" class="btn btn-lg btn-block btn-primary" v-on:click="rewardSubmit">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var vueList = new Vue({
+        el: '#vueList',
+        components: {
+            // 选择职位组件
+            'doer-positionchoose': positionchoose,
+            // 选择地区组件
+            'doer-citychoose': citychoose
+        },
+        data: {
+            overPercent: '28',
+            // 1-5的受欢迎程度
+            starRank: 2,
+            rewardForm: {
+                rewardMoney: '',
+                positionName: 'Java工程师',
+                recruitNumber: '5',
+                positionType: {
+                    name: '技术支持/维护工程师',
+                    id: '2102'
+                },
+                // 是否面议
+                negotiable: false,
+                salaryMin: '2000',
+                salaryMax: '5000',
+                workYears: {
+                    selected: '',
+                    options: [{"id":251,"name":"无经验"},{"id":252,"name":"1年以下"},{"id":253,"name":"1-3年"},{"id":254,"name":"3-5年"},{"id":255,"name":"5-10年"},{"id":256,"name":"10年以上"}]
+                },
+                needDegree: {
+                    selected: '',
+                    options: [{"id":61,"level":1,"name":"其他"},{"id":73,"level":1,"name":"小学"},{"id":62,"level":1,"name":"初中"},{"id":63,"level":1,"name":"高中"},{"id":74,"level":1,"name":"职高"},{"id":64,"level":1,"name":"中专"},{"id":65,"level":1,"name":"中技"},{"id":66,"level":1,"name":"大专"},{"id":67,"level":1,"name":"本科"},{"id":68,"level":1,"name":"MBA"},{"id":69,"level":1,"name":"EMBA"},{"id":70,"level":1,"name":"硕士"},{"id":71,"level":1,"name":"博士"}]
+                },
+                region: {
+                    province: '',
+                    provinceId: '',
+                    city: '',
+                    cityId: '',
+                    county: '',
+                    countyId: ''
+                },
+                mapLocation: '',
+                positionDesc: ''
+            }
+        },
+        // 计算属性
+        computed: {
+
+        },
+        // 监听属性
+        watch: {
+
+        },
+        // 存放事件的地方
+        methods: {
+            // 输入悬赏金额后计算受欢迎程度
+            getStarRank: function(money){
+                var reg = /^[1-9]+[0-9]*]*$/;
+                if(reg.test(money)){
+                    this.overPercent = "88";
+                    this.starRank = 5;
+                }else{
+                    $.toast("请输入正整数","cancel")
+                }
+            },
+            // 选择职位
+            positionGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentPositionChoose.positionChooseModal(selected,triggerName,chooseType);
+            },
+            positionCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                this.rewardForm.positionType = backData.selected;
+            },
+            // 选择地区
+            cityGetChoose: function(selected,triggerName,chooseType){
+                // 给子组件传入三个参数，selected是已选，triggerName是作用于这个组件的数据名称，chooseType是选择类型（单选或多选）
+                this.$refs.componentCityChoose.cityChooseModal(selected,triggerName,chooseType);
+            },
+            cityCallBack: function(backData){
+                // backData返回值里包括了已选selected和之前传入的作用于这个组件的数据名称triggerName
+                this.rewardForm.region = backData.selected;
+            },
+            // 生成地图
+            buildMap: function(){
+                $("#mapBox").html("你点击了生成地图，记得把地图放到这里来")
+            },
+            // 提交表单
+            rewardSubmit: function(){
+                console.log(this.rewardForm)
+                window.location.href = '悬赏发布成功.html'
+            }
+        },
+        // 页面加载数据前要做的事情写在这里
+        created: function(){
+            
+        },
+        // 页面加载完数据后要做的事情写在这里
+        mounted: function(){
+            $("select.form-control").select2({
+                minimumResultsForSearch: -1
+            });
+        }
+    })
+</script>
