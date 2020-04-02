@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html lang="zh-cmn-Hans">
+
 <head>
     <title>急聘君</title>
     <meta name="keywords" content="急聘君" />
@@ -7,8 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" id="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
     <link href="images/favicon.ico" rel="shortcut icon" />
     <!-- 基础样式 -->
     <link rel="stylesheet" type="text/css" href="css/reward-html.css">
@@ -21,6 +23,7 @@
     <script type="text/javascript" src="js/FileSaver.min.js"></script>
     <script type="text/javascript" src="js/jquery.wordexport.js"></script>
 </head>
+
 <body class="bg-white">
     <div id="vueList" v-cloak>
         <!-- 主体内容 -->
@@ -76,7 +79,8 @@
                             <td colspan="4">
                                 <div class="resume-info-item" v-if="resumeInfo.intention.length>0">
                                     <ul>
-                                        <li class="pb-4" v-for="(item,index) in resumeInfo.intention" v-bind:key="'intention'+index">
+                                        <li class="pb-4" v-for="(item,index) in resumeInfo.intention"
+                                            v-bind:key="'intention'+index">
                                             <div class="fz-lg">{{item.positionName}}</div>
                                             <div class="text-muted">
                                                 <span class="gap-text">{{item.salaryCNName}}</span>
@@ -172,18 +176,20 @@
                 </table>
             </div>
             <div class="text-center mt-4 unprint">
-                <button type="button" class="btn btn-lg btn-primary gap-x" v-on:click="downLoad(resumeInfo.baseInfo.realName)">下载</button>
+                <button type="button" class="btn btn-lg btn-primary gap-x"
+                    v-on:click="downLoad(resumeInfo.baseInfo.realName)">下载</button>
                 <button type="button" class="btn btn-lg btn-danger gap-x" v-on:click="print">打印</button>
             </div>
         </div>
     </div>
 </body>
+
 </html>
 <script type="text/javascript">
     var vueList = new Vue({
         el: '#vueList',
         components: {
-            
+
         },
         data: {
             resumeInfo: {
@@ -202,8 +208,7 @@
                     state: '在职-考虑机会'
                 },
                 // 求职意向
-                intention: [
-                    {
+                intention: [{
                         positionName: '茶艺师',
                         salaryCNName: '面议',
                         addressPost: '桂林市',
@@ -217,8 +222,7 @@
                     }
                 ],
                 // 工作经历
-                experience: [
-                    {
+                experience: [{
                         positionName: '销售经理',
                         companyName: '广西道尔人力资源有限公司',
                         workTime: '2018-10至2019-02',
@@ -232,23 +236,19 @@
                     }
                 ],
                 // 项目经验
-                project: [
-                    {
-                        projectName: '桂林天网子系统',
-                        positionName: '项目经理',
-                        workTime: '2018-10至2019-02',
-                        projectDesc: '做牛做马，非常的累，早就想辞职了，但是又没钱。'
-                    }
-                ],
+                project: [{
+                    projectName: '桂林天网子系统',
+                    positionName: '项目经理',
+                    workTime: '2018-10至2019-02',
+                    projectDesc: '做牛做马，非常的累，早就想辞职了，但是又没钱。'
+                }],
                 // 教育经历
-                education: [
-                    {
-                        university: '广西师范大学',
-                        degree: '本科',
-                        major: '电子信息工程',
-                        studyTime: '2012-09至2016-06'
-                    }
-                ]
+                education: [{
+                    university: '广西师范大学',
+                    degree: '本科',
+                    major: '电子信息工程',
+                    studyTime: '2012-09至2016-06'
+                }]
             }
         },
         // 计算属性
@@ -261,23 +261,23 @@
         },
         // 存放事件的地方
         methods: {
-            downLoad: function(realName){
-                $("#downLoadResume").wordExport(realName+"的简历",{
+            downLoad: function (realName) {
+                $("#downLoadResume").wordExport(realName + "的简历", {
                     styles: 'div,ul,li{margin:0;padding:0}.print-resume-header{font-family:"Microsoft YaHei";font-size:14px}.print-title{font-size:32px;text-align:center;margin-bottom:20px}.print-sub{margin-bottom:10px}.text-muted{color:#999}.fz-lg{font-size:18px;}.print-resume-table{font-family:"Microsoft YaHei";font-size:14px;width:100%;border-collapse:collapse}.print-resume-table td{padding:10px;border:solid 1px #e6e6e6}.print-td-active{background:#f0f0f0;white-space:nowrap}.timeline{margin-bottom:20px}.timeline-main{font-size:18px;}.timeline-depict{color:#999}'
                 });
             },
-            print: function(e){
-                $(".unprint").css("display","none");
+            print: function (e) {
+                $(".unprint").css("display", "none");
                 window.print();
-                $(".unprint").css("display","block");
+                $(".unprint").css("display", "block");
             }
         },
         // 页面加载数据前要做的事情写在这里
-        created: function(){
-            
+        created: function () {
+
         },
         // 页面加载完数据后要做的事情写在这里
-        mounted: function(){
+        mounted: function () {
 
         }
     })

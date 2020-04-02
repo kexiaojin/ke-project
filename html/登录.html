@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html lang="zh-cmn-Hans">
+
 <head>
     <title>急聘君</title>
     <meta name="keywords" content="急聘君" />
@@ -7,8 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" id="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
     <link href="images/favicon.ico" rel="shortcut icon" />
     <!-- 基础样式 -->
     <link rel="stylesheet" type="text/css" href="css/reward-html.css">
@@ -21,7 +23,7 @@
     <!-- 表单验证 -->
     <script type="text/javascript" src="js/jquery.validate-1.14.0.min.js"></script>
     <style type="text/css">
-        .canvasBox{
+        .canvasBox {
             position: fixed;
             top: 0;
             left: 0;
@@ -29,6 +31,7 @@
         }
     </style>
 </head>
+
 <body class="login-bg">
     <noscript>
         <div class="doer-warning">
@@ -88,7 +91,8 @@
                                         <i class="fas fa-fw fa-building"></i>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control" name="companyLoginName" placeholder="请输入企业邮箱 / 道尔工作网账号" v-model="companyLoginData.companyLoginName">
+                                <input type="text" class="form-control" name="companyLoginName"
+                                    placeholder="请输入企业邮箱 / 道尔工作网账号" v-model="companyLoginData.companyLoginName">
                             </div>
                         </div>
                         <div class="form-group">
@@ -98,7 +102,8 @@
                                         <i class="fas fa-fw fa-lock"></i>
                                     </span>
                                 </div>
-                                <input type="password" class="form-control" name="companyLoginPwd" placeholder="请输入密码" v-model="companyLoginData.companyLoginPwd">
+                                <input type="password" class="form-control" name="companyLoginPwd" placeholder="请输入密码"
+                                    v-model="companyLoginData.companyLoginPwd">
                             </div>
                         </div>
                         <div class="form-group">
@@ -108,7 +113,8 @@
                                         <i class="fas fa-fw fa-shield-alt"></i>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control" name="companyLoginPicCode" placeholder="请输入图片验证码" v-model="companyLoginData.companyLoginPicCode">
+                                <input type="text" class="form-control" name="companyLoginPicCode"
+                                    placeholder="请输入图片验证码" v-model="companyLoginData.companyLoginPicCode">
                                 <div class="input-group-append">
                                     <img v-bind:src="picCodeSrc" alt="图片" class="pointer" v-on:click="changePicCode">
                                 </div>
@@ -127,6 +133,7 @@
         </div>
     </div>
 </body>
+
 </html>
 <script type="text/javascript">
     var vueList = new Vue({
@@ -157,49 +164,62 @@
         // 存放事件的地方
         methods: {
             // 改变图片验证码
-            changePicCode: function(e){
-                var timestamp = "http://www.doerjob.com:8080/verifyCodeServlet?timestamp="+(new Date()).valueOf(); 
+            changePicCode: function (e) {
+                var timestamp = "http://www.doerjob.com:8080/verifyCodeServlet?timestamp=" + (new Date())
+                    .valueOf();
                 this.picCodeSrc = timestamp;
             }
         },
         // 页面加载数据前要做的事情写在这里
-        created: function(){
-            
+        created: function () {
+
         },
         // 页面加载完数据后要做的事情写在这里
-        mounted: function(){
+        mounted: function () {
             // 表单验证
             var formValidatorLogin = $("#companyLoginForm").validate({
-                submitHandler:function(form){
+                submitHandler: function (form) {
                     $.toast('你通过了验证')
                     // form.submit();
                 },
                 rules: {
-                    "companyLoginName":{required:true},
-                    "companyLoginPwd":{required:true},
-                    "companyLoginPicCode":{required:true}
+                    "companyLoginName": {
+                        required: true
+                    },
+                    "companyLoginPwd": {
+                        required: true
+                    },
+                    "companyLoginPicCode": {
+                        required: true
+                    }
                 },
                 messages: {
-                    "companyLoginName":{required:'不能为空'},
-                    "companyLoginPwd":{required:'不能为空'},
-                    "companyLoginPicCode":{required:'不能为空'}
+                    "companyLoginName": {
+                        required: '不能为空'
+                    },
+                    "companyLoginPwd": {
+                        required: '不能为空'
+                    },
+                    "companyLoginPicCode": {
+                        required: '不能为空'
+                    }
                 },
                 onkeyup: false,
-                errorPlacement: function(error, element) {
-                    element.wrap('<div class="error-box"></div>');  
-                    error.appendTo(element.parent());  
+                errorPlacement: function (error, element) {
+                    element.wrap('<div class="error-box"></div>');
+                    error.appendTo(element.parent());
                 }
             });
             // 开始绘制背景canvas
             window.requestAnimFrame = (function () {
-                return  window.requestAnimationFrame ||
-                        window.webkitRequestAnimationFrame ||
-                        window.mozRequestAnimationFrame ||
-                        window.oRequestAnimationFrame ||
-                        window.msRequestAnimationFrame ||
-                        function (callback) {
-                            window.setTimeout(callback, 1000 / 60);
-                        };
+                return window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.oRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    function (callback) {
+                        window.setTimeout(callback, 1000 / 60);
+                    };
             })();
             $(".canvasBox").empty();
             //封装方法，压缩之后减少文件大小
@@ -224,8 +244,10 @@
             }
             //设置canvas的高宽
             function set_canvas_size() {
-                canvas_width = the_canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, 
-                canvas_height = the_canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+                canvas_width = the_canvas.width = window.innerWidth || document.documentElement
+                    .clientWidth || document.body.clientWidth,
+                    canvas_height = the_canvas.height = window.innerHeight || document.documentElement
+                    .clientHeight || document.body.clientHeight;
             }
             //绘制过程
             function draw_canvas() {
@@ -234,25 +256,27 @@
                 var all_array = [current_point].concat(random_lines);
                 var e, i, d, x_dist, y_dist, dist; //临时节点
                 //遍历处理每一个点
-                random_lines.forEach(function(r) {
+                random_lines.forEach(function (r) {
                     r.x += r.xa,
-                    r.y += r.ya, //移动
-                    r.xa *= r.x > canvas_width || r.x < 0 ? -1 : 1, 
-                    r.ya *= r.y > canvas_height || r.y < 0 ? -1 : 1, //碰到边界，反向反弹
-                    context.fillStyle="#fff";
+                        r.y += r.ya, //移动
+                        r.xa *= r.x > canvas_width || r.x < 0 ? -1 : 1,
+                        r.ya *= r.y > canvas_height || r.y < 0 ? -1 : 1, //碰到边界，反向反弹
+                        context.fillStyle = "#fff";
                     context.fillRect(r.x - 0.5, r.y - 0.5, 1, 1); //绘制一个宽高为1的点
                     for (i = 0; i < all_array.length; i++) {
                         e = all_array[i];
                         //不是当前点
                         if (r !== e && null !== e.x && null !== e.y) {
-                                x_dist = r.x - e.x, //x轴距离 l
+                            x_dist = r.x - e.x, //x轴距离 l
                                 y_dist = r.y - e.y, //y轴距离 n
                                 dist = x_dist * x_dist + y_dist * y_dist; //总距离, m
-                            dist < e.max && (e === current_point && dist >= e.max / 2 && (r.x -= 0.03 * x_dist, r.y -= 0.03 * y_dist), //靠近的时候加速
+                            dist < e.max && (e === current_point && dist >= e.max / 2 && (r.x -=
+                                    0.03 * x_dist, r.y -= 0.03 * y_dist), //靠近的时候加速
                                 d = (e.max - dist) / e.max,
                                 context.beginPath(),
                                 context.lineWidth = d / 2,
-                                context.strokeStyle = "rgba(" + config.c + "," + (d + 0.2) + ")",
+                                context.strokeStyle = "rgba(" + config.c + "," + (d + 0.2) +
+                                ")",
                                 context.moveTo(r.x, r.y),
                                 context.lineTo(e.x, e.y),
                                 context.stroke());
@@ -265,7 +289,8 @@
             var the_canvas = document.createElement("canvas"), //画布
                 config = get_config_option(), //配置
                 canvas_id = "c_n" + config.l, //canvas id
-                context = the_canvas.getContext("2d"), canvas_width, canvas_height,
+                context = the_canvas.getContext("2d"),
+                canvas_width, canvas_height,
                 random = Math.random,
                 current_point = {
                     x: null, //当前鼠标x
@@ -278,9 +303,9 @@
             //初始化画布大小
             set_canvas_size(), window.onresize = set_canvas_size;
             //当时鼠标位置存储，离开的时候，释放当前位置信息
-            window.onmousemove = function(e) {
+            window.onmousemove = function (e) {
                 e = e || window.event, current_point.x = e.clientX, current_point.y = e.clientY;
-            }, window.onmouseout = function() {
+            }, window.onmouseout = function () {
                 current_point.x = null, current_point.y = null;
             };
             //随机生成config.n条线位置信息
@@ -298,7 +323,7 @@
                 });
             }
             //重绘
-            setTimeout(function() {
+            setTimeout(function () {
                 draw_canvas();
             }, 100);
         }
